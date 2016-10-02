@@ -1,0 +1,355 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Regional Settings</title>
+		<link href="css/bootstrap.min.css" media="all" rel="stylesheet" />
+		<link href="css/app.css" media="all" rel="stylesheet" />
+	</head>
+	<body>
+		<div class="container">
+			<nav class="navbar navbar-default">
+				<div class="container-fluid">
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+							<span class="sr-only">Toggle navigation</span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+						<a class="navbar-brand" href="/"> Regional Settings </a>
+					</div>
+					<div id="navbar" class="navbar-collapse collapse">
+						<ul class="navbar-nav list-inline">
+							<li>
+								<a href="/">
+								<button type="button" class="btn btn-default navbar-btn">
+									Home
+								</button></a>
+							</li>
+							<li>
+								<a href="/logoff">
+								<button type="button" class="btn btn-default navbar-btn">
+									Log Off
+								</button></a>
+							</li>
+						</ul>
+					</div><!--/.nav-collapse -->
+				</div><!--/.container-fluid -->
+			</nav>
+			<div class="alert alert-success" role="alert"><strong>Please wait</strong> loading settings...</div>
+			<div id="mainPnl" class="panel panel-default dnone">
+				<div class="panel-body">
+					<form id="regionalFrm" method='post' action='regional' enctype='multipart/form-data' autocomplete='off'>
+						<div class="form-group">
+							<div class="formCtrl">
+								<label for="ntpEnabled">Enable NTP time sync</label>
+								<input type="checkbox" class="form-control" id="ntpEnabled" name="ntpEnabled" >
+							</div>
+							<a role="button" tabindex="0" data-trigger="focus" class="info" data-po="po" title="NTP Time Sync" data-placement="bottom" data-html="true" data-content="Enable / disable NTP time sync. The device will sync time with a remote NTP time server when connected to the internet. NTP time sync will work when the device is configured to act as a WiFi client. See&nbsp;<a href='https://en.wikipedia.org/wiki/Network_Time_Protocol' target='_blank'>NTP</a>&nbsp;for details"> <span>i</span> </a>
+						</div>
+						<div id="ntpPnl" class="panel panel-default dnone">
+							<div class="panel-heading">
+								<h3 class="panel-title">NTP Params</h3>
+							</div>
+							<div class="panel-body">
+								<div class="form-group">
+									<div class="formCtrl">
+										<label for="ntpServer">NTP Server</label>
+										<select class="form-control" id="ntpServer" name="ntpServer">
+											<option value="0">pool.ntp.org</option>
+											<option value="1">europe.pool.ntp.org</option>
+											<option value="2">time-a.timefreq.bldrdoc.gov</option>
+											<option value="3">time-b.timefreq.bldrdoc.gov</option>
+											<option value="4">time-c.timefreq.bldrdoc.gov</option>
+											<option value="5">chronos.csr.net</option>
+										</select>
+									</div>
+									<a role="button" tabindex="0" data-trigger="focus" class="info" data-po="po" title="NTP Server" data-placement="bottom" data-content="Select the remote NTP server to sync time with. The default is 'pool.ntp.org'."> <span>i</span> </a>
+								</div>
+								<div class="form-group">
+									<div class="formCtrl">
+										<label for="ntpTimeZone">Time Zone</label>
+										<select class="form-control" id="ntpTimeZone" name="ntpTimeZone">
+											<option value="-12">UTC-12</option>
+											<option value="-11">UTC-11</option>
+											<option value="-10">UTC-10</option>
+											<option value="-9">UTC-9</option>
+											<option value="-8">UTC-8</option>
+											<option value="-7">UTC-7</option>
+											<option value="-6">UTC-6</option>
+											<option value="-5">UTC-5</option>
+											<option value="-4">UTC-4</option>
+											<option value="-3">UTC-3</option>
+											<option value="-2">UTC-2</option>
+											<option value="-1">UTC-1</option>
+											<option value="0">UTC</option>
+											<option value="1">UTC+1</option>
+											<option value="2">UTC+2</option>
+											<option value="3">UTC+3</option>
+											<option value="4">UTC+4</option>
+											<option value="5">UTC+5</option>
+											<option value="6">UTC+6</option>
+											<option value="7">UTC+7</option>
+											<option value="8">UTC+8</option>
+											<option value="9">UTC+9</option>
+											<option value="10">UTC+10</option>
+											<option value="11">UTC+11</option>
+											<option value="12">UTC+12</option>
+										</select>
+									</div>
+									<a role="button" tabindex="0" data-trigger="focus" class="info" data-po="po" title="Time Zone" data-placement="bottom" data-content="Select the local time zone for NTP sync. The default is 'UTC'."> <span>i</span> </a>
+								</div>
+								<div class="form-group">
+									<div class="formCtrl">
+										<label for="ntpSyncInterval">NTP Sync Interval</label>
+										<select class="form-control" id="ntpSyncInterval" name="ntpSyncInterval">
+											<option value="10800">Every 3 hours</option>
+											<option value="21600">Every 6 hours</option>
+											<option value="43200">Every 12 hours</option>
+											<option value="86400">Every 24 hours</option>
+											<option value="172800">Every 48 hours</option>
+										</select>
+									</div>
+									<a role="button" tabindex="0" data-trigger="focus" class="info" data-po="po" title="NTP Sync Interval" data-placement="bottom" data-content="Select the time interval for NTP time re-sync. The default is 'Every 12 hours'."> <span>i</span> </a>
+								</div>
+								<div class="form-group">
+									<div class="formCtrl">
+										<label for="ntplocale">Locale</label>
+										<select class="form-control" id="ntpLocale" name="ntpLocale">
+											<option value="af-ZA">af-ZA</option>
+											<option value="am-ET">am-ET</option>
+											<option value="ar-AE">ar-AE</option>
+											<option value="ar-BH">ar-BH</option>
+											<option value="ar-DZ">ar-DZ</option>
+											<option value="ar-EG">ar-EG</option>
+											<option value="ar-IQ">ar-IQ</option>
+											<option value="ar-JO">ar-JO</option>
+											<option value="ar-KW">ar-KW</option>
+											<option value="ar-LB">ar-LB</option>
+											<option value="ar-LY">ar-LY</option>
+											<option value="ar-MA">ar-MA</option>
+											<option value="ar-OM">ar-OM</option>
+											<option value="ar-QA">ar-QA</option>
+											<option value="ar-SA">ar-SA</option>
+											<option value="ar-SY">ar-SY</option>
+											<option value="ar-TN">ar-TN</option>
+											<option value="ar-YE">ar-YE</option>
+											<option value="arn-CL">arn-CL</option>
+											<option value="as-IN">as-IN</option>
+											<option value="ba-RU">ba-RU</option>
+											<option value="be-BY">be-BY</option>
+											<option value="bg-BG">bg-BG</option>
+											<option value="bn-BD">bn-BD</option>
+											<option value="bn-IN">bn-IN</option>
+											<option value="bo-CN">bo-CN</option>
+											<option value="br-FR">br-FR</option>
+											<option value="ca-ES">ca-ES</option>
+											<option value="co-FR">co-FR</option>
+											<option value="cs-CZ">cs-CZ</option>
+											<option value="cy-GB">cy-GB</option>
+											<option value="da-DK">da-DK</option>
+											<option value="de-AT">de-AT</option>
+											<option value="de-CH">de-CH</option>
+											<option value="de-DE">de-DE</option>
+											<option value="de-LI">de-LI</option>
+											<option value="de-LU">de-LU</option>
+											<option value="dsb-DE">dsb-DE</option>
+											<option value="dv-MV">dv-MV</option>
+											<option value="el-GR">el-GR</option>
+											<option value="en-AU">en-AU</option>
+											<option value="en-BZ">en-BZ</option>
+											<option value="en-CA">en-CA</option>
+											<option value="en-GB">en-GB</option>
+											<option value="en-IE">en-IE</option>
+											<option value="en-IN">en-IN</option>
+											<option value="en-JM">en-JM</option>
+											<option value="en-MY">en-MY</option>
+											<option value="en-NZ">en-NZ</option>
+											<option value="en-PH">en-PH</option>
+											<option value="en-SG">en-SG</option>
+											<option value="en-TT">en-TT</option>
+											<option value="en-US">en-US</option>
+											<option value="en-ZA">en-ZA</option>
+											<option value="en-ZW">en-ZW</option>
+											<option value="es-AR">es-AR</option>
+											<option value="es-BO">es-BO</option>
+											<option value="es-CL">es-CL</option>
+											<option value="es-CO">es-CO</option>
+											<option value="es-CR">es-CR</option>
+											<option value="es-DO">es-DO</option>
+											<option value="es-EC">es-EC</option>
+											<option value="es-ES">es-ES</option>
+											<option value="es-GT">es-GT</option>
+											<option value="es-HN">es-HN</option>
+											<option value="es-MX">es-MX</option>
+											<option value="es-NI">es-NI</option>
+											<option value="es-PA">es-PA</option>
+											<option value="es-PE">es-PE</option>
+											<option value="es-PR">es-PR</option>
+											<option value="es-PY">es-PY</option>
+											<option value="es-SV">es-SV</option>
+											<option value="es-US">es-US</option>
+											<option value="es-UY">es-UY</option>
+											<option value="es-VE">es-VE</option>
+											<option value="et-EE">et-EE</option>
+											<option value="eu-ES">eu-ES</option>
+											<option value="fa-IR">fa-IR</option>
+											<option value="fi-FI">fi-FI</option>
+											<option value="fil-PH">fil-PH</option>
+											<option value="fo-FO">fo-FO</option>
+											<option value="fr-BE">fr-BE</option>
+											<option value="fr-CA">fr-CA</option>
+											<option value="fr-CH">fr-CH</option>
+											<option value="fr-FR">fr-FR</option>
+											<option value="fr-LU">fr-LU</option>
+											<option value="fr-MC">fr-MC</option>
+											<option value="fy-NL">fy-NL</option>
+											<option value="ga-IE">ga-IE</option>
+											<option value="gd-GB">gd-GB</option>
+											<option value="gl-ES">gl-ES</option>
+											<option value="gsw-FR">gsw-FR</option>
+											<option value="gu-IN">gu-IN</option>
+											<option value="he-IL">he-IL</option>
+											<option value="hi-IN">hi-IN</option>
+											<option value="hr-BA">hr-BA</option>
+											<option value="hr-HR">hr-HR</option>
+											<option value="hsb-DE">hsb-DE</option>
+											<option value="hu-HU">hu-HU</option>
+											<option value="hy-AM">hy-AM</option>
+											<option value="id-ID">id-ID</option>
+											<option value="ig-NG">ig-NG</option>
+											<option value="ii-CN">ii-CN</option>
+											<option value="is-IS">is-IS</option>
+											<option value="it-CH">it-CH</option>
+											<option value="it-IT">it-IT</option>
+											<option value="ja-JP">ja-JP</option>
+											<option value="ka-GE">ka-GE</option>
+											<option value="kk-KZ">kk-KZ</option>
+											<option value="kl-GL">kl-GL</option>
+											<option value="km-KH">km-KH</option>
+											<option value="kn-IN">kn-IN</option>
+											<option value="ko-KR">ko-KR</option>
+											<option value="kok-IN">kok-IN</option>
+											<option value="ky-KG">ky-KG</option>
+											<option value="lb-LU">lb-LU</option>
+											<option value="lo-LA">lo-LA</option>
+											<option value="lt-LT">lt-LT</option>
+											<option value="lv-LV">lv-LV</option>
+											<option value="mi-NZ">mi-NZ</option>
+											<option value="mk-MK">mk-MK</option>
+											<option value="ml-IN">ml-IN</option>
+											<option value="mn-MN">mn-MN</option>
+											<option value="moh-CA">moh-CA</option>
+											<option value="mr-IN">mr-IN</option>
+											<option value="ms-BN">ms-BN</option>
+											<option value="ms-MY">ms-MY</option>
+											<option value="mt-MT">mt-MT</option>
+											<option value="nb-NO">nb-NO</option>
+											<option value="ne-NP">ne-NP</option>
+											<option value="nl-BE">nl-BE</option>
+											<option value="nl-NL">nl-NL</option>
+											<option value="nn-NO">nn-NO</option>
+											<option value="nso-ZA">nso-ZA</option>
+											<option value="oc-FR">oc-FR</option>
+											<option value="or-IN">or-IN</option>
+											<option value="pa-IN">pa-IN</option>
+											<option value="pl-PL">pl-PL</option>
+											<option value="prs-AF">prs-AF</option>
+											<option value="ps-AF">ps-AF</option>
+											<option value="pt-BR">pt-BR</option>
+											<option value="pt-PT">pt-PT</option>
+											<option value="qut-GT">qut-GT</option>
+											<option value="quz-BO">quz-BO</option>
+											<option value="quz-EC">quz-EC</option>
+											<option value="quz-PE">quz-PE</option>
+											<option value="rm-CH">rm-CH</option>
+											<option value="ro-RO">ro-RO</option>
+											<option value="ru-RU">ru-RU</option>
+											<option value="rw-RW">rw-RW</option>
+											<option value="sa-IN">sa-IN</option>
+											<option value="sah-RU">sah-RU</option>
+											<option value="se-FI">se-FI</option>
+											<option value="se-NO">se-NO</option>
+											<option value="se-SE">se-SE</option>
+											<option value="si-LK">si-LK</option>
+											<option value="sk-SK">sk-SK</option>
+											<option value="sl-SI">sl-SI</option>
+											<option value="sma-NO">sma-NO</option>
+											<option value="sma-SE">sma-SE</option>
+											<option value="smj-NO">smj-NO</option>
+											<option value="smj-SE">smj-SE</option>
+											<option value="smn-FI">smn-FI</option>
+											<option value="sms-FI">sms-FI</option>
+											<option value="sq-AL">sq-AL</option>
+											<option value="sv-FI">sv-FI</option>
+											<option value="sv-SE">sv-SE</option>
+											<option value="sw-KE">sw-KE</option>
+											<option value="syr-SY">syr-SY</option>
+											<option value="ta-IN">ta-IN</option>
+											<option value="te-IN">te-IN</option>
+											<option value="th-TH">th-TH</option>
+											<option value="tk-TM">tk-TM</option>
+											<option value="tn-ZA">tn-ZA</option>
+											<option value="tr-TR">tr-TR</option>
+											<option value="tt-RU">tt-RU</option>
+											<option value="ug-CN">ug-CN</option>
+											<option value="uk-UA">uk-UA</option>
+											<option value="ur-PK">ur-PK</option>
+											<option value="vi-VN">vi-VN</option>
+											<option value="wo-SN">wo-SN</option>
+											<option value="xh-ZA">xh-ZA</option>
+											<option value="yo-NG">yo-NG</option>
+											<option value="zh-CN">zh-CN</option>
+											<option value="zh-HK">zh-HK</option>
+											<option value="zh-MO">zh-MO</option>
+											<option value="zh-SG">zh-SG</option>
+											<option value="zh-TW">zh-TW</option>
+											<option value="zu-ZA">zu-ZA</option>
+										</select>
+									</div>
+									<a role="button" tabindex="0" data-trigger="focus" class="info" data-po="po" title="Locale" data-placement="bottom" data-content="Select the locale to be used for UI date/time formatting purposes. The default value is 'en-GB'."> <span>i</span> </a>
+								</div>
+							</div>
+						</div>
+						<button type="submit" class="btn btn-default dnone">
+							Submit
+						</button>
+					</form>
+					<br/>
+					<div id="ntpResultPnl" class="panel panel-success dnone">
+						<div class="panel-heading">
+					    	<h3 class="panel-title">NTP Sync Details</h3>
+				  		</div>
+					  	<div class="panel-body">
+					    	<table class="table table-bordered table-striped">
+					    		<colgroup>
+					          		<col class="col-md-2">
+					          		<col class="col-md-10">
+						        </colgroup>
+								<tbody>
+									<tr>
+										<td>Current Time:</td>
+										<td id="tdNtpTime"></td>
+									</tr>
+									<tr>
+										<td>Last Sync:</td>
+										<td id="tdLastSync"></td>
+									</tr>
+									<tr>
+										<td>Last Sync Retries:</td>
+										<td id="tdLastSyncRetries"></td>
+									</tr>
+								</tbody>
+							</table>
+					  	</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="js/jquery-2.2.0.min.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		<script src="js/jquery.mask.min.js"></script>
+		<script src="js/regional.js"></script>
+	</body>
+</html>

@@ -1,0 +1,411 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Onboard I/O</title>
+		<link href="css/bootstrap.min.css" media="all" rel="stylesheet" />
+		<link href="css/app.css" media="all" rel="stylesheet" />
+	</head>
+	<body>
+		<div class="container">
+			<nav class="navbar navbar-default">
+				<div class="container-fluid">
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+							<span class="sr-only">Toggle navigation</span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+						<a class="navbar-brand" href="/"> Onboard I/O </a>
+					</div>
+					<div id="navbar" class="navbar-collapse collapse">
+						<ul class="navbar-nav list-inline">
+							<li>
+								<a href="/">
+								<button type="button" class="btn btn-default navbar-btn">
+									Home
+								</button></a>
+							</li>
+							<li>
+								<a href="/logoff">
+								<button type="button" class="btn btn-default navbar-btn">
+									Log Off
+								</button></a>
+							</li>
+						</ul>
+					</div><!--/.nav-collapse -->
+				</div><!--/.container-fluid -->
+			</nav>
+			<div class="alert alert-success" role="alert"><strong>Please wait</strong> loading settings...</div>
+			<div id="mainPnl" class="dnone">				
+				<form id="gpioFrm" method='post' action='/gpio' enctype='multipart/form-data' autocomplete='off'>
+					<div class="panel panel-default">
+						<div class="panel-heading" data-toggle="collapse" data-target="#d0EditPnl">
+							<h3 id="d0NameTitle" class="panel-title">gpio_0</h3>
+							<h3 class="panel-title">&nbsp;(D0)</h3>
+						</div>
+						<div id="d0EditPnl" class="panel-body collapse">
+							<div class="form-group">
+								<div class="formCtrl">
+									<label for="d0PinMode">I/O Mode</label>
+									<select class="form-control" id="d0PinMode">
+										<option value="0">Unused</option>
+										<option value="1">Digital Input</option>
+										<option value="2">Digital Input With Pullup</option>
+										<option value="3">Digital Output</option>
+										<option value="4">PWM Analog Output</option>
+									</select>
+								</div>
+								<a role="button" tabindex="0" data-trigger="focus" class="info" data-po="po" title="I/O Mode" data-placement="bottom" data-html="true" data-content="Configure this device digital I/O pin as:<br/><br/><ol><li>A digital input to read state of some external device</li><li>A digital output to control state of some external device</li><li>A PWM analog output to control state of some external device</li>"> <span>i</span> </a>
+							</div>
+							<div class="form-group">
+								<div class="formCtrl">
+									<label for="d0Name">Name</label>
+									<input type="text" class="form-control valtxt" id="d0Name" >
+								</div>
+								<a role="button" tabindex="0" data-trigger="focus" class="info" data-po="po" title="Name" data-placement="bottom" data-content="A meaningful name for this GPIO pin on the device"> <span>i</span> </a>
+							    <span id="d0NameValFail" class="valFail">* A valid name is required</span>
+							</div>
+							<div class="form-group">
+								<div class="formCtrl">
+									<label for="d0Default">Default Value</label>
+									<input type="text" class="form-control d" id="d0Default" >
+								</div>
+								<a role="button" tabindex="0" data-trigger="focus" class="info" data-po="po" title="Default Value" data-placement="bottom" data-content="Configure a default value for this pin. When the pin is configured as an output this value is used to initialize the state of the pin at device startup time. The valid range for this value is [0-1] for a digital output and [0-255] for a PWM analog output."> <span>i</span> </a>
+							    <span id="d0DefaultValFail" class="valFail">* A valid default value is required</span>
+							</div>
+							<div class="mqtt">
+								<div class="form-group">
+									<div class="formCtrl">
+										<label for="d0MQTTInEnabled">Enable MQTT In</label>
+										<input type="checkbox" class="form-control" id="d0MQTTInEnabled" name="d0MQTTInEnabled" >
+									</div>
+									<a role="button" tabindex="0" data-trigger="focus" class="info" data-po="po" title="Enable MQTT In" data-placement="bottom" data-html="true" data-content="Enables/disables MQTT inbound messages for this pin.<br/><br/>When enabled and this pin is configured as an output, an MQTT message value received is interpreted as a value to set the output value. A 0 or 1 is a valid value for a digital output and a value between 0 and 255 is a valid value for a PWM analog output."> <span>i</span> </a>
+								</div>
+								<div class="form-group">
+									<div class="formCtrl">
+										<label for="d0MQTTOutEnabled">Enable MQTT Out</label>
+										<input type="checkbox" class="form-control" id="d0MQTTOutEnabled" name="d0MQTTOutEnabled" >
+									</div>
+									<a role="button" tabindex="0" data-trigger="focus" class="info" data-po="po" title="Enable MQTT Out" data-placement="bottom" data-html="true" data-content="Enables/disables MQTT outbound messages for this pin.<br/><br/>When enabled, any change in state for this pin will be sent as an MQTT message to the MQTT server broker."> <span>i</span> </a>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					<div class="panel panel-default">
+						<div class="panel-heading" data-toggle="collapse" data-target="#d1EditPnl">
+							<h3 id="d1NameTitle" class="panel-title">gpio_1</h3>
+							<h3 class="panel-title">&nbsp;(D1)</h3>
+						</div>
+						<div id="d1EditPnl" class="panel-body collapse">
+							<div class="form-group">
+								<div class="formCtrl">
+									<label for="d1PinMode">I/O Mode</label>
+									<select class="form-control" id="d1PinMode">
+										<option value="0">Unused</option>
+										<option value="1">Digital Input</option>
+										<option value="2">Digital Input With Pullup</option>
+										<option value="3">Digital Output</option>
+										<option value="4">PWM Analog Output</option>
+									</select>
+								</div>
+								<a role="button" tabindex="0" data-trigger="focus" class="info" data-po="po" title="I/O Mode" data-placement="bottom" data-html="true" data-content="Configure this device digital I/O pin as:<br/><br/><ol><li>A digital input to read state of some external device</li><li>A digital output to control state of some external device</li><li>A PWM analog output to control state of some external device</li>"> <span>i</span> </a>
+							</div>
+							<div class="form-group">
+								<div class="formCtrl">
+									<label for="d1Name">Name</label>
+									<input type="text" class="form-control valtxt" id="d1Name" >
+								</div>
+								<a role="button" tabindex="0" data-trigger="focus" class="info" data-po="po" title="Name" data-placement="bottom" data-content="A meaningful name for this GPIO pin on the device"> <span>i</span> </a>
+							    <span id="d1NameValFail" class="valFail">* A valid name is required</span>
+							</div>
+							<div class="form-group">
+								<div class="formCtrl">
+									<label for="d1Default">Default Value</label>
+									<input type="text" class="form-control d" id="d1Default" >
+								</div>
+								<a role="button" tabindex="0" data-trigger="focus" class="info" data-po="po" title="Default Value" data-placement="bottom" data-content="Configure a default value for this pin. When the pin is configured as an output this value is used to initialize the state of the pin at device startup time. The valid range for this value is [0-1] for a digital output and [0-255] for a PWM analog output."> <span>i</span> </a>
+							    <span id="d1DefaultValFail" class="valFail">* A valid default value is required</span>
+							</div>
+							<div class="mqtt">
+								<div class="form-group">
+									<div class="formCtrl">
+										<label for="d1MQTTInEnabled">Enable MQTT In</label>
+										<input type="checkbox" class="form-control" id="d1MQTTInEnabled" name="d1MQTTInEnabled" >
+									</div>
+									<a role="button" tabindex="0" data-trigger="focus" class="info" data-po="po" title="Enable MQTT In" data-placement="bottom" data-html="true" data-content="Enables/disables MQTT inbound messages for this pin.<br/><br/>When enabled and this pin is configured as an output, an MQTT message value received is interpreted as a value to set the output value. A 0 or 1 is a valid value for a digital output and a value between 0 and 255 is a valid value for a PWM analog output."> <span>i</span> </a>
+								</div>
+								<div class="form-group">
+									<div class="formCtrl">
+										<label for="d1MQTTOutEnabled">Enable MQTT Out</label>
+										<input type="checkbox" class="form-control" id="d1MQTTOutEnabled" name="d1MQTTOutEnabled" >
+									</div>
+									<a role="button" tabindex="0" data-trigger="focus" class="info" data-po="po" title="Enable MQTT Out" data-placement="bottom" data-html="true" data-content="Enables/disables MQTT outbound messages for this pin.<br/><br/>When enabled, any change in state for this pin will be sent as an MQTT message to the MQTT server broker."> <span>i</span> </a>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					<div class="panel panel-default">
+						<div class="panel-heading" data-toggle="collapse" data-target="#d2EditPnl">
+							<h3 id="d2NameTitle" class="panel-title">gpio_2</h3>
+							<h3 class="panel-title">&nbsp;(D2)</h3>
+						</div>
+						<div id="d2EditPnl" class="panel-body collapse">
+							<div class="form-group">
+								<div class="formCtrl">
+									<label for="d2PinMode">I/O Mode</label>
+									<select class="form-control" id="d2PinMode">
+										<option value="0">Unused</option>
+										<option value="1">Digital Input</option>
+										<option value="2">Digital Input With Pullup</option>
+										<option value="3">Digital Output</option>
+										<option value="4">PWM Analog Output</option>
+									</select>
+								</div>
+								<a role="button" tabindex="0" data-trigger="focus" class="info" data-po="po" title="I/O Mode" data-placement="bottom" data-html="true" data-content="Configure this device digital I/O pin as:<br/><br/><ol><li>A digital input to read state of some external device</li><li>A digital output to control state of some external device</li><li>A PWM analog output to control state of some external device</li>"> <span>i</span> </a>
+							</div>
+							<div class="form-group">
+								<div class="formCtrl">
+									<label for="d2Name">Name</label>
+									<input type="text" class="form-control valtxt" id="d2Name" >
+								</div>
+								<a role="button" tabindex="0" data-trigger="focus" class="info" data-po="po" title="Name" data-placement="bottom" data-content="A meaningful name for this GPIO pin on the device"> <span>i</span> </a>
+							    <span id="d2NameValFail" class="valFail">* A valid name is required</span>
+							</div>
+							<div class="form-group">
+								<div class="formCtrl">
+									<label for="d2Default">Default Value</label>
+									<input type="text" class="form-control d" id="d2Default" >
+								</div>
+								<a role="button" tabindex="0" data-trigger="focus" class="info" data-po="po" title="Default Value" data-placement="bottom" data-content="Configure a default value for this pin. When the pin is configured as an output this value is used to initialize the state of the pin at device startup time. The valid range for this value is [0-1] for a digital output and [0-255] for a PWM analog output."> <span>i</span> </a>
+							    <span id="d2DefaultValFail" class="valFail">* A valid default value is required</span>
+							</div>
+							<div class="mqtt">
+								<div class="form-group">
+									<div class="formCtrl">
+										<label for="d2MQTTInEnabled">Enable MQTT In</label>
+										<input type="checkbox" class="form-control" id="d2MQTTInEnabled" name="d2MQTTInEnabled" >
+									</div>
+									<a role="button" tabindex="0" data-trigger="focus" class="info" data-po="po" title="Enable MQTT In" data-placement="bottom" data-html="true" data-content="Enables/disables MQTT inbound messages for this pin.<br/><br/>When enabled and this pin is configured as an output, an MQTT message value received is interpreted as a value to set the output value. A 0 or 1 is a valid value for a digital output and a value between 0 and 255 is a valid value for a PWM analog output."> <span>i</span> </a>
+								</div>
+								<div class="form-group">
+									<div class="formCtrl">
+										<label for="d2MQTTOutEnabled">Enable MQTT Out</label>
+										<input type="checkbox" class="form-control" id="d2MQTTOutEnabled" name="d2MQTTOutEnabled" >
+									</div>
+									<a role="button" tabindex="0" data-trigger="focus" class="info" data-po="po" title="Enable MQTT Out" data-placement="bottom" data-html="true" data-content="Enables/disables MQTT outbound messages for this pin.<br/><br/>When enabled, any change in state for this pin will be sent as an MQTT message to the MQTT server broker."> <span>i</span> </a>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					<div class="panel panel-default">
+						<div class="panel-heading" data-toggle="collapse" data-target="#d3EditPnl">
+							<h3 id="d3NameTitle" class="panel-title">gpio_3</h3>
+							<h3 class="panel-title">&nbsp;(D3)</h3>
+						</div>
+						<div id="d3EditPnl" class="panel-body collapse">
+							<div class="form-group">
+								<div class="formCtrl">
+									<label for="d3PinMode">I/O Mode</label>
+									<select class="form-control" id="d3PinMode">
+										<option value="0">Unused</option>
+										<option value="1">Digital Input</option>
+										<option value="2">Digital Input With Pullup</option>
+										<option value="3">Digital Output</option>
+										<option value="4">PWM Analog Output</option>
+									</select>
+								</div>
+								<a role="button" tabindex="0" data-trigger="focus" class="info" data-po="po" title="I/O Mode" data-placement="bottom" data-html="true" data-content="Configure this device digital I/O pin as:<br/><br/><ol><li>A digital input to read state of some external device</li><li>A digital output to control state of some external device</li><li>A PWM analog output to control state of some external device</li>"> <span>i</span> </a>
+							</div>
+							<div class="form-group">
+								<div class="formCtrl">
+									<label for="d3Name">Name</label>
+									<input type="text" class="form-control valtxt" id="d3Name" >
+								</div>
+								<a role="button" tabindex="0" data-trigger="focus" class="info" data-po="po" title="Name" data-placement="bottom" data-content="A meaningful name for this GPIO pin on the device"> <span>i</span> </a>
+							    <span id="d3NameValFail" class="valFail">* A valid name is required</span>
+							</div>
+							<div class="form-group">
+								<div class="formCtrl">
+									<label for="d3Default">Default Value</label>
+									<input type="text" class="form-control d" id="d3Default" >
+								</div>
+								<a role="button" tabindex="0" data-trigger="focus" class="info" data-po="po" title="Default Value" data-placement="bottom" data-content="Configure a default value for this pin. When the pin is configured as an output this value is used to initialize the state of the pin at device startup time. The valid range for this value is [0-1] for a digital output and [0-255] for a PWM analog output."> <span>i</span> </a>
+							    <span id="d3DefaultValFail" class="valFail">* A valid default value is required</span>
+							</div>
+							<div class="mqtt">
+								<div class="form-group">
+									<div class="formCtrl">
+										<label for="d3MQTTInEnabled">Enable MQTT In</label>
+										<input type="checkbox" class="form-control" id="d3MQTTInEnabled" name="d3MQTTInEnabled" >
+									</div>
+									<a role="button" tabindex="0" data-trigger="focus" class="info" data-po="po" title="Enable MQTT In" data-placement="bottom" data-html="true" data-content="Enables/disables MQTT inbound messages for this pin.<br/><br/>When enabled and this pin is configured as an output, an MQTT message value received is interpreted as a value to set the output value. A 0 or 1 is a valid value for a digital output and a value between 0 and 255 is a valid value for a PWM analog output."> <span>i</span> </a>
+								</div>
+								<div class="form-group">
+									<div class="formCtrl">
+										<label for="d3MQTTOutEnabled">Enable MQTT Out</label>
+										<input type="checkbox" class="form-control" id="d3MQTTOutEnabled" name="d3MQTTOutEnabled" >
+									</div>
+									<a role="button" tabindex="0" data-trigger="focus" class="info" data-po="po" title="Enable MQTT Out" data-placement="bottom" data-html="true" data-content="Enables/disables MQTT outbound messages for this pin.<br/><br/>When enabled, any change in state for this pin will be sent as an MQTT message to the MQTT server broker."> <span>i</span> </a>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					<div class="panel panel-default">
+						<div class="panel-heading" data-toggle="collapse" data-target="#d4EditPnl">
+							<h3 id="d4NameTitle" class="panel-title">gpio_4</h3>
+							<h3 class="panel-title">&nbsp;(D4)</h3>
+						</div>
+						<div id="d4EditPnl" class="panel-body collapse">
+							<div class="form-group">
+								<div class="formCtrl">
+									<label for="d4PinMode">I/O Mode</label>
+									<select class="form-control" id="d4PinMode">
+										<option value="0">Unused</option>
+										<option value="1">Digital Input</option>
+										<option value="2">Digital Input With Pullup</option>
+										<option value="3">Digital Output</option>
+										<option value="4">PWM Analog Output</option>
+									</select>
+								</div>
+								<a role="button" tabindex="0" data-trigger="focus" class="info" data-po="po" title="I/O Mode" data-placement="bottom" data-html="true" data-content="Configure this device digital I/O pin as:<br/><br/><ol><li>A digital input to read state of some external device</li><li>A digital output to control state of some external device</li><li>A PWM analog output to control state of some external device</li>"> <span>i</span> </a>
+							</div>
+							<div class="form-group">
+								<div class="formCtrl">
+									<label for="d4Name">Name</label>
+									<input type="text" class="form-control valtxt" id="d4Name" >
+								</div>
+								<a role="button" tabindex="0" data-trigger="focus" class="info" data-po="po" title="Name" data-placement="bottom" data-content="A meaningful name for this GPIO pin on the device"> <span>i</span> </a>
+							    <span id="d4NameValFail" class="valFail">* A valid name is required</span>
+							</div>
+							<div class="form-group">
+								<div class="formCtrl">
+									<label for="d4Default">Default Value</label>
+									<input type="text" class="form-control d" id="d4Default" >
+								</div>
+								<a role="button" tabindex="0" data-trigger="focus" class="info" data-po="po" title="Default Value" data-placement="bottom" data-content="Configure a default value for this pin. When the pin is configured as an output this value is used to initialize the state of the pin at device startup time. The valid range for this value is [0-1] for a digital output and [0-255] for a PWM analog output."> <span>i</span> </a>
+							    <span id="d4DefaultValFail" class="valFail">* A valid default value is required</span>
+							</div>
+							<div class="mqtt">
+								<div class="form-group">
+									<div class="formCtrl">
+										<label for="d4MQTTInEnabled">Enable MQTT In</label>
+										<input type="checkbox" class="form-control" id="d4MQTTInEnabled" name="d4MQTTInEnabled" >
+									</div>
+									<a role="button" tabindex="0" data-trigger="focus" class="info" data-po="po" title="Enable MQTT In" data-placement="bottom" data-html="true" data-content="Enables/disables MQTT inbound messages for this pin.<br/><br/>When enabled and this pin is configured as an output, an MQTT message value received is interpreted as a value to set the output value. A 0 or 1 is a valid value for a digital output and a value between 0 and 255 is a valid value for a PWM analog output."> <span>i</span> </a>
+								</div>
+								<div class="form-group">
+									<div class="formCtrl">
+										<label for="d4MQTTOutEnabled">Enable MQTT Out</label>
+										<input type="checkbox" class="form-control" id="d4MQTTOutEnabled" name="d4MQTTOutEnabled" >
+									</div>
+									<a role="button" tabindex="0" data-trigger="focus" class="info" data-po="po" title="Enable MQTT Out" data-placement="bottom" data-html="true" data-content="Enables/disables MQTT outbound messages for this pin.<br/><br/>When enabled, any change in state for this pin will be sent as an MQTT message to the MQTT server broker."> <span>i</span> </a>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					<div class="panel panel-default">
+						<div class="panel-heading" data-toggle="collapse" data-target="#a0EditPnl">
+							<h3 id="a0NameTitle" class="panel-title">analogInput</h3>
+							<h3 class="panel-title">&nbsp;(A0)</h3>
+						</div>
+						<div id="a0EditPnl" class="panel-body collapse">
+							<div class="form-group">
+								<div class="formCtrl">
+									<label for="a0PinMode">I/O Mode</label>
+									<select class="form-control" id="a0PinMode">
+										<option value="0">Unused</option>
+										<option value="1">Analog Input</option>
+									</select>
+								</div>
+								<a role="button" tabindex="0" data-trigger="focus" class="info" data-po="po" title="I/O Mode" data-placement="bottom" data-content="Enable/disable the analog input pin on the device. When enabled this pin can be used to read the analog state of some external device."> <span>i</span> </a>
+							</div>
+							<div class="form-group">
+								<div class="formCtrl">
+									<label for="a0Name">Name</label>
+									<input type="text" class="form-control valtxt" id="a0Name" >
+								</div>
+								<a role="button" tabindex="0" data-trigger="focus" class="info" data-po="po" title="Name" data-placement="bottom" data-content="A meaningful name for the analog pin on the device"> <span>i</span> </a>
+							    <span id="a0NameValFail" class="valFail">* A valid name is required</span>
+							</div>
+							<div class="form-group">
+								<div class="formCtrl">
+									<label for="a0Offset">Offset</label>
+									<input type="text" class="form-control float" id="a0Offset" maxlength="16">
+								</div>
+								<a role="button" tabindex="0" data-trigger="focus" class="info" data-po="po" title="Offset" data-placement="bottom" data-html="true" data-content="An offset value that is applied to the raw analog input voltage value, prior to the multiplier value being applied.<br/><br/>The resulting calculated analog value is calculated as (raw + offset) * multipler.<br/><br/>Enter the value zero here if no offset is required."> <span>i</span> </a>
+							    <span id="a0OffsetValFail" class="valFail">* A valid floating point offset value is required</span>
+							</div>
+							<div class="form-group">
+								<div class="formCtrl">
+									<label for="a0Multiplier">Multiplier</label>
+									<input type="text" class="form-control float" id="a0Multiplier" maxlength="16">
+								</div>
+								<a role="button" tabindex="0" data-trigger="focus" class="info" data-po="po" title="Multiplier" data-placement="bottom" data-html="true" data-content="A multiplier value that is applied to the raw analog input voltage value, after any configured offset value has been applied.<br/><br/>The resulting calculated analog value is calculated as (raw + offset) * multipler.<br/><br/>Enter the value 1 here if no multiplier is required."> <span>i</span> </a>
+							    <span id="a0MultiplierValFail" class="valFail">* A valid floating point multiplier value is required</span>
+							</div>
+							<div class="form-group">
+								<div class="formCtrl">
+									<label for="a0Unit">Unit of Measure</label>
+									<select class="form-control" id="a0Unit">
+										<option value="0"></option>
+										<option value="1">&deg;C</option>
+										<option value="2">&deg;F</option>
+										<option value="3">mm</option>
+										<option value="4">cm</option>
+										<option value="5">m</option>
+										<option value="6">km</option>
+										<option value="7">in</option>
+										<option value="8">ft</option>
+										<option value="9">mi</option>
+										<option value="10">ml</option>
+										<option value="11">cl</option>
+										<option value="12">l</option>
+										<option value="13">gal</option>
+										<option value="14">mg</option>
+										<option value="15">g</option>
+										<option value="16">kg</option>
+										<option value="17">oz</option>
+										<option value="18">lb</option>
+										<option value="19">t</option>
+										<option value="20">BTU</option>
+										<option value="21">mV</option>
+										<option value="22">V</option>
+										<option value="23">mA</option>
+										<option value="24">A</option>
+										<option value="25">&#8486;</option>
+										<option value="26">W</option>
+									</select>
+								</div>
+								<a role="button" tabindex="0" data-trigger="focus" class="info" data-po="po" title="Unit of Measure" data-placement="bottom" data-content="The common unit of measure that applies to the external device connected to the analog input. E.g. if a temperature sensor was connected, you might select &deg;C here"> <span>i</span> </a>							    
+							</div>
+							<div class="mqtt">
+								<div class="form-group">
+									<div class="formCtrl">
+										<label for="a0MQTTOutEnabled">Enable MQTT Out</label>
+										<input type="checkbox" class="form-control" id="a0MQTTOutEnabled" name="a0MQTTOutEnabled" >
+									</div>
+									<a role="button" tabindex="0" data-trigger="focus" class="info" data-po="po" title="Enable MQTT Out" data-placement="bottom" data-html="true" data-content="Enables/disables MQTT outbound messages for this pin.<br/><br/>When enabled, any change in state for this pin will be sent as an MQTT message to the MQTT server broker."> <span>i</span> </a>
+								</div>
+							</div>
+						</div>
+					</div>
+					<input type="hidden" name="f" />
+					<button type="submit" class="btn btn-default dnone">
+						Submit
+					</button>
+				</form>				
+			</div>
+		</div>
+		<script src="js/jquery-2.2.0.min.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		<script src="js/jquery.mask.min.js"></script>
+		<script src="js/gpio.js"></script>
+	</body>
+</html>

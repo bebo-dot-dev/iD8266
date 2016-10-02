@@ -1,0 +1,264 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Diagnostics</title>
+		<link href="css/bootstrap.min.css" media="all" rel="stylesheet" />
+		<link href="css/app.css" media="all" rel="stylesheet" />			
+	</head>
+	<body>
+		<div class="container">
+			<nav class="navbar navbar-default">
+				<div class="container-fluid">
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+							<span class="sr-only">Toggle navigation</span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+						<a class="navbar-brand" href="/"> Diagnostics </a>
+					</div>
+					<div id="navbar" class="navbar-collapse collapse">
+						<ul class="navbar-nav list-inline">
+							<li>
+								<a href="/">
+								<button type="button" class="btn btn-default navbar-btn">
+									Home
+								</button></a>
+							</li>
+							<li>
+								<a href="/logoff">
+								<button type="button" class="btn btn-default navbar-btn">
+									Log Off
+								</button></a>
+							</li>
+						</ul>
+					</div><!--/.nav-collapse -->
+				</div><!--/.container-fluid -->
+			</nav>
+			<div class="alert alert-success" role="alert"><strong>Please wait</strong> loading settings...</div>
+			<div id="mainPnl" class="dnone">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+				    	<h3 class="panel-title">Runtime</h3>
+			  		</div>
+				  	<div class="panel-body">
+				    	<table class="table table-bordered table-striped">
+							<tbody>
+								<tr>
+									<td>Device Type:</td>
+									<td id="deviceClassString"></td>
+								</tr>
+								<tr>
+									<td>Firmware Version:</td>
+									<td id="firmwareVersion"></td>
+								</tr>
+								<tr>
+									<td>SDK Version:</td>
+									<td id="sdkVersion"></td>
+								</tr>
+								<tr>
+									<td>Core Version:</td>
+									<td id="coreVersion"></td>
+								</tr>
+								<tr>
+									<td>Firmware Bytes:</td>
+									<td id="binaryBytes"></td>
+								</tr>
+								<tr>
+									<td>Free Bytes:</td>
+									<td id="freeBytes"></td>
+								</tr>
+								<tr>
+									<td>Free Heap:</td>
+									<td id="freeHeap"></td>
+								</tr>
+								<tr>
+									<td>Device Up Time:</td>
+									<td id="deviceUpTime"></td>
+								</tr>
+							</tbody>
+						</table>
+				  	</div>
+				</div>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+				    	<h3 class="panel-title"><a href="/network">Network Configuration</a></h3>
+			  		</div>
+				  	<div class="panel-body">
+				    	<table class="table table-bordered table-striped">
+							<tbody>
+								<tr>
+									<td>WiFi Mode:</td>
+									<td id="wifiMode"></td>
+								</tr>
+								<tr>
+									<td>WiFi Client IP Mode:</td>
+									<td id="ipMode"></td>
+								</tr>
+								<tr>
+									<td>Device MAC:</td>
+									<td id="deviceMac"></td>
+								</tr>
+								<tr>
+									<td>Device AP IP:</td>
+									<td id="deviceApIp"></td>
+								</tr>
+								<tr>
+									<td>Device WiFi Client IP:</td>
+									<td id="deviceIp"></td>
+								</tr>
+								<tr>
+									<td>Your IP:</td>
+									<td id="clientIp"></td>
+								</tr>
+							</tbody>
+						</table>
+				  	</div>
+				</div>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+				    	<h3 class="panel-title"><a href="/dns">DNS Configuration</a></h3>
+			  		</div>
+				  	<div class="panel-body">
+				    	<table class="table table-bordered table-striped">
+							<tbody>
+								<tr>
+									<td>HostName:</td>
+									<td id="hostName"></td>
+								</tr>
+								<tr>
+									<td>MDNS Enabled:</td>
+									<td id="mdnsEnabled"></td>
+								</tr>
+								<tr>
+									<td>DNS Enabled:</td>
+									<td id="dnsEnabled"></td>
+								</tr>
+				
+							</tbody>
+						</table>
+				  	</div>
+				</div>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+				    	<h3 class="panel-title"><a href="/webserver">Webserver Configuration</a></h3>
+			  		</div>
+				  	<div class="panel-body">
+				    	<table class="table table-bordered table-striped">
+							<tbody>
+								<tr>
+									<td>HTTP Port:</td>
+									<td id="webserverPort"></td>
+								</tr>
+								<tr>
+									<td>Websocket Port:</td>
+									<td id="websocketServerPort"></td>
+								</tr>
+							</tbody>
+						</table>
+				  	</div>
+				</div>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+				    	<h3 class="panel-title"><a href="/regional">Regional Configuration</a></h3>
+			  		</div>
+				  	<div class="panel-body">
+				    	<table class="table table-bordered table-striped">
+							<tbody>
+								<tr>
+									<td>NTP Enabled:</td>
+									<td id="ntpEnabled"></td>
+								</tr>
+								<tr>
+									<td>NTP Locale:</td>
+									<td id="ntpLocale"></td>
+								</tr>
+								<tr>
+									<td>NTP Time:</td>
+									<td id="ntpTime">N/A</td>
+								</tr>
+								<tr>
+									<td>NTP Last Sync:</td>
+									<td id="ntpLastSync">N/A</td>
+								</tr>
+								<tr>
+									<td>NTP Last Sync Retries:</td>
+									<td id="ntpLastSyncRetries">N/A</td>
+								</tr>
+							</tbody>
+						</table>
+				  	</div>
+				</div>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+				    	<h3 class="panel-title"><a href="/gpio">MQTT Configuration</a></h3>
+			  		</div>
+				  	<div class="panel-body">
+				    	<table class="table table-bordered table-striped">
+							<tbody>
+								<tr>
+									<td>MQTT Enabled:</td>
+									<td id="mqttSystemEnabled"></td>
+								</tr>
+								<tr>
+									<td>MQTT Server Broker IP:</td>
+									<td id="mqttServerBrokerIp"></td>
+								</tr>
+								<tr>
+									<td>MQTT Server Broker Port:</td>
+									<td id="mqttServerBrokerPort"></td>
+								</tr>
+								<tr>
+									<td>MQTT Connected:</td>
+									<td id="mqttConnected"></td>
+								</tr>
+							</tbody>
+						</table>
+				  	</div>
+				</div>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+				    	<h3 class="panel-title"><a href="/logging">Logging Configuration</a></h3>
+			  		</div>
+				  	<div class="panel-body">
+				    	<table class="table table-bordered table-striped">
+							<tbody>
+								<tr>
+									<td>ThingSpeak Enabled:</td>
+									<td id="thingSpeakEnabled"></td>
+								</tr>
+								<tr>
+									<td>HTTP Logging Enabled:</td>
+									<td id="httpLoggingEnabled"></td>
+								</tr>
+								<tr class="httpLogging">
+									<td>HTTP Logging Host:</td>
+									<td id="httpLoggingHost"></td>
+								</tr>
+								<tr class="httpLogging">
+									<td>HTTP Logging Base URI:</td>
+									<td id="httpLoggingUri"></td>
+								</tr>								
+								<tr class="httpLogging">
+									<td>HTTP Logging Last URI:</td>
+									<td id="httpLoggingLastUri"></td>
+								</tr>
+								<tr class="httpLogging">
+									<td>HTTP Logging Last Call Ok:</td>
+									<td id="httpLoggingLastCallOk"></td>
+								</tr>
+								
+							</tbody>
+						</table>
+				  	</div>
+				</div>
+			</div>
+		</div>
+		<script src="js/jquery-2.2.0.min.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		<script src="js/jquery.mask.min.js"></script>
+		<script src="js/diagnostics.js"></script>
+	</body>
+</html>

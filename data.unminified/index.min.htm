@@ -1,0 +1,171 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Menu Options</title>
+		<link href="css/bootstrap.min.css" media="all" rel="stylesheet" />
+		<link href="css/app.css" media="all" rel="stylesheet" />
+	</head>
+	<body>
+		<div class="container idx">
+			<nav class="navbar navbar-default">
+				<div class="container-fluid">
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle collapsed"
+						data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+						aria-controls="navbar">
+							<span class="sr-only">Toggle navigation</span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+						<a class="navbar-brand" href="#"> Main Menu </a>
+					</div>
+					<div id="navbar" class="navbar-collapse collapse">
+						<ul class="navbar-nav list-inline">
+							<li>
+								<a href="/logoff">
+								<button type="button" class="btn btn-default navbar-btn">
+									Log Off
+								</button> </a>
+							</li>
+						</ul>
+					</div>
+					<!--/.nav-collapse -->
+				</div>
+				<!--/.container-fluid -->
+			</nav>
+			<div id="bodySection" class="dnone">
+				<div class="panel panel-default">
+					<div class="panel-body">
+						<span id="deviceType">iD8266 WiFi Controller</span>&nbsp; <small><strong>v<span id="version">1</span></strong></small>
+					</div>
+				</div>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Network</h3>
+					</div>
+					<div class="panel-body">
+						<a href="/network.cm">General Network Settings</a>
+						<a role="button" tabindex="0" data-trigger="focus" class="info" data-po="po" data-placement="top"
+						title="General Network Settings" data-content="Configure Wifi mode, DHCP / StaticIP etc"> <span>i</span> </a>
+						<br/>
+						<a href="/dns.cm">DNS Settings</a>
+						<a role="button" tabindex="1" data-trigger="focus" class="info" data-po="po" data-placement="top"
+						title="DNS Settings" data-content="Configure hostname, DNS mode type etc"> <span>i</span> </a>
+						<br/>
+						<a href="/webserver.cm">Web Server Settings</a>
+						<a role="button" tabindex="2" data-trigger="focus" class="info" data-po="po" data-placement="top"
+						title="Web Server Settings" data-content="Configure Web Server settings"> <span>i</span> </a>
+					</div>
+				</div>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">I/O</h3>
+					</div>
+					<div class="panel-body">
+						<a href="/mqtt.cm">MQTT</a>
+						<a role="button" tabindex="3" data-trigger="focus" class="info" data-po="po" data-placement="top" data-html="true"
+						title="MQTT" data-content="Configure the lightweight MQTT publish/subscribe protocol for the device.<br/>See&nbsp;<a href='https://en.wikipedia.org/wiki/MQTT' target='_blank' class='plink'>MQTT</a>&nbsp;for details"> <span>i</span> </a>
+						<br/>
+						<a href="/gpio.cm">Onboard GPIO</a>
+						<a role="button" tabindex="3" data-trigger="focus" class="info" data-po="po" data-placement="top"
+						title="Onboard GPIO" data-content="Configure device onboard I/O to enabled remote control actions on connected devices"> <span>i</span> </a>
+						<div class="dnone">
+							<a id="d0" href="/gpiodtl.cm?d=0">Unused</a>
+							<a role="button" tabindex="4" data-trigger="focus" class="info" data-po="po" data-placement="top"
+							title="D0" data-content=""> <span>i</span> </a>
+						</div>
+						<div class="dnone">
+							<a id="d1" href="/gpiodtl.cm?d=1">Unused</a>
+							<a role="button" tabindex="5" data-trigger="focus" class="info" data-po="po" data-placement="top"
+							title="D1" data-content=""> <span>i</span> </a>
+						</div>
+						<div class="dnone">
+							<a id="d2" href="/gpiodtl.cm?d=2">Unused</a>
+							<a role="button" tabindex="6" data-trigger="focus" class="info" data-po="po" data-placement="top"
+							title="D2" data-content=""> <span>i</span> </a>
+						</div>
+						<div class="dnone">
+							<a id="d3" href="/gpiodtl.cm?d=3">Unused</a>
+							<a role="button" tabindex="7" data-trigger="focus" class="info" data-po="po" data-placement="top"
+							title="D3" data-content=""> <span>i</span> </a>
+						</div>
+						<div class="dnone">
+							<a id="d4" href="/gpiodtl.cm?d=4">Unused</a>
+							<a role="button" tabindex="8" data-trigger="focus" class="info" data-po="po" data-placement="top"
+							title="D4" data-content=""> <span>i</span> </a>
+						</div>
+						<div class="dnone">
+							<a id="a0" href="/gpiodtl.cm?a=0">Unused</a>
+							<a role="button" tabindex="9" data-trigger="focus" class="info" data-po="po" data-placement="top"
+							title="A0" data-content=""> <span>i</span> </a>
+						</div>
+					</div>
+				</div>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">System</h3>
+					</div>
+					<div class="panel-body">
+						<a href="/regional.cm">Regional Settings</a>
+						<a role="button" tabindex="10" data-trigger="focus" class="info" data-po="po" data-placement="top"
+						title="Regional Settings" data-content="Configure NTP time server settings, timezone etc"> <span>i</span> </a>
+						<br/>
+						<a href="/power.cm">Power Management</a>
+						<a role="button" tabindex="10" data-trigger="focus" class="info" data-po="po" data-placement="top"
+						title="Power Management" data-content="Configure deep sleep power management settings"> <span>i</span> </a>
+						<br/>
+						<a href="/logging.cm">Logging</a>
+						<a role="button" tabindex="11" data-trigger="focus" class="info" data-po="po" data-placement="top"
+						title="Logging" data-content="Configure settings for logging to external services"> <span>i</span> </a>
+						<br/>
+						<a href="/diagnostics.cm">Diagnostics</a>
+						<a role="button" tabindex="12" data-trigger="focus" class="info" data-po="po" data-placement="top"
+						title="Diagnostics" data-content="Review diagnostic data, software version and runtime parameters"> <span>i</span> </a>
+						<br/>
+						<a href="/firmwareUpload.cm">Firmware Update</a>
+						<a role="button" tabindex="13" data-trigger="focus" class="info" data-po="po" data-placement="top"
+						title="Firmware Update" data-content="Manage the software running on this device / update the runtime firmware"> <span>i</span> </a>
+						<br/>
+						<a id="rebootLnk" href="#" data-action="reboot" data-toggle="modal" data-target="#confirmDlg">Reboot</a>
+						<a role="button" tabindex="14" data-trigger="focus" class="info" data-po="po" data-placement="top"
+						title="Reboot" data-content="Perform a device soft reboot"> <span>i</span> </a>
+						<br/>
+						<a id="resetLink" href="#" data-action="reset" data-toggle="modal" data-target="#confirmDlg">Factory Reset</a>
+						<a role="button" tabindex="15" data-trigger="focus" class="info" data-po="po" data-placement="top"
+						title="Factory Reset" data-content="Reset the device to factory default settings and reboot"> <span>i</span> </a>
+					</div>
+				</div>
+			</div>
+		</div>		
+		<div class="modal fade" id="confirmDlg" tabindex="-1" role="dialog"
+		aria-labelledby="confirmDlgLabel">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<h4 class="modal-title" id="confirmDlgLabel">Reset</h4>
+					</div>
+					<div class="modal-body">
+						<div></div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">
+							Close
+						</button>
+						<button id="actionBtn" type="button" class="btn btn-primary">
+							Reset
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="js/jquery-2.2.0.min.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		<script src="js/idx.js"></script>
+	</body>
+</html>

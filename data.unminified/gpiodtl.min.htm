@@ -1,0 +1,89 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>I/O Control</title>
+		<link href="css/bootstrap.min.css" media="all" rel="stylesheet" />
+		<link href="css/app.css" media="all" rel="stylesheet" />
+	</head>
+	<body>
+		<div class="container">
+			<nav class="navbar navbar-default">
+				<div class="container-fluid">
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+							<span class="sr-only">Toggle navigation</span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+						<a class="navbar-brand" href="/"> I/O Control </a>
+					</div>
+					<div id="navbar" class="navbar-collapse collapse">
+						<ul class="navbar-nav list-inline">
+							<li>
+								<a href="/">
+								<button type="button" class="btn btn-default navbar-btn">
+									Home
+								</button></a>
+							</li>
+							<li>
+								<a href="/logoff">
+								<button type="button" class="btn btn-default navbar-btn">
+									Log Off
+								</button></a>
+							</li>
+						</ul>
+					</div><!--/.nav-collapse -->
+				</div><!--/.container-fluid -->
+			</nav>
+			<div class="alert alert-success" role="alert"><strong>Please wait</strong> loading...</div>
+			<div id="mainPnl" class="panel panel-default dnone">
+				<div class="panel-body">
+					<div id="digitalPanel" class="panel panel-default dnone">
+						<div class="panel-heading">
+							<span class="socketStatus"></span>
+							<h3 id="dNameTitle" class="panel-title">gpio</h3>
+							<h5 id="dMode" class="panel-title">mode</h5>
+							<h5 class="panel-title statusTxt"></h5>
+						</div>
+						<div class="panel-body">
+							<!--switch or range slider -->
+							<div class="onoffswitch dnone">
+							    <input type="checkbox" name="switch" class="onoffswitch-checkbox" id="switch">
+							    <label class="onoffswitch-label" for="switch">
+							        <span class="onoffswitch-inner"></span>
+							        <span class="onoffswitch-switch"></span>
+							    </label>
+							</div>
+							<div class="range-slider dnone">
+								<input class="range-slider__range" type="range" value="0" min="0" max="255" id="range">
+								<span class="range-slider_value">0</span>
+							</div>
+						</div>
+					</div>		
+					<div id="analogPanel" class="panel panel-default dnone">
+						<div class="panel-heading">
+							<span class="socketStatus"></span>
+							<h3 id="aNameTitle" class="panel-title">analogInput</h3>
+							<h5 class="panel-title">(Analog Input)</h5>
+							<h5 class="panel-title statusTxt"></h5>
+						</div>
+						<div class="panel-body">
+							<h3>
+								<span id="a0Calculated"></span>&nbsp;<span id="a0UnitStr"></span>
+							</h3>
+							<h5>
+								Raw&#58;&nbsp;<span id="a0Value"></span>&nbsp;&#40;<span id="a0Voltage"></span>&nbsp;volts&#41;
+							</h5>
+						</div>
+					</div>	
+				</div>
+			</div>
+		</div>
+		<script src="js/jquery-2.2.0.min.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		<script src="js/jquery.mask.min.js"></script>
+		<script src="js/gpiodtl.js"></script>
+	</body>
+</html>

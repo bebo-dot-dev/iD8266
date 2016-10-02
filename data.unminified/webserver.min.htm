@@ -1,0 +1,95 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Web Server Settings</title>
+		<link href="css/bootstrap.min.css" media="all" rel="stylesheet" />
+		<link href="css/app.css" media="all" rel="stylesheet" />
+	</head>
+	<body>
+		<div class="container">
+			<nav class="navbar navbar-default">
+				<div class="container-fluid">
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+							<span class="sr-only">Toggle navigation</span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+						<a class="navbar-brand" href="/"> Web Server Settings </a>
+					</div>
+					<div id="navbar" class="navbar-collapse collapse">
+						<ul class="navbar-nav list-inline">
+							<li>
+								<a href="/">
+								<button type="button" class="btn btn-default navbar-btn">
+									Home
+								</button></a>
+							</li>
+							<li>
+								<a href="/logoff">
+								<button type="button" class="btn btn-default navbar-btn">
+									Log Off
+								</button></a>
+							</li>
+						</ul>
+					</div><!--/.nav-collapse -->
+				</div><!--/.container-fluid -->
+			</nav>
+			<div class="alert alert-success" role="alert"><strong>Please wait</strong> loading settings...</div>
+			<div id="mainPnl" class="panel panel-default dnone">
+				<div class="panel-body">
+					<form id="webserverFrm" method='post' action='/webserver' enctype='multipart/form-data' autocomplete='off'>
+						<div class="form-group">
+							<div class="formCtrl">
+								<label for="adminPwd">Administrator Password</label>
+								<input type="password" class="form-control valtxt" id="adminPwd" name="adminPwd" >
+							</div>
+							<a role="button" tabindex="0" data-trigger="focus" class="info" data-po="po" title="Administrator Password" data-placement="bottom" data-content="Configure the administrator password for access to this device website. Min length is 8 characters."> <span>i</span> </a>
+							<span id="adminPwdValFail" class="valFail">* A valid password is required</span>
+						</div>
+						<div class="form-group">
+							<div class="formCtrl">
+								<label for="webserverPort">Web Server Port</label>
+								<input type="text" class="form-control w70 number" id="webserverPort" name="webserverPort" maxlength="5" >
+							</div>
+							<a role="button" tabindex="0" data-trigger="focus" class="info" data-po="po" title="Web Server Port" data-placement="bottom" data-content="Configure the IP port the web server listens on. Default is 80. Valid range is 1-65535."> <span>i</span> </a>
+							<span id="webserverPortValFail" class="valFail">* A valid web server port value is required</span>
+						</div>
+						<div class="form-group">
+							<div class="formCtrl">
+								<label for="websocketServerPort">Websocket Server Port</label>
+								<input type="text" class="form-control w70 number" id="websocketServerPort" name="websocketServerPort" maxlength="5" >
+							</div>
+							<a role="button" tabindex="0" data-trigger="focus" class="info" data-po="po" title="Websocket Server Port" data-placement="bottom" data-content="Configure the IP port the websocket server listens on. Default is 81. Valid range is 1-65535."> <span>i</span> </a>								
+							<span id="websocketServerPortValFail" class="valFail">* A valid websocket server port value is required</span>
+						</div>
+						<div class="form-group">
+							<div class="formCtrl">
+								<label for="includeServerHeader">Server Response Header</label>
+								<input type="checkbox" class="form-control" id="includeServerHeader" name="includeServerHeader" >
+							</div>
+							<a role="button" tabindex="0" data-trigger="focus" class="info" data-po="po" title="Include Server Response Header" data-placement="bottom" data-content="Enable / disable the web server 'Server' HTTP protocol response header. Default is off. Including a response server header can be useful in custom client applications."> <span>i</span> </a>
+							</div>
+						<div class="form-group">
+							<div class="formCtrl">
+								<label for="serverHeader">Response Header Value</label>
+								<input type="text" class="form-control valtxt" id="serverHeader" name="serverHeader" >
+							</div>
+							<a role="button" tabindex="0" data-trigger="focus" class="info" data-po="po" title="Server Response Header Value" data-placement="bottom" data-content="The web server 'Server' HTTP protocol response header value returned when enabled. Min length is 8 characters."> <span>i</span> </a>
+							<span id="serverHeaderValFail" class="valFail">* A valid server header value is required</span>
+						</div>						
+						<button type="submit" class="btn btn-default dnone">
+							Submit
+						</button>
+					</form>
+				</div>
+			</div>
+		</div>
+		<script src="js/jquery-2.2.0.min.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		<script src="js/jquery.mask.min.js"></script>
+		<script src="js/webserver.js"></script>
+	</body>
+</html>

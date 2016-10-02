@@ -1,0 +1,364 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Logging Configuration</title>
+		<link href="css/bootstrap.min.css" media="all" rel="stylesheet" />
+		<link href="css/app.css" media="all" rel="stylesheet" />
+	</head>
+	<body>
+		<div class="container">
+			<nav class="navbar navbar-default">
+				<div class="container-fluid">
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+							<span class="sr-only">Toggle navigation</span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+						<a class="navbar-brand" href="/"> Logging Config </a>
+					</div>
+					<div id="navbar" class="navbar-collapse collapse">
+						<ul class="navbar-nav list-inline">
+							<li>
+								<a href="/">
+								<button type="button" class="btn btn-default navbar-btn">
+									Home
+								</button></a>
+							</li>
+							<li>
+								<a href="/logoff">
+								<button type="button" class="btn btn-default navbar-btn">
+									Log Off
+								</button></a>
+							</li>
+						</ul>
+					</div><!--/.nav-collapse -->
+				</div><!--/.container-fluid -->
+			</nav>
+			<div class="alert alert-success" role="alert"><strong>Please wait</strong> loading settings...</div>
+			<div id="mainPnl" class="dnone">				
+				<form id="gpioFrm" method='post' action='/logging' enctype='multipart/form-data' autocomplete='off'>
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h3 class="panel-title">Options</h3>
+						</div>
+						<div class="panel-body">
+							<div class="form-group">
+								<div class="formCtrl">
+									<label for="thingSpeakEnabled">Enable ThingSpeak</label>
+									<input type="checkbox" class="form-control" id="thingSpeakEnabled" name="thingSpeakEnabled" >
+								</div>
+								<a role="button" tabindex="0" data-trigger="focus" class="info" data-po="po" title="Enable ThingSpeak" data-placement="bottom" data-html="true" data-content="Enables/disables logging to ThingSpeak for this device.<br/><br/>ThingSpeak enforces a call velocity of >= 15 secs between calls; multiple changes occurring within any given 15 second window will not be logged.<br/><br/>See&nbsp;<a href='https://thingspeak.com/' target='_blank'>ThingSpeak</a>&nbsp;for details"> <span>i</span> </a>
+							</div>
+							<div class="form-group">
+								<div class="formCtrl">
+									<label for="httpLoggingEnabled">Enable HTTP Logging</label>
+									<input type="checkbox" class="form-control" id="httpLoggingEnabled" name="httpLoggingEnabled" >
+								</div>
+								<a role="button" tabindex="1" data-trigger="focus" class="info" data-po="po" title="Enable HTTP Logging" data-placement="bottom" data-html="true" data-content="Enables/disables logging to any web server via the HTTP protocol for this device.<br/><br/>The target host can be on the local network or the internet; when enabled, each logging request is made as a GET request with I/O specific change event data passed as a query string parameter.<br/><br/>It's possible to use this feature chained with other external services e.g.&nbsp;<a href='https://uk.mathworks.com/help/thingspeak/thingtweet-app.html' target='_blank'>ThingTweet</a>&nbsp;and&nbsp;<a href='https://ifttt.com/wtf' target='_blank'>IFTTT</a>&nbsp;to extend this device's range/flexibility"> <span>i</span> </a>
+							</div>
+							<div class="httplogging">
+								<div class="form-group">
+									<div class="formCtrl">
+										<label for="httpLoggingHost">HTTP Logging Host</label>
+										<input type="text" class="form-control valtxt" id="httpLoggingHost" name="httpLoggingHost" maxlength="32" >
+									</div>
+									<a role="button" tabindex="1" data-trigger="focus" class="info" data-po="po" title="HTTP Logging Host" data-placement="bottom" data-content="The hostname of the server to log to e.g. api.thingspeak.com"> <span>i</span> </a>
+								    <span id="httpLoggingHostValFail" class="valFail">* A valid host is required</span>
+								</div>
+								<div class="form-group">
+									<div class="formCtrl">
+										<label for="httpLoggingUri">HTTP Logging URI</label>
+										<input type="text" class="form-control" id="httpLoggingUri" name="httpLoggingUri" maxlength="128" >
+									</div>
+									<a role="button" tabindex="2" data-trigger="focus" class="info" data-po="po" title="HTTP Logging URI" data-placement="bottom" data-html="true" data-content="The URI path to include in the request.<br/><br/>The URI can include any required query string parameters that are necessary for the request to succeed i.e. an API key / password etc.<br/><br/>e.g.&nbsp;/apps/thingtweet/1/statuses/update?key=E8L860U5PZ4LYAOD&status="> <span>i</span> </a>								    
+								</div>								
+							</div>
+						</div>
+					</div>
+					
+					<div id="ioSection" class="dnone">
+						<div class="panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#d0EditPnl">
+								<h3 id="d0NameTitle" class="panel-title">gpio_0</h3>
+								<h3 class="panel-title">&nbsp;(D0)</h3>
+							</div>
+							<div id="d0EditPnl" class="panel-body collapse">
+								<div class="thingspeak">									
+									<div class="form-group">
+										<div class="formCtrl">
+											<label for="d0LogToThingSpeak">Enable ThingSpeak</label>
+											<input type="checkbox" class="form-control" id="d0LogToThingSpeak" name="d0LogToThingSpeak" >
+										</div>
+										<a role="button" tabindex="4" data-trigger="focus" class="info" data-po="po" title="Enable ThingSpeak" data-placement="bottom" data-html="true" data-content="Enables/disables logging to ThingSpeak for this pin.<br/><br/>When enabled, any change in state for this pin will be sent as a channel update to ThingSpeak."> <span>i</span> </a>
+									</div>
+									<div id="d0ThingSpeakParams" class="dnone mb15">
+										<div class="form-group">
+											<div class="formCtrl">
+												<label for="d0ThingSpeakChannel">ThingSpeak Channel</label>
+												<input type="text" class="form-control w100 number" id="d0ThingSpeakChannel" name="d0ThingSpeakChannel" maxlength="32" >
+											</div>
+											<a role="button" tabindex="5" data-trigger="focus" class="info" data-po="po" title="ThingSpeak Channel" data-placement="bottom" data-content="The target ThingSpeak Channel specific to this pin"> <span>i</span> </a>
+										    <span id="d0ThingSpeakChannelValFail" class="valFail">* A valid channel number is required</span>
+										</div>
+										<div class="form-group">
+											<div class="formCtrl">
+												<label for="d0ThingSpeakApiKey">ThingSpeak API Key</label>
+												<input type="password" class="form-control valtxt apiKey" id="d0ThingSpeakApiKey" name="d0ThingSpeakApiKey" maxlength="32" >
+											</div>
+											<a role="button" tabindex="6" data-trigger="focus" class="info" data-po="po" title="ThingSpeak API Key" data-placement="bottom" data-content="The corresponding API key for the channel configured for this pin"> <span>i</span> </a>
+										    <span id="d0ThingSpeakApiKeyValFail" class="valFail">* A valid API key is required</span>
+										</div>
+									</div>
+								</div>
+								<div class="httplogging">
+									<div class="form-group">
+										<div class="formCtrl">
+											<label for="d0HttpLoggingEnabled">Enable HTTP Logging</label>
+											<input type="checkbox" class="form-control" id="d0HttpLoggingEnabled" name="d0HttpLoggingEnabled" >
+										</div>
+										<a role="button" tabindex="7" data-trigger="focus" class="info" data-po="po" title="Enable HTTP Logging" data-placement="bottom" data-html="true" data-content="Enables/disables HTTP logging for this pin.<br/><br/>When enabled, any change in state for this pin will be sent as a HTTP GET request to the configured host."> <span>i</span> </a>
+									</div>
+								</div>																			
+							</div>
+						</div>
+						
+						<div class="panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#d1EditPnl">
+								<h3 id="d1NameTitle" class="panel-title">gpio_1</h3>
+								<h3 class="panel-title">&nbsp;(D1)</h3>
+							</div>
+							<div id="d1EditPnl" class="panel-body collapse">
+								<div class="thingspeak">							
+									<div class="form-group">
+										<div class="formCtrl">
+											<label for="d1LogToThingSpeak">Enable ThingSpeak</label>
+											<input type="checkbox" class="form-control" id="d1LogToThingSpeak" name="d1LogToThingSpeak" >
+										</div>
+										<a role="button" tabindex="8" data-trigger="focus" class="info" data-po="po" title="Enable ThingSpeak" data-placement="bottom" data-html="true" data-content="Enables/disables logging to ThingSpeak for this pin.<br/><br/>When enabled, any change in state for this pin will be sent as a channel update to ThingSpeak."> <span>i</span> </a>
+									</div>
+									<div id="d1ThingSpeakParams" class="dnone mb15">
+										<div class="form-group">
+											<div class="formCtrl">
+												<label for="d1ThingSpeakChannel">ThingSpeak Channel</label>
+												<input type="text" class="form-control w100 number" id="d1ThingSpeakChannel" name="d1ThingSpeakChannel" maxlength="32" >
+											</div>
+											<a role="button" tabindex="9" data-trigger="focus" class="info" data-po="po" title="ThingSpeak Channel" data-placement="bottom" data-content="The target ThingSpeak Channel specific to this pin"> <span>i</span> </a>
+										    <span id="d1ThingSpeakChannelValFail" class="valFail">* A valid channel number is required</span>
+										</div>
+										<div class="form-group">
+											<div class="formCtrl">
+												<label for="d1ThingSpeakApiKey">ThingSpeak API Key</label>
+												<input type="password" class="form-control valtxt apiKey" id="d1ThingSpeakApiKey" name="d1ThingSpeakApiKey" maxlength="32" >
+											</div>
+											<a role="button" tabindex="10" data-trigger="focus" class="info" data-po="po" title="ThingSpeak API Key" data-placement="bottom" data-content="The corresponding API key for the channel configured for this pin"> <span>i</span> </a>
+										    <span id="d1ThingSpeakApiKeyValFail" class="valFail">* A valid API key is required</span>
+										</div>	
+									</div>
+								</div>
+								<div class="httplogging">
+									<div class="form-group">
+										<div class="formCtrl">
+											<label for="d1HttpLoggingEnabled">Enable HTTP Logging</label>
+											<input type="checkbox" class="form-control" id="d1HttpLoggingEnabled" name="d1HttpLoggingEnabled" >
+										</div>
+										<a role="button" tabindex="11" data-trigger="focus" class="info" data-po="po" title="Enable HTTP Logging" data-placement="bottom" data-html="true" data-content="Enables/disables HTTP logging for this pin.<br/><br/>When enabled, any change in state for this pin will be sent as a HTTP GET request to the configured host."> <span>i</span> </a>
+									</div>
+								</div>																	
+							</div>
+						</div>
+						
+						<div class="panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#d2EditPnl">
+								<h3 id="d2NameTitle" class="panel-title">gpio_2</h3>
+								<h3 class="panel-title">&nbsp;(D2)</h3>
+							</div>
+							<div id="d2EditPnl" class="panel-body collapse">
+								<div class="thingspeak">									
+									<div class="form-group">
+										<div class="formCtrl">
+											<label for="d2LogToThingSpeak">Enable ThingSpeak</label>
+											<input type="checkbox" class="form-control" id="d2LogToThingSpeak" name="d2LogToThingSpeak" >
+										</div>
+										<a role="button" tabindex="12" data-trigger="focus" class="info" data-po="po" title="Enable ThingSpeak" data-placement="bottom" data-html="true" data-content="Enables/disables logging to ThingSpeak for this pin.<br/><br/>When enabled, any change in state for this pin will be sent as a channel update to ThingSpeak."> <span>i</span> </a>
+									</div>
+									<div id="d2ThingSpeakParams" class="dnone mb15">
+										<div class="form-group">
+											<div class="formCtrl">
+												<label for="d2ThingSpeakChannel">ThingSpeak Channel</label>
+												<input type="text" class="form-control w100 number" id="d2ThingSpeakChannel" name="d2ThingSpeakChannel" maxlength="32" >
+											</div>
+											<a role="button" tabindex="13" data-trigger="focus" class="info" data-po="po" title="ThingSpeak Channel" data-placement="bottom" data-content="The target ThingSpeak Channel specific to this pin"> <span>i</span> </a>
+										    <span id="d2ThingSpeakChannelValFail" class="valFail">* A valid channel number is required</span>
+										</div>
+										<div class="form-group">
+											<div class="formCtrl">
+												<label for="d2ThingSpeakApiKey">ThingSpeak API Key</label>
+												<input type="password" class="form-control valtxt apiKey" id="d2ThingSpeakApiKey" name="d2ThingSpeakApiKey" maxlength="32" >
+											</div>
+											<a role="button" tabindex="14" data-trigger="focus" class="info" data-po="po" title="ThingSpeak API Key" data-placement="bottom" data-content="The corresponding API key for the channel configured for this pin"> <span>i</span> </a>
+										    <span id="d2ThingSpeakApiKeyValFail" class="valFail">* A valid API key is required</span>
+										</div>		
+									</div>
+								</div>
+								<div class="httplogging">
+									<div class="form-group">
+										<div class="formCtrl">
+											<label for="d2HttpLoggingEnabled">Enable HTTP Logging</label>
+											<input type="checkbox" class="form-control" id="d2HttpLoggingEnabled" name="d2HttpLoggingEnabled" >
+										</div>
+										<a role="button" tabindex="15" data-trigger="focus" class="info" data-po="po" title="Enable HTTP Logging" data-placement="bottom" data-html="true" data-content="Enables/disables HTTP logging for this pin.<br/><br/>When enabled, any change in state for this pin will be sent as a HTTP GET request to the configured host."> <span>i</span> </a>
+									</div>
+								</div>																
+							</div>
+						</div>
+						
+						<div class="panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#d3EditPnl">
+								<h3 id="d3NameTitle" class="panel-title">gpio_3</h3>
+								<h3 class="panel-title">&nbsp;(D3)</h3>
+							</div>
+							<div id="d3EditPnl" class="panel-body collapse">
+								<div class="thingspeak">									
+									<div class="form-group">
+										<div class="formCtrl">
+											<label for="d3LogToThingSpeak">Enable ThingSpeak</label>
+											<input type="checkbox" class="form-control" id="d3LogToThingSpeak" name="d3LogToThingSpeak" >
+										</div>
+										<a role="button" tabindex="16" data-trigger="focus" class="info" data-po="po" title="Enable ThingSpeak" data-placement="bottom" data-html="true" data-content="Enables/disables logging to ThingSpeak for this pin.<br/><br/>When enabled, any change in state for this pin will be sent as a channel update to ThingSpeak."> <span>i</span> </a>
+									</div>
+									<div id="d3ThingSpeakParams" class="dnone mb15">
+										<div class="form-group">
+											<div class="formCtrl">
+												<label for="d3ThingSpeakChannel">ThingSpeak Channel</label>
+												<input type="text" class="form-control w100 number" id="d3ThingSpeakChannel" name="d3ThingSpeakChannel" maxlength="32" >
+											</div>
+											<a role="button" tabindex="17" data-trigger="focus" class="info" data-po="po" title="ThingSpeak Channel" data-placement="bottom" data-content="The target ThingSpeak Channel specific to this pin"> <span>i</span> </a>
+										    <span id="d3ThingSpeakChannelValFail" class="valFail">* A valid channel number is required</span>
+										</div>
+										<div class="form-group">
+											<div class="formCtrl">
+												<label for="d3ThingSpeakApiKey">ThingSpeak API Key</label>
+												<input type="password" class="form-control valtxt apiKey" id="d3ThingSpeakApiKey" name="d3ThingSpeakApiKey" maxlength="32" >
+											</div>
+											<a role="button" tabindex="18" data-trigger="focus" class="info" data-po="po" title="ThingSpeak API Key" data-placement="bottom" data-content="The corresponding API key for the channel configured for this pin"> <span>i</span> </a>
+										    <span id="d3ThingSpeakApiKeyValFail" class="valFail">* A valid API key is required</span>
+										</div>
+									</div>
+								</div>
+								<div class="httplogging">
+									<div class="form-group">
+										<div class="formCtrl">
+											<label for="d3HttpLoggingEnabled">Enable HTTP Logging</label>
+											<input type="checkbox" class="form-control" id="d3HttpLoggingEnabled" name="d3HttpLoggingEnabled" >
+										</div>
+										<a role="button" tabindex="19" data-trigger="focus" class="info" data-po="po" title="Enable HTTP Logging" data-placement="bottom" data-html="true" data-content="Enables/disables HTTP logging for this pin.<br/><br/>When enabled, any change in state for this pin will be sent as a HTTP GET request to the configured host."> <span>i</span> </a>
+									</div>
+								</div>																		
+							</div>
+						</div>
+						
+						<div class="panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#d4EditPnl">
+								<h3 id="d4NameTitle" class="panel-title">gpio_4</h3>
+								<h3 class="panel-title">&nbsp;(D4)</h3>
+							</div>
+							<div id="d4EditPnl" class="panel-body collapse">
+								<div class="thingspeak">									
+									<div class="form-group">
+										<div class="formCtrl">
+											<label for="d4LogToThingSpeak">Enable ThingSpeak</label>
+											<input type="checkbox" class="form-control" id="d4LogToThingSpeak" name="d4LogToThingSpeak" >
+										</div>
+										<a role="button" tabindex="20" data-trigger="focus" class="info" data-po="po" title="Enable ThingSpeak" data-placement="bottom" data-html="true" data-content="Enables/disables logging to ThingSpeak for this pin.<br/><br/>When enabled, any change in state for this pin will be sent as a channel update to ThingSpeak."> <span>i</span> </a>
+									</div>
+									<div id="d4ThingSpeakParams" class="dnone mb15">
+										<div class="form-group">
+											<div class="formCtrl">
+												<label for="d4ThingSpeakChannel">ThingSpeak Channel</label>
+												<input type="text" class="form-control w100 number" id="d4ThingSpeakChannel" name="d4ThingSpeakChannel" maxlength="32" >
+											</div>
+											<a role="button" tabindex="21" data-trigger="focus" class="info" data-po="po" title="ThingSpeak Channel" data-placement="bottom" data-content="The target ThingSpeak Channel specific to this pin"> <span>i</span> </a>
+										    <span id="d4ThingSpeakChannelValFail" class="valFail">* A valid channel number is required</span>
+										</div>
+										<div class="form-group">
+											<div class="formCtrl">
+												<label for="d4ThingSpeakApiKey">ThingSpeak API Key</label>
+												<input type="password" class="form-control valtxt apiKey" id="d4ThingSpeakApiKey" name="d4ThingSpeakApiKey" maxlength="32" >
+											</div>
+											<a role="button" tabindex="22" data-trigger="focus" class="info" data-po="po" title="ThingSpeak API Key" data-placement="bottom" data-content="The corresponding API key for the channel configured for this pin"> <span>i</span> </a>
+										    <span id="d4ThingSpeakApiKeyValFail" class="valFail">* A valid API key is required</span>
+										</div>	
+									</div>
+								</div>
+								<div class="httplogging">
+									<div class="form-group">
+										<div class="formCtrl">
+											<label for="d4HttpLoggingEnabled">Enable HTTP Logging</label>
+											<input type="checkbox" class="form-control" id="d4HttpLoggingEnabled" name="d4HttpLoggingEnabled" >
+										</div>
+										<a role="button" tabindex="23" data-trigger="focus" class="info" data-po="po" title="Enable HTTP Logging" data-placement="bottom" data-html="true" data-content="Enables/disables HTTP logging for this pin.<br/><br/>When enabled, any change in state for this pin will be sent as a HTTP GET request to the configured host."> <span>i</span> </a>
+									</div>
+								</div>																
+							</div>
+						</div>
+											
+						<div class="panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#a0EditPnl">
+								<h3 id="a0NameTitle" class="panel-title">analogInput</h3>
+								<h3 class="panel-title">&nbsp;(A0)</h3>
+							</div>
+							<div id="a0EditPnl" class="panel-body collapse">
+								<div class="thingspeak">									
+									<div class="form-group">
+										<div class="formCtrl">
+											<label for="a0LogToThingSpeak">Enable ThingSpeak</label>
+											<input type="checkbox" class="form-control" id="a0LogToThingSpeak" name="a0LogToThingSpeak" >
+										</div>
+										<a role="button" tabindex="24" data-trigger="focus" class="info" data-po="po" title="Enable ThingSpeak" data-placement="bottom" data-html="true" data-content="Enables/disables logging to ThingSpeak for this pin.<br/><br/>When enabled, any change in state for this pin will be sent as a channel update to ThingSpeak."> <span>i</span> </a>
+									</div>
+									<div id="a0ThingSpeakParams" class="dnone mb15">
+										<div class="form-group">
+											<div class="formCtrl">
+												<label for="a0ThingSpeakChannel">ThingSpeak Channel</label>
+												<input type="text" class="form-control w100 number" id="a0ThingSpeakChannel" name="a0ThingSpeakChannel" maxlength="32" >
+											</div>
+											<a role="button" tabindex="25" data-trigger="focus" class="info" data-po="po" title="ThingSpeak Channel" data-placement="bottom" data-content="The target ThingSpeak Channel specific to this pin"> <span>i</span> </a>
+										    <span id="a0ThingSpeakChannelValFail" class="valFail">* A valid channel number is required</span>
+										</div>
+										<div class="form-group">
+											<div class="formCtrl">
+												<label for="a0ThingSpeakApiKey">ThingSpeak API Key</label>
+												<input type="password" class="form-control valtxt apiKey" id="a0ThingSpeakApiKey" name="a0ThingSpeakApiKey" maxlength="32" >
+											</div>
+											<a role="button" tabindex="26" data-trigger="focus" class="info" data-po="po" title="ThingSpeak API Key" data-placement="bottom" data-content="The corresponding API key for the channel configured for this pin"> <span>i</span> </a>
+										    <span id="a0ThingSpeakApiKeyValFail" class="valFail">* A valid API key is required</span>
+										</div>
+									</div>
+								</div>
+								<div class="httplogging">
+									<div class="form-group">
+										<div class="formCtrl">
+											<label for="a0HttpLoggingEnabled">Enable HTTP Logging</label>
+											<input type="checkbox" class="form-control" id="a0HttpLoggingEnabled" name="a0HttpLoggingEnabled" >
+										</div>
+										<a role="button" tabindex="27" data-trigger="focus" class="info" data-po="po" title="Enable HTTP Logging" data-placement="bottom" data-html="true" data-content="Enables/disables HTTP logging for this pin.<br/><br/>When enabled, any change in state for this pin will be sent as a HTTP GET request to the configured host."> <span>i</span> </a>
+									</div>
+								</div>																		
+							</div>
+						</div>					
+					</div>
+					<button type="submit" class="btn btn-default dnone">
+						Submit
+					</button>
+				</form>				
+			</div>
+		</div>
+		<script src="js/jquery-2.2.0.min.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		<script src="js/jquery.mask.min.js"></script>
+		<script src="js/logging.js"></script>
+	</body>
+</html>

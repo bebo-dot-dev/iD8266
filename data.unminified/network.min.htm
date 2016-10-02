@@ -1,0 +1,194 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Network Settings</title>
+		<link href="css/bootstrap.min.css" media="all" rel="stylesheet" />
+		<link href="css/app.css" media="all" rel="stylesheet" />
+	</head>
+	<body>
+		<div class="container">
+			<nav class="navbar navbar-default">
+				<div class="container-fluid">
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+							<span class="sr-only">Toggle navigation</span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+						<a class="navbar-brand" href="/"> Network Settings </a>
+					</div>
+					<div id="navbar" class="navbar-collapse collapse">
+						<ul class="navbar-nav list-inline">
+							<li>
+								<a href="/">
+								<button type="button" class="btn btn-default navbar-btn">
+									Home
+								</button></a>
+							</li>
+							<li>
+								<a href="/logoff">
+								<button type="button" class="btn btn-default navbar-btn">
+									Log Off
+								</button></a>
+							</li>
+						</ul>
+					</div><!--/.nav-collapse -->
+				</div><!--/.container-fluid -->
+			</nav>
+			<div class="alert alert-success" role="alert"><strong>Please wait</strong> loading settings...</div>
+			<div id="mainPnl" class="panel panel-default dnone">
+				<div class="panel-body">
+					<form id="networkFrm" method='post' action='/network' enctype='multipart/form-data' autocomplete='off'>
+						<div class="form-group">
+							<div class="formCtrl">
+								<label for="wifiMode">Wifi Mode</label>
+								<select class="form-control" id="wifiMode" name="wifiMode">
+									<option value="2">Access Point</option>
+									<option value="1">Wifi Client</option>
+									<option value="3">AP + Wifi Client</option>
+								</select>
+							</div>
+							<a role="button" tabindex="0" data-trigger="focus" class="info" data-po="po" title="WiFi Mode" data-placement="bottom" data-html="true" data-content="The device can operate in one of three modes:<br/>1) AP mode only<br/>2) WiFi Client mode only<br/>3) Both AP mode and Wifi Client mode"> <span>i</span> </a>
+						</div>
+						<div id="apPnl" class="panel panel-default">
+							<div class="panel-heading">
+								<h3 class="panel-title">Access Point Params</h3>
+							</div>
+							<div class="panel-body">
+								<div class="form-group">
+									<div class="formCtrl">
+										<label for="apSSID">SSID</label>
+										<input type="text" class="form-control valtxt" id="apSSID" name="apSSID" >
+									</div>
+									<a role="button" tabindex="0" data-trigger="focus" class="info" data-po="po" title="SSID" data-placement="bottom" data-content="An SSID is required when the device is operating in access point mode. This is the name of the AP you'll see when connecting from a phone / PC."> <span>i</span> </a>
+								    <span id="apSSIDValFail" class="valFail">* A valid SSID is required</span>
+								</div>
+								<div class="form-group">
+									<div class="formCtrl">
+										<label for="apPwd">Passphrase</label>
+										<input type="password" class="form-control valtxt" id="apPwd" name="apPwd" >
+									</div>
+									<a role="button" tabindex="0" data-trigger="focus" class="info" data-po="po" title="Passphrase" data-placement="bottom" data-content="A Passphrase is required when the device is operating in access point mode. Open AP mode is not supported."> <span>i</span> </a>
+									<span id="apPwdValFail" class="valFail">* A valid passphrase is required</span>
+								</div>
+								<div class="form-group">
+									<div class="formCtrl">
+										<label for="wifiMode">Channel</label>
+										<select class="form-control" id="apChannel" name="apChannel">
+											<option value="1">1</option>
+											<option value="2">2</option>
+											<option value="3">3</option>
+											<option value="4">4</option>
+											<option value="5">5</option>
+											<option value="6">6</option>
+											<option value="7">7</option>
+											<option value="8">8</option>
+											<option value="9">9</option>
+											<option value="10">10</option>
+											<option value="11">11</option>
+											<option value="12">12</option>
+											<option value="13">13</option>
+										</select>
+									</div>
+									<a role="button" tabindex="0" data-trigger="focus" class="info" data-po="po" title="Channel" data-placement="bottom" data-content="Describes the WiFi channel the access point will operate on. Choose a quiet low traffic channel in your location."> <span>i</span> </a>
+								</div>
+							</div>
+						</div>
+						<div id="cliPnl" class="panel panel-default">
+							<div class="panel-heading">
+								<h3 class="panel-title">WiFi Client Params</h3>
+							</div>
+							<div class="panel-body">
+								<div class="form-group">
+									<div class="formCtrl">
+										<label for="netApSSID">SSID</label>
+										<input type="text" class="form-control valtxt" id="netApSSID" name="netApSSID" >
+									</div>
+									<a role="button" tabindex="0" data-trigger="focus" class="info" data-po="po" title="Network SSID" data-placement="bottom" data-content="This the SSID of a WiFi access point on the network the device will connect to as a WiFi client."> <span>i</span> </a>
+									<span id="netApSSIDValFail" class="valFail">* A valid SSID is required</span>
+								</div>
+								<div class="form-group">
+									<div class="formCtrl">
+										<label for="netApPwd">Passphrase</label>
+										<input type="password" class="form-control valtxt" id="netApPwd" name="netApPwd" >
+									</div>
+									<a role="button" tabindex="0" data-trigger="focus" class="info" data-po="po" title="Passphrase" data-placement="bottom" data-content="This is the Passphrase the device will use when connecting to a WiFi access point on the network. Open AP mode is not supported."> <span>i</span> </a>
+									<span id="netApPwdValFail" class="valFail">* A valid passphrase is required</span>
+								</div>
+								<div class="form-group">
+									<div class="formCtrl">
+										<label for="netApIpMode">IP Mode</label>
+										<select class="form-control" id="netApIpMode" name="netApIpMode">
+											<option value="0">DHCP</option>
+											<option value="1">Static</option>
+										</select>
+									</div>
+									<a role="button" tabindex="0" data-trigger="focus" class="info" data-po="po" title="IP Mode" data-placement="bottom" data-content="Choose between DHCP and Static IP mode when the device is operating in WiFi client mode."> <span>i</span> </a>
+								</div>
+								<div id="netApStaticIpPnl" class="panel panel-default">
+									<div class="panel-heading">
+										<h3 class="panel-title">Static IP Params</h3>
+									</div>
+									<div class="panel-body">
+
+										<div class="form-group">
+											<div class="formCtrl">
+												<label for="netApStaticIp">IP Address</label>
+												<input type="text" class="form-control ip_address" id="netApStaticIp" name="netApStaticIp" placeholder="nnn.nnn.nnn.nnn" />
+											</div>
+											<a role="button" tabindex="0" data-trigger="focus" class="info" data-po="po" title="IP Address" data-placement="bottom" data-content="Your chosen WiFi client static IP address e.g. 192.168.0.5"> <span>i</span> </a>
+											<span id="netApStaticIpValFail" class="valFail">* A valid IP address is required</span>
+										</div>
+										<div class="form-group">
+											<div class="formCtrl">
+												<label for="netApSubnet">Subnet</label>
+												<input type="text" class="form-control ip_address" id="netApSubnet" name="netApSubnet" placeholder="nnn.nnn.nnn.nnn" />
+											</div>
+											<a role="button" tabindex="0" data-trigger="focus" class="info" data-po="po" title="Subnet" data-placement="bottom" data-content="Your chosen WiFi client subnet for the static IP e.g. 255.255.255.0"> <span>i</span> </a>
+											<span id="netApSubnetValFail" class="valFail">* A valid IP address is required</span>
+										</div>
+										<div class="form-group">
+											<div class="formCtrl">
+												<label for="netApGatewayIp">Gateway IP Address</label>
+												<input type="text" class="form-control ip_address" id="netApGatewayIp" name="netApGatewayIp" placeholder="nnn.nnn.nnn.nnn" />
+											</div>
+											<a role="button" tabindex="0" data-trigger="focus" class="info" data-po="po" title="Gateway IP Address" data-placement="bottom" data-content="The IP address of the device on the network that operates as the gateway to the internet e.g. 192.168.0.1"> <span>i</span> </a>
+											<span id="netApGatewayIpValFail" class="valFail">* A valid IP address is required</span>
+										</div>
+										<div class="form-group">
+											<div class="formCtrl">
+												<label for="netApDnsIp">DNS IP Address</label>
+												<input type="text" class="form-control ip_address" id="netApDnsIp" name="netApDnsIp" placeholder="nnn.nnn.nnn.nnn" />
+											</div>
+											<a role="button" tabindex="0" data-trigger="focus" class="info" data-po="po" title="DNS IP Address" data-placement="bottom" data-content="The IP address of the machine you use as your DNS server e.g. 8.8.8.8 (Google DNS)"> <span>i</span> </a>
+											<span id="netApDnsIpValFail" class="valFail">* A valid IP address is required</span>
+										</div>
+										<div class="form-group">
+											<div class="formCtrl">
+												<label for="netApDns2Ip">DNS IP Address #2</label>
+												<input type="text" class="form-control ip_address" id="netApDns2Ip" name="netApDns2Ip" placeholder="nnn.nnn.nnn.nnn" />
+											</div>
+											<a role="button" tabindex="0" data-trigger="focus" class="info" data-po="po" title="DNS IP Address #2" data-placement="bottom" data-content="The IP address of the machine you use as your 2nd DNS server e.g. 8.8.4.4 (Google DNS)"> <span>i</span> </a>
+											<span id="netApDns2IpValFail" class="valFail">* A valid IP address is required</span>
+										</div>
+
+									</div>
+								</div>
+
+							</div>
+						</div>
+						<button type="submit" class="btn btn-default dnone">
+							Submit
+						</button>
+					</form>
+				</div>
+			</div>
+		</div>
+		<script src="js/jquery-2.2.0.min.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		<script src="js/jquery.mask.min.js"></script>
+		<script src="js/network.js"></script>
+	</body>
+</html>

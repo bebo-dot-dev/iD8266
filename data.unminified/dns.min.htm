@@ -1,0 +1,109 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>DNS Settings</title>
+		<link href="css/bootstrap.min.css" media="all" rel="stylesheet" />
+		<link href="css/app.css" media="all" rel="stylesheet" />
+	</head>
+	<body>
+		<div class="container">
+			<nav class="navbar navbar-default">
+				<div class="container-fluid">
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+							<span class="sr-only">Toggle navigation</span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+						<a class="navbar-brand" href="/"> DNS Settings </a>
+					</div>
+					<div id="navbar" class="navbar-collapse collapse">
+						<ul class="navbar-nav list-inline">
+							<li>
+								<a href="/">
+								<button type="button" class="btn btn-default navbar-btn">
+									Home
+								</button></a>
+							</li>
+							<li>
+								<a href="/logoff">
+								<button type="button" class="btn btn-default navbar-btn">
+									Log Off
+								</button></a>
+							</li>
+						</ul>
+					</div><!--/.nav-collapse -->
+				</div><!--/.container-fluid -->
+			</nav>
+			<div class="alert alert-success" role="alert"><strong>Please wait</strong> loading settings...</div>
+			<div id="mainPnl" class="panel panel-default dnone">
+				<div class="panel-body">
+					<form id="dnsFrm" method='post' action='/dns' enctype='multipart/form-data' autocomplete='off'>
+						<div class="form-group">
+							<div class="formCtrl">
+								<label for="hostName">HostName</label>
+								<input type="text" class="form-control valtxt" id="hostName" name="hostName" >
+							</div>
+							<a role="button" tabindex="0" data-trigger="focus" class="info" data-po="po" title="HostName" data-placement="bottom" data-content="The hostname of the device as it appears on the network"> <span>i</span> </a>
+							<span id="hostNameValFail" class="valFail">* A valid HostName is required</span>
+						</div>
+						<div class="form-group">
+							<div class="formCtrl">
+								<label for="mdnsEnabled">Enable Multicast DNS</label>
+								<input type="checkbox" class="form-control" id="mdnsEnabled" name="mdnsEnabled" >
+							</div>
+							<a role="button" tabindex="0" data-trigger="focus" class="info" data-po="po" title="Enable Multicast DNS" data-placement="bottom" data-html="true" data-content="Enable / disable the multicast DNS protocol. The device will support resolution to http://hostName.local when acting as a WiFi client. See&nbsp;<a href='https://en.wikipedia.org/wiki/Multicast_DNS' target='_blank'>Multicast DNS</a>&nbsp;for details"> <span>i</span> </a>
+						</div>
+						<div class="form-group">
+							<div class="formCtrl">
+								<label for="dnsEnabled">Enable DNS</label>
+								<input type="checkbox" class="form-control" id="dnsEnabled" name="dnsEnabled" >
+							</div>
+							<a role="button" tabindex="0" data-trigger="focus" class="info" data-po="po" title="Enable DNS" data-placement="bottom" data-html="true" data-content="Enable / disable the DNS protocol. The device will support resolution to http://hostName when acting as an access point. See&nbsp;<a href='https://en.wikipedia.org/wiki/Domain_Name_System' target='_blank'>DNS</a>&nbsp;for details"> <span>i</span> </a>
+						</div>
+						<div id="dnsPnl" class="panel panel-default dnone">
+							<div class="panel-heading">
+								<h3 class="panel-title">DNS Params</h3>
+							</div>
+							<div class="panel-body">
+								<div class="form-group">
+									<div class="formCtrl">
+										<label for="dnsTTL">DNS TTL</label>
+										<input type="text" class="form-control w70 number" id="dnsTTL" name="dnsTTL" maxlength="5" >
+									</div>
+									<a role="button" tabindex="0" data-trigger="focus" class="info" data-po="po" title="DNS TTL" data-placement="bottom" data-content="Configure the DNS resolver cache TTL value. Default is 300. Valid range is 1-65535."> <span>i</span> </a>
+									<span id="dnsTTLValFail" class="valFail">* A valid TTL value is required</span>
+								</div>
+								<div class="form-group">
+									<div class="formCtrl">
+										<label for="dnsPort">DNS Port</label>
+										<input type="text" class="form-control w70 number" id="dnsPort" name="dnsPort" maxlength="5" >
+									</div>
+									<a role="button" tabindex="0" data-trigger="focus" class="info" data-po="po" title="DNS Port" data-placement="bottom" data-content="Configure the DNS service tcp port. Default is 53. Valid range is 1-65535."> <span>i</span> </a>
+									<span id="dnsPortValFail" class="valFail">* A valid DNS port value is required</span>
+								</div>
+								<div class="form-group">
+									<div class="formCtrl">
+										<label for="dnsCatchAll">DNS Catch All</label>
+										<input type="checkbox" class="form-control" id="dnsCatchAll" name="dnsCatchAll" >
+									</div>
+									<a role="button" tabindex="0" data-trigger="focus" class="info" data-po="po" title="DNS Catch All" data-placement="bottom" data-html="true" data-content="Enable / disable DNS catch all. When enabled the DNS service on the device will act as a greedy captive portal. In other words all hostnames will resolve to the device rather than only the device specific hostname."> <span>i</span> </a>
+								</div>
+							</div>
+						</div>
+													
+						<button type="submit" class="btn btn-default dnone">
+							Submit
+						</button>
+					</form>
+				</div>
+			</div>
+		</div>
+		<script src="js/jquery-2.2.0.min.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		<script src="js/jquery.mask.min.js"></script>
+		<script src="js/dns.js"></script>
+	</body>
+</html>
