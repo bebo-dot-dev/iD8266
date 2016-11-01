@@ -31,11 +31,13 @@ public:
 
 	time_t lastTime = 0;
 	static String ntpServerName;
+	static String fallbackNtpServerName;
 	static int8_t timezone;
 	static time_t syncInterval;
 	static bool syncResponseReceived;
 	static time_t lastSync;
 	static uint16_t lastSyncRetries;
+	static IPAddress lastSyncIPAddress;
 
 	static byte packetBuffer[NTP_PACKET_SIZE]; //buffer to hold incoming & outgoing packets
 

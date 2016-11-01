@@ -11,11 +11,13 @@
 #include <WiFiUdp.h>
 
 String Ntp::ntpServerName;
+String Ntp::fallbackNtpServerName;
 int8_t Ntp::timezone;
 time_t Ntp::syncInterval;
 bool Ntp::syncResponseReceived;
 time_t Ntp::lastSync;
 uint16_t Ntp::lastSyncRetries;
+IPAddress Ntp::lastSyncIPAddress;
 
 WiFiUDP Ntp::udpListener;
 byte Ntp::packetBuffer[NTP_PACKET_SIZE];
@@ -23,9 +25,11 @@ byte Ntp::packetBuffer[NTP_PACKET_SIZE];
 ICACHE_FLASH_ATTR Ntp::Ntp(uint8_t server, int8_t tz, time_t syncSecs) {
 
 	ntpServerName = getNtpServerName(server);
+	fallbackNtpServerName = getNtpServerName(server + 1);
 	timezone = tz;
 	syncInterval = syncSecs;
 	syncResponseReceived = false;
+	lastSyncIPAddress = INADDR_NONE;
 
 	udpListener.begin(UDP_PORT);
 
@@ -68,31 +72,50 @@ time_t ICACHE_FLASH_ATTR Ntp::getNtpTime() {
 		APP_SERIAL_DEBUG("NTP UDP flush\n");
 		while (udpListener.parsePacket() > 0); // discard any previously received packets
 
-		APP_SERIAL_DEBUG("NTP server hostname resolution for: %s\n", ntpServerName.c_str());
+		bool hasIP = false;
+
+		String activeNtpServer = lastSyncRetries < 4 ? ntpServerName : fallbackNtpServerName;
+		APP_SERIAL_DEBUG("NTP server hostname resolution for: %s\n", activeNtpServer.c_str());
+
 		IPAddress timeServerIP;
-		WiFi.hostByName(ntpServerName.c_str(), timeServerIP);
-		APP_SERIAL_DEBUG("NTP server hostname resolves to: %s\n", timeServerIP.toString().c_str());
+		if (WiFi.hostByName(activeNtpServer.c_str(), timeServerIP)) {
+			APP_SERIAL_DEBUG("NTP server hostname resolves to: %s\n", timeServerIP.toString().c_str());
+			lastSyncIPAddress = timeServerIP;
+			hasIP = true;
+		} else {
+			APP_SERIAL_DEBUG("NTP server hostname resolution failure\n");
+		}
 
-		APP_SERIAL_DEBUG("Transmit NTP Request attempt: %d\n", lastSyncRetries);
-		sendNTPpacket(timeServerIP);
+		if ((!hasIP) && (lastSyncIPAddress != INADDR_NONE)) {
+			APP_SERIAL_DEBUG("Using IP address: %s from last successful DNS lookup\n", lastSyncIPAddress.toString().c_str());
+			hasIP = true;
+		}
 
-		uint32_t beginWait = millis();
-		while (millis() - beginWait < 500) {
-			int size = udpListener.parsePacket();
-			if (size >= NTP_PACKET_SIZE) {
-				APP_SERIAL_DEBUG("Receive NTP Response\n");
-				udpListener.read(packetBuffer, NTP_PACKET_SIZE); // read packet into the buffer
-				unsigned long secsSince1900;
-				// convert four bytes starting at location 40 to a long integer
-				secsSince1900 = (unsigned long) packetBuffer[40] << 24;
-				secsSince1900 |= (unsigned long) packetBuffer[41] << 16;
-				secsSince1900 |= (unsigned long) packetBuffer[42] << 8;
-				secsSince1900 |= (unsigned long) packetBuffer[43];
-				syncResponseReceived = true;
-				lastSync = secsSince1900 - 2208988800UL + timezone * SECS_PER_HOUR;
-				return lastSync;
+		if (hasIP) {
+
+			APP_SERIAL_DEBUG("Transmit NTP request attempt: %d\n", lastSyncRetries);
+			sendNTPpacket(lastSyncIPAddress);
+
+			uint32_t beginWait = millis();
+			while (millis() - beginWait < 500) {
+				int size = udpListener.parsePacket();
+				if (size >= NTP_PACKET_SIZE) {
+					APP_SERIAL_DEBUG("Received NTP response\n");
+					udpListener.read(packetBuffer, NTP_PACKET_SIZE); // read packet into the buffer
+					unsigned long secsSince1900;
+					// convert four bytes starting at location 40 to a long integer
+					secsSince1900 = (unsigned long) packetBuffer[40] << 24;
+					secsSince1900 |= (unsigned long) packetBuffer[41] << 16;
+					secsSince1900 |= (unsigned long) packetBuffer[42] << 8;
+					secsSince1900 |= (unsigned long) packetBuffer[43];
+					syncResponseReceived = true;
+					lastSync = secsSince1900 - 2208988800UL + timezone * SECS_PER_HOUR;
+					return lastSync;
+				}
+				yield();
 			}
-			yield();
+		} else {
+			APP_SERIAL_DEBUG("Skipped NTP request attempt: %d due to no NTP server IP being determined\n", lastSyncRetries);
 		}
 		delay(10);
 	}
