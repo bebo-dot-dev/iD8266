@@ -26,7 +26,7 @@ ICACHE_FLASH_ATTR PowerManager::PowerManager(rst_info *resetInfo) {
 	resetReason = (rst_reason)resetInfo->reason;
 
 	wakeEventType =
-		resetInfo->reason == rst_reason::REASON_EXT_SYS_RST || resetInfo->reason == rst_reason::REASON_SOFT_RESTART
+		resetInfo->reason == rst_reason::REASON_DEFAULT_RST || resetInfo->reason == rst_reason::REASON_EXT_SYS_RST || resetInfo->reason == rst_reason::REASON_SOFT_RESTART
 		? powerEventType::manualWakeEvent
 		: powerEventType::automatedWakeEvent;
 
@@ -36,11 +36,16 @@ ICACHE_FLASH_ATTR PowerManager::PowerManager(rst_info *resetInfo) {
 		delaySleep();
 	}
 
-	checkLengthySleep();
+	if (appConfigData.powerMgmt.enabled) {
+		checkLengthySleep();
+	} else {
+		initRtcStoreData();
+	}
 
 	if (resetReason != rst_reason::REASON_DEEP_SLEEP_AWAKE) {
 		rtcConfigData.lastSleepTimestamp = 0;
 	}
+
 }
 
 /*
@@ -59,8 +64,6 @@ void ICACHE_FLASH_ATTR PowerManager::checkLengthySleep() {
 
 			//if (crcCalc == rtcConfigData.crc32) {
 			//RTC data looks good
-
-			bool isInLengthySleep = rtcConfigData.targetSleepCount > 0;
 			rtcConfigData.sleepCount += 1;
 
 			if (rtcConfigData.sleepCount > rtcConfigData.targetSleepCount) {
@@ -179,6 +182,8 @@ void ICACHE_FLASH_ATTR PowerManager::deepSleep(bool sleepLoggingEnabled) {
 
 	//persist current config to RTC memory
 	ESP.rtcUserMemoryWrite(0, (uint32_t*) &rtcConfigData, sizeof(rtcData));
+
+	APP_SERIAL_DEBUG("Going into deep sleep for %d microseconds now!", rtcConfigData.pwrDownLength);
 
 	//initiate sleep for the specified sleepLength
 	ESP.deepSleep(rtcConfigData.pwrDownLength, rtcConfigData.wakeMode);
