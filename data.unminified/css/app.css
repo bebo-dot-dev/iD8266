@@ -184,11 +184,11 @@ a {
   content: "\2716";
 }
 
-table tr td:nth-child(1) {
+.diagnostics table tr td:nth-child(1) {
   width: 50%;
 }
 
-table tr td:nth-child(2) {
+.diagnostics table tr td:nth-child(2) {
   word-break: break-all;
 }
 
