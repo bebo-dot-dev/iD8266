@@ -32,12 +32,37 @@
 	</natures>
 	<linkedResources>
 		<link>
-			<name>mqtt</name>
+			<name>DHT-sensor-library</name>
+			<type>2</type>
+			<location>/home/joe/git/DHT-sensor-library</location>
+		</link>
+		<link>
+			<name>ESP8266Base32</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>thingspeak</name>
+			<name>ESP8266Complexify</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>ESP8266TOTP</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>Sha</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>pubsubclient</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>src</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
@@ -52,9 +77,94 @@
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>webSockets</name>
+			<name>ESP8266Base32/.git</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>ESP8266Base32/.gitignore</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266Base32/.gitignore</locationURI>
+		</link>
+		<link>
+			<name>ESP8266Base32/Base32.cpp</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266Base32/Base32.cpp</locationURI>
+		</link>
+		<link>
+			<name>ESP8266Base32/Base32.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266Base32/Base32.h</locationURI>
+		</link>
+		<link>
+			<name>ESP8266Base32/README.md</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266Base32/README.md</locationURI>
+		</link>
+		<link>
+			<name>ESP8266Complexify/.git</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>ESP8266Complexify/Complexify.cpp</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266Complexify/Complexify.cpp</locationURI>
+		</link>
+		<link>
+			<name>ESP8266Complexify/Complexify.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266Complexify/Complexify.h</locationURI>
+		</link>
+		<link>
+			<name>ESP8266Complexify/README.md</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266Complexify/README.md</locationURI>
+		</link>
+		<link>
+			<name>ESP8266TOTP/ESP8266TOTP.cpp</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266TOTP/ESP8266TOTP.cpp</locationURI>
+		</link>
+		<link>
+			<name>ESP8266TOTP/ESP8266TOTP.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266TOTP/ESP8266TOTP.h</locationURI>
+		</link>
+		<link>
+			<name>Sha/examples</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>Sha/keywords.txt</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/git/Cryptosuite/Sha/keywords.txt</locationURI>
+		</link>
+		<link>
+			<name>Sha/readme.txt</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/git/Cryptosuite/Sha/readme.txt</locationURI>
+		</link>
+		<link>
+			<name>Sha/sha1.cpp</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/git/Cryptosuite/Sha/sha1.cpp</locationURI>
+		</link>
+		<link>
+			<name>Sha/sha1.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/git/Cryptosuite/Sha/sha1.h</locationURI>
+		</link>
+		<link>
+			<name>Sha/sha256.cpp</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/git/Cryptosuite/Sha/sha256.cpp</locationURI>
+		</link>
+		<link>
+			<name>Sha/sha256.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/git/Cryptosuite/Sha/sha256.h</locationURI>
 		</link>
 		<link>
 			<name>core/core</name>
@@ -122,112 +232,127 @@
 			<location>/home/joe/.arduino15/packages/esp8266/hardware/esp8266/2.3.0/libraries/Wire</location>
 		</link>
 		<link>
-			<name>mqtt/.git</name>
+			<name>pubsubclient/.git</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>mqtt/.gitignore</name>
+			<name>pubsubclient/.gitignore</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/git/pubsubclient/.gitignore</locationURI>
 		</link>
 		<link>
-			<name>mqtt/.project</name>
+			<name>pubsubclient/.project</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/git/pubsubclient/.project</locationURI>
 		</link>
 		<link>
-			<name>mqtt/.travis.yml</name>
+			<name>pubsubclient/.travis.yml</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/git/pubsubclient/.travis.yml</locationURI>
 		</link>
 		<link>
-			<name>mqtt/CHANGES.txt</name>
+			<name>pubsubclient/CHANGES.txt</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/git/pubsubclient/CHANGES.txt</locationURI>
 		</link>
 		<link>
-			<name>mqtt/LICENSE.txt</name>
+			<name>pubsubclient/LICENSE.txt</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/git/pubsubclient/LICENSE.txt</locationURI>
 		</link>
 		<link>
-			<name>mqtt/README.md</name>
+			<name>pubsubclient/README.md</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/git/pubsubclient/README.md</locationURI>
 		</link>
 		<link>
-			<name>mqtt/examples</name>
+			<name>pubsubclient/examples</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>mqtt/keywords.txt</name>
+			<name>pubsubclient/keywords.txt</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/git/pubsubclient/keywords.txt</locationURI>
 		</link>
 		<link>
-			<name>mqtt/library.json</name>
+			<name>pubsubclient/library.json</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/git/pubsubclient/library.json</locationURI>
 		</link>
 		<link>
-			<name>mqtt/library.properties</name>
+			<name>pubsubclient/library.properties</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/git/pubsubclient/library.properties</locationURI>
 		</link>
 		<link>
-			<name>mqtt/src</name>
+			<name>pubsubclient/src</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>thingspeak/.git</name>
+			<name>pubsubclient/tests</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>thingspeak/.project</name>
+			<name>src/PubSubClient.cpp</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/thingspeak-arduino/.project</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/git/pubsubclient/src/PubSubClient.cpp</locationURI>
 		</link>
 		<link>
-			<name>thingspeak/README.md</name>
+			<name>src/PubSubClient.h</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/thingspeak-arduino/README.md</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/git/pubsubclient/src/PubSubClient.h</locationURI>
 		</link>
 		<link>
-			<name>thingspeak/examples</name>
+			<name>src/ThingSpeak.cpp</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/git/thingspeak-arduino/src/ThingSpeak.cpp</locationURI>
+		</link>
+		<link>
+			<name>src/ThingSpeak.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/git/thingspeak-arduino/src/ThingSpeak.h</locationURI>
+		</link>
+		<link>
+			<name>src/WebSockets.cpp</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/src/WebSockets.cpp</locationURI>
+		</link>
+		<link>
+			<name>src/WebSockets.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/src/WebSockets.h</locationURI>
+		</link>
+		<link>
+			<name>src/WebSocketsClient.cpp</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/src/WebSocketsClient.cpp</locationURI>
+		</link>
+		<link>
+			<name>src/WebSocketsClient.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/src/WebSocketsClient.h</locationURI>
+		</link>
+		<link>
+			<name>src/WebSocketsServer.cpp</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/src/WebSocketsServer.cpp</locationURI>
+		</link>
+		<link>
+			<name>src/WebSocketsServer.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/src/WebSocketsServer.h</locationURI>
+		</link>
+		<link>
+			<name>src/libb64</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>thingspeak/extras</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>thingspeak/keywords.txt</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/thingspeak-arduino/keywords.txt</locationURI>
-		</link>
-		<link>
-			<name>thingspeak/library.json</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/thingspeak-arduino/library.json</locationURI>
-		</link>
-		<link>
-			<name>thingspeak/library.properties</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/thingspeak-arduino/library.properties</locationURI>
-		</link>
-		<link>
-			<name>thingspeak/license.md</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/thingspeak-arduino/license.md</locationURI>
-		</link>
-		<link>
-			<name>thingspeak/src</name>
+			<name>src/libsha1</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
@@ -337,214 +462,174 @@
 			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266TrueRandom/keywords.txt</locationURI>
 		</link>
 		<link>
-			<name>webSockets/.git</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.gitignore</name>
+			<name>ESP8266Base32/.git/FETCH_HEAD</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.gitignore</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266Base32/.git/FETCH_HEAD</locationURI>
 		</link>
 		<link>
-			<name>webSockets/.project</name>
+			<name>ESP8266Base32/.git/HEAD</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.project</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266Base32/.git/HEAD</locationURI>
 		</link>
 		<link>
-			<name>webSockets/LICENSE</name>
+			<name>ESP8266Base32/.git/config</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/LICENSE</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266Base32/.git/config</locationURI>
 		</link>
 		<link>
-			<name>webSockets/README.md</name>
+			<name>ESP8266Base32/.git/description</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/README.md</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266Base32/.git/description</locationURI>
 		</link>
 		<link>
-			<name>webSockets/examples</name>
+			<name>ESP8266Base32/.git/hooks</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>webSockets/library.json</name>
+			<name>ESP8266Base32/.git/index</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/library.json</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266Base32/.git/index</locationURI>
 		</link>
 		<link>
-			<name>webSockets/library.properties</name>
+			<name>ESP8266Base32/.git/info</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>ESP8266Base32/.git/logs</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>ESP8266Base32/.git/objects</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>ESP8266Base32/.git/packed-refs</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/library.properties</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266Base32/.git/packed-refs</locationURI>
 		</link>
 		<link>
-			<name>webSockets/src</name>
+			<name>ESP8266Base32/.git/refs</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>webSockets/tests</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>mqtt/.git/FETCH_HEAD</name>
+			<name>ESP8266Base32/.git/smartgit.config</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/pubsubclient/.git/FETCH_HEAD</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266Base32/.git/smartgit.config</locationURI>
 		</link>
 		<link>
-			<name>mqtt/.git/HEAD</name>
+			<name>ESP8266Complexify/.git/COMMIT_EDITMSG</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/pubsubclient/.git/HEAD</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266Complexify/.git/COMMIT_EDITMSG</locationURI>
 		</link>
 		<link>
-			<name>mqtt/.git/config</name>
+			<name>ESP8266Complexify/.git/FETCH_HEAD</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/pubsubclient/.git/config</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266Complexify/.git/FETCH_HEAD</locationURI>
 		</link>
 		<link>
-			<name>mqtt/.git/index</name>
+			<name>ESP8266Complexify/.git/HEAD</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/pubsubclient/.git/index</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266Complexify/.git/HEAD</locationURI>
 		</link>
 		<link>
-			<name>mqtt/.git/logs</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>mqtt/.git/objects</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>mqtt/.git/refs</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>mqtt/examples/mqtt_auth</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>mqtt/examples/mqtt_basic</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>mqtt/examples/mqtt_esp8266</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>mqtt/examples/mqtt_publish_in_callback</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>mqtt/examples/mqtt_reconnect_nonblocking</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>mqtt/examples/mqtt_stream</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>mqtt/src/PubSubClient.cpp</name>
+			<name>ESP8266Complexify/.git/config</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/pubsubclient/src/PubSubClient.cpp</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266Complexify/.git/config</locationURI>
 		</link>
 		<link>
-			<name>mqtt/src/PubSubClient.h</name>
+			<name>ESP8266Complexify/.git/description</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/pubsubclient/src/PubSubClient.h</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266Complexify/.git/description</locationURI>
 		</link>
 		<link>
-			<name>thingspeak/.git/FETCH_HEAD</name>
+			<name>ESP8266Complexify/.git/hooks</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>ESP8266Complexify/.git/index</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/thingspeak-arduino/.git/FETCH_HEAD</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266Complexify/.git/index</locationURI>
 		</link>
 		<link>
-			<name>thingspeak/.git/HEAD</name>
+			<name>ESP8266Complexify/.git/info</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>ESP8266Complexify/.git/logs</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>ESP8266Complexify/.git/objects</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>ESP8266Complexify/.git/refs</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>Sha/examples/hmacsha256test</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>Sha/examples/sha1test</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>Sha/examples/sha256test</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>src/libb64/AUTHORS</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/thingspeak-arduino/.git/HEAD</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/src/libb64/AUTHORS</locationURI>
 		</link>
 		<link>
-			<name>thingspeak/.git/config</name>
+			<name>src/libb64/LICENSE</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/thingspeak-arduino/.git/config</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/src/libb64/LICENSE</locationURI>
 		</link>
 		<link>
-			<name>thingspeak/.git/index</name>
+			<name>src/libb64/cdecode.c</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/thingspeak-arduino/.git/index</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/src/libb64/cdecode.c</locationURI>
 		</link>
 		<link>
-			<name>thingspeak/.git/logs</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>thingspeak/.git/objects</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>thingspeak/.git/refs</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>thingspeak/examples/CheerLights</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>thingspeak/examples/ReadLastTemperature</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>thingspeak/examples/ReadPrivateChannel</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>thingspeak/examples/ReadWeatherStation</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>thingspeak/examples/WriteMultipleVoltages</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>thingspeak/examples/WriteVoltage</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>thingspeak/extras/documentation</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>thingspeak/extras/test</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>thingspeak/src/ThingSpeak.cpp</name>
+			<name>src/libb64/cdecode_inc.h</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/thingspeak-arduino/src/ThingSpeak.cpp</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/src/libb64/cdecode_inc.h</locationURI>
 		</link>
 		<link>
-			<name>thingspeak/src/ThingSpeak.h</name>
+			<name>src/libb64/cencode.c</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/thingspeak-arduino/src/ThingSpeak.h</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/src/libb64/cencode.c</locationURI>
+		</link>
+		<link>
+			<name>src/libb64/cencode_inc.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/src/libb64/cencode_inc.h</locationURI>
+		</link>
+		<link>
+			<name>src/libsha1/libsha1.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/src/libsha1/libsha1.c</locationURI>
+		</link>
+		<link>
+			<name>src/libsha1/libsha1.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/src/libsha1/libsha1.h</locationURI>
 		</link>
 		<link>
 			<name>time/.git/FETCH_HEAD</name>
@@ -727,439 +812,349 @@
 			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266TrueRandom/Release/subdir.mk</locationURI>
 		</link>
 		<link>
-			<name>webSockets/.git/COMMIT_EDITMSG</name>
+			<name>ESP8266Base32/.git/hooks/applypatch-msg.sample</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/COMMIT_EDITMSG</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266Base32/.git/hooks/applypatch-msg.sample</locationURI>
 		</link>
 		<link>
-			<name>webSockets/.git/FETCH_HEAD</name>
+			<name>ESP8266Base32/.git/hooks/commit-msg.sample</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/FETCH_HEAD</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266Base32/.git/hooks/commit-msg.sample</locationURI>
 		</link>
 		<link>
-			<name>webSockets/.git/HEAD</name>
+			<name>ESP8266Base32/.git/hooks/post-update.sample</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/HEAD</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266Base32/.git/hooks/post-update.sample</locationURI>
 		</link>
 		<link>
-			<name>webSockets/.git/ORIG_HEAD</name>
+			<name>ESP8266Base32/.git/hooks/pre-applypatch.sample</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/ORIG_HEAD</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266Base32/.git/hooks/pre-applypatch.sample</locationURI>
 		</link>
 		<link>
-			<name>webSockets/.git/config</name>
+			<name>ESP8266Base32/.git/hooks/pre-commit.sample</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/config</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266Base32/.git/hooks/pre-commit.sample</locationURI>
 		</link>
 		<link>
-			<name>webSockets/.git/index</name>
+			<name>ESP8266Base32/.git/hooks/pre-push.sample</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/index</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266Base32/.git/hooks/pre-push.sample</locationURI>
 		</link>
 		<link>
-			<name>webSockets/.git/logs</name>
+			<name>ESP8266Base32/.git/hooks/pre-rebase.sample</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266Base32/.git/hooks/pre-rebase.sample</locationURI>
+		</link>
+		<link>
+			<name>ESP8266Base32/.git/hooks/prepare-commit-msg.sample</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266Base32/.git/hooks/prepare-commit-msg.sample</locationURI>
+		</link>
+		<link>
+			<name>ESP8266Base32/.git/hooks/update.sample</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266Base32/.git/hooks/update.sample</locationURI>
+		</link>
+		<link>
+			<name>ESP8266Base32/.git/info/exclude</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266Base32/.git/info/exclude</locationURI>
+		</link>
+		<link>
+			<name>ESP8266Base32/.git/logs/HEAD</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266Base32/.git/logs/HEAD</locationURI>
+		</link>
+		<link>
+			<name>ESP8266Base32/.git/logs/refs</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>webSockets/.git/objects</name>
+			<name>ESP8266Base32/.git/objects/2a</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>webSockets/.git/refs</name>
+			<name>ESP8266Base32/.git/objects/2e</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>webSockets/examples/Nginx</name>
+			<name>ESP8266Base32/.git/objects/4e</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>webSockets/examples/WebSocketClient</name>
+			<name>ESP8266Base32/.git/objects/b8</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>webSockets/examples/WebSocketClientAVR</name>
+			<name>ESP8266Base32/.git/objects/d8</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>webSockets/examples/WebSocketClientSSL</name>
+			<name>ESP8266Base32/.git/objects/de</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>webSockets/examples/WebSocketServer</name>
+			<name>ESP8266Base32/.git/refs/heads</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>webSockets/examples/WebSocketServer_LEDcontrol</name>
+			<name>ESP8266Base32/.git/refs/remotes</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>webSockets/src/WebSockets.cpp</name>
+			<name>ESP8266Complexify/.git/hooks/applypatch-msg.sample</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/src/WebSockets.cpp</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266Complexify/.git/hooks/applypatch-msg.sample</locationURI>
 		</link>
 		<link>
-			<name>webSockets/src/WebSockets.h</name>
+			<name>ESP8266Complexify/.git/hooks/commit-msg.sample</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/src/WebSockets.h</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266Complexify/.git/hooks/commit-msg.sample</locationURI>
 		</link>
 		<link>
-			<name>webSockets/src/WebSocketsClient.cpp</name>
+			<name>ESP8266Complexify/.git/hooks/post-update.sample</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/src/WebSocketsClient.cpp</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266Complexify/.git/hooks/post-update.sample</locationURI>
 		</link>
 		<link>
-			<name>webSockets/src/WebSocketsClient.h</name>
+			<name>ESP8266Complexify/.git/hooks/pre-applypatch.sample</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/src/WebSocketsClient.h</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266Complexify/.git/hooks/pre-applypatch.sample</locationURI>
 		</link>
 		<link>
-			<name>webSockets/src/WebSocketsServer.cpp</name>
+			<name>ESP8266Complexify/.git/hooks/pre-commit.sample</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/src/WebSocketsServer.cpp</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266Complexify/.git/hooks/pre-commit.sample</locationURI>
 		</link>
 		<link>
-			<name>webSockets/src/WebSocketsServer.h</name>
+			<name>ESP8266Complexify/.git/hooks/pre-push.sample</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/src/WebSocketsServer.h</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266Complexify/.git/hooks/pre-push.sample</locationURI>
 		</link>
 		<link>
-			<name>webSockets/src/libb64</name>
+			<name>ESP8266Complexify/.git/hooks/pre-rebase.sample</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266Complexify/.git/hooks/pre-rebase.sample</locationURI>
+		</link>
+		<link>
+			<name>ESP8266Complexify/.git/hooks/prepare-commit-msg.sample</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266Complexify/.git/hooks/prepare-commit-msg.sample</locationURI>
+		</link>
+		<link>
+			<name>ESP8266Complexify/.git/hooks/update.sample</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266Complexify/.git/hooks/update.sample</locationURI>
+		</link>
+		<link>
+			<name>ESP8266Complexify/.git/info/exclude</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266Complexify/.git/info/exclude</locationURI>
+		</link>
+		<link>
+			<name>ESP8266Complexify/.git/logs/HEAD</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266Complexify/.git/logs/HEAD</locationURI>
+		</link>
+		<link>
+			<name>ESP8266Complexify/.git/logs/refs</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>webSockets/src/libsha1</name>
+			<name>ESP8266Complexify/.git/objects/3b</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>webSockets/tests/webSocket.html</name>
+			<name>ESP8266Complexify/.git/objects/66</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>ESP8266Complexify/.git/objects/9e</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>ESP8266Complexify/.git/objects/b5</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>ESP8266Complexify/.git/objects/cd</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>ESP8266Complexify/.git/objects/d2</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>ESP8266Complexify/.git/objects/d7</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>ESP8266Complexify/.git/objects/e5</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>ESP8266Complexify/.git/objects/f1</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>ESP8266Complexify/.git/objects/f2</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>ESP8266Complexify/.git/refs/heads</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>ESP8266Complexify/.git/refs/remotes</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>Sha/examples/hmacsha256test/hmacsha256test.pde</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/tests/webSocket.html</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/git/Cryptosuite/Sha/examples/hmacsha256test/hmacsha256test.pde</locationURI>
 		</link>
 		<link>
-			<name>webSockets/tests/webSocketServer</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
+			<name>Sha/examples/sha1test/sha1test.pde</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/git/Cryptosuite/Sha/examples/sha1test/sha1test.pde</locationURI>
 		</link>
 		<link>
-			<name>mqtt/.git/logs/HEAD</name>
+			<name>Sha/examples/sha256test/sha256test.pde</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/git/Cryptosuite/Sha/examples/sha256test/sha256test.pde</locationURI>
+		</link>
+		<link>
+			<name>pubsubclient/.git/logs/HEAD</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/git/pubsubclient/.git/logs/HEAD</locationURI>
 		</link>
 		<link>
-			<name>mqtt/.git/logs/refs</name>
+			<name>pubsubclient/.git/logs/refs</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>mqtt/.git/objects/pack</name>
+			<name>pubsubclient/.git/objects/pack</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>mqtt/.git/refs/heads</name>
+			<name>pubsubclient/.git/refs/heads</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>mqtt/.git/refs/remotes</name>
+			<name>pubsubclient/.git/refs/remotes</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>mqtt/.git/refs/tags</name>
+			<name>pubsubclient/.git/refs/tags</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>mqtt/examples/mqtt_auth/mqtt_auth.ino</name>
+			<name>pubsubclient/examples/mqtt_auth/mqtt_auth.ino</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/git/pubsubclient/examples/mqtt_auth/mqtt_auth.ino</locationURI>
 		</link>
 		<link>
-			<name>mqtt/examples/mqtt_basic/mqtt_basic.ino</name>
+			<name>pubsubclient/examples/mqtt_basic/mqtt_basic.ino</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/git/pubsubclient/examples/mqtt_basic/mqtt_basic.ino</locationURI>
 		</link>
 		<link>
-			<name>mqtt/examples/mqtt_esp8266/mqtt_esp8266.ino</name>
+			<name>pubsubclient/examples/mqtt_esp8266/mqtt_esp8266.ino</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/git/pubsubclient/examples/mqtt_esp8266/mqtt_esp8266.ino</locationURI>
 		</link>
 		<link>
-			<name>mqtt/examples/mqtt_publish_in_callback/mqtt_publish_in_callback.ino</name>
+			<name>pubsubclient/examples/mqtt_publish_in_callback/mqtt_publish_in_callback.ino</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/git/pubsubclient/examples/mqtt_publish_in_callback/mqtt_publish_in_callback.ino</locationURI>
 		</link>
 		<link>
-			<name>mqtt/examples/mqtt_reconnect_nonblocking/mqtt_reconnect_nonblocking.ino</name>
+			<name>pubsubclient/examples/mqtt_reconnect_nonblocking/mqtt_reconnect_nonblocking.ino</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/git/pubsubclient/examples/mqtt_reconnect_nonblocking/mqtt_reconnect_nonblocking.ino</locationURI>
 		</link>
 		<link>
-			<name>mqtt/examples/mqtt_stream/mqtt_stream.ino</name>
+			<name>pubsubclient/examples/mqtt_stream/mqtt_stream.ino</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/git/pubsubclient/examples/mqtt_stream/mqtt_stream.ino</locationURI>
 		</link>
 		<link>
-			<name>thingspeak/.git/logs/HEAD</name>
+			<name>pubsubclient/tests/src/connect_spec.cpp</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/thingspeak-arduino/.git/logs/HEAD</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/git/pubsubclient/tests/src/connect_spec.cpp</locationURI>
 		</link>
 		<link>
-			<name>thingspeak/.git/logs/refs</name>
+			<name>pubsubclient/tests/src/keepalive_spec.cpp</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/git/pubsubclient/tests/src/keepalive_spec.cpp</locationURI>
+		</link>
+		<link>
+			<name>pubsubclient/tests/src/lib</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>thingspeak/.git/objects/pack</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>thingspeak/.git/refs/heads</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>thingspeak/.git/refs/remotes</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>thingspeak/.git/refs/tags</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>thingspeak/examples/CheerLights/CheerLights.ino</name>
+			<name>pubsubclient/tests/src/publish_spec.cpp</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/thingspeak-arduino/examples/CheerLights/CheerLights.ino</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/git/pubsubclient/tests/src/publish_spec.cpp</locationURI>
 		</link>
 		<link>
-			<name>thingspeak/examples/ReadLastTemperature/ReadLastTemperature.ino</name>
+			<name>pubsubclient/tests/src/receive_spec.cpp</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/thingspeak-arduino/examples/ReadLastTemperature/ReadLastTemperature.ino</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/git/pubsubclient/tests/src/receive_spec.cpp</locationURI>
 		</link>
 		<link>
-			<name>thingspeak/examples/ReadPrivateChannel/ReadPrivateChannel.ino</name>
+			<name>pubsubclient/tests/src/subscribe_spec.cpp</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/thingspeak-arduino/examples/ReadPrivateChannel/ReadPrivateChannel.ino</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/git/pubsubclient/tests/src/subscribe_spec.cpp</locationURI>
 		</link>
 		<link>
-			<name>thingspeak/examples/ReadWeatherStation/ReadWeatherStation.ino</name>
+			<name>pubsubclient/tests/testcases/__init__.py</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/thingspeak-arduino/examples/ReadWeatherStation/ReadWeatherStation.ino</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/git/pubsubclient/tests/testcases/__init__.py</locationURI>
 		</link>
 		<link>
-			<name>thingspeak/examples/WriteMultipleVoltages/WriteMultipleVoltages.ino</name>
+			<name>pubsubclient/tests/testcases/mqtt_basic.py</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/thingspeak-arduino/examples/WriteMultipleVoltages/WriteMultipleVoltages.ino</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/git/pubsubclient/tests/testcases/mqtt_basic.py</locationURI>
 		</link>
 		<link>
-			<name>thingspeak/examples/WriteVoltage/WriteVoltage.ino</name>
+			<name>pubsubclient/tests/testcases/mqtt_publish_in_callback.py</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/thingspeak-arduino/examples/WriteVoltage/WriteVoltage.ino</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/git/pubsubclient/tests/testcases/mqtt_publish_in_callback.py</locationURI>
 		</link>
 		<link>
-			<name>thingspeak/extras/documentation/ThingSpeakLogo.jpg</name>
+			<name>pubsubclient/tests/testcases/settings.py</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/thingspeak-arduino/extras/documentation/ThingSpeakLogo.jpg</locationURI>
-		</link>
-		<link>
-			<name>thingspeak/extras/documentation/_thing_speak_8h_source.html</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/thingspeak-arduino/extras/documentation/_thing_speak_8h_source.html</locationURI>
-		</link>
-		<link>
-			<name>thingspeak/extras/documentation/annotated.html</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/thingspeak-arduino/extras/documentation/annotated.html</locationURI>
-		</link>
-		<link>
-			<name>thingspeak/extras/documentation/arrowdown.png</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/thingspeak-arduino/extras/documentation/arrowdown.png</locationURI>
-		</link>
-		<link>
-			<name>thingspeak/extras/documentation/arrowright.png</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/thingspeak-arduino/extras/documentation/arrowright.png</locationURI>
-		</link>
-		<link>
-			<name>thingspeak/extras/documentation/bc_s.png</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/thingspeak-arduino/extras/documentation/bc_s.png</locationURI>
-		</link>
-		<link>
-			<name>thingspeak/extras/documentation/bdwn.png</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/thingspeak-arduino/extras/documentation/bdwn.png</locationURI>
-		</link>
-		<link>
-			<name>thingspeak/extras/documentation/class_thing_speak_class.html</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/thingspeak-arduino/extras/documentation/class_thing_speak_class.html</locationURI>
-		</link>
-		<link>
-			<name>thingspeak/extras/documentation/classes.html</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/thingspeak-arduino/extras/documentation/classes.html</locationURI>
-		</link>
-		<link>
-			<name>thingspeak/extras/documentation/closed.png</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/thingspeak-arduino/extras/documentation/closed.png</locationURI>
-		</link>
-		<link>
-			<name>thingspeak/extras/documentation/dir_339e8c1d13ed9d171a31356d80f51341.html</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/thingspeak-arduino/extras/documentation/dir_339e8c1d13ed9d171a31356d80f51341.html</locationURI>
-		</link>
-		<link>
-			<name>thingspeak/extras/documentation/dir_9eb8a1162b9e86c4bf1f8e762bfe83d1.html</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/thingspeak-arduino/extras/documentation/dir_9eb8a1162b9e86c4bf1f8e762bfe83d1.html</locationURI>
-		</link>
-		<link>
-			<name>thingspeak/extras/documentation/doc.png</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/thingspeak-arduino/extras/documentation/doc.png</locationURI>
-		</link>
-		<link>
-			<name>thingspeak/extras/documentation/doxygen.css</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/thingspeak-arduino/extras/documentation/doxygen.css</locationURI>
-		</link>
-		<link>
-			<name>thingspeak/extras/documentation/doxygen.png</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/thingspeak-arduino/extras/documentation/doxygen.png</locationURI>
-		</link>
-		<link>
-			<name>thingspeak/extras/documentation/dynsections.js</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/thingspeak-arduino/extras/documentation/dynsections.js</locationURI>
-		</link>
-		<link>
-			<name>thingspeak/extras/documentation/folderclosed.png</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/thingspeak-arduino/extras/documentation/folderclosed.png</locationURI>
-		</link>
-		<link>
-			<name>thingspeak/extras/documentation/folderopen.png</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/thingspeak-arduino/extras/documentation/folderopen.png</locationURI>
-		</link>
-		<link>
-			<name>thingspeak/extras/documentation/functions.html</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/thingspeak-arduino/extras/documentation/functions.html</locationURI>
-		</link>
-		<link>
-			<name>thingspeak/extras/documentation/functions_func.html</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/thingspeak-arduino/extras/documentation/functions_func.html</locationURI>
-		</link>
-		<link>
-			<name>thingspeak/extras/documentation/index.html</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/thingspeak-arduino/extras/documentation/index.html</locationURI>
-		</link>
-		<link>
-			<name>thingspeak/extras/documentation/jquery.js</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/thingspeak-arduino/extras/documentation/jquery.js</locationURI>
-		</link>
-		<link>
-			<name>thingspeak/extras/documentation/nav_f.png</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/thingspeak-arduino/extras/documentation/nav_f.png</locationURI>
-		</link>
-		<link>
-			<name>thingspeak/extras/documentation/nav_g.png</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/thingspeak-arduino/extras/documentation/nav_g.png</locationURI>
-		</link>
-		<link>
-			<name>thingspeak/extras/documentation/nav_h.png</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/thingspeak-arduino/extras/documentation/nav_h.png</locationURI>
-		</link>
-		<link>
-			<name>thingspeak/extras/documentation/open.png</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/thingspeak-arduino/extras/documentation/open.png</locationURI>
-		</link>
-		<link>
-			<name>thingspeak/extras/documentation/splitbar.png</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/thingspeak-arduino/extras/documentation/splitbar.png</locationURI>
-		</link>
-		<link>
-			<name>thingspeak/extras/documentation/sync_off.png</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/thingspeak-arduino/extras/documentation/sync_off.png</locationURI>
-		</link>
-		<link>
-			<name>thingspeak/extras/documentation/sync_on.png</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/thingspeak-arduino/extras/documentation/sync_on.png</locationURI>
-		</link>
-		<link>
-			<name>thingspeak/extras/documentation/tab_a.png</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/thingspeak-arduino/extras/documentation/tab_a.png</locationURI>
-		</link>
-		<link>
-			<name>thingspeak/extras/documentation/tab_b.png</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/thingspeak-arduino/extras/documentation/tab_b.png</locationURI>
-		</link>
-		<link>
-			<name>thingspeak/extras/documentation/tab_h.png</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/thingspeak-arduino/extras/documentation/tab_h.png</locationURI>
-		</link>
-		<link>
-			<name>thingspeak/extras/documentation/tab_s.png</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/thingspeak-arduino/extras/documentation/tab_s.png</locationURI>
-		</link>
-		<link>
-			<name>thingspeak/extras/documentation/tabs.css</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/thingspeak-arduino/extras/documentation/tabs.css</locationURI>
-		</link>
-		<link>
-			<name>thingspeak/extras/test/testBegin</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>thingspeak/extras/test/testReadField</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>thingspeak/extras/test/testSetField</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>thingspeak/extras/test/testWriteField</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/git/pubsubclient/tests/testcases/settings.py</locationURI>
 		</link>
 		<link>
 			<name>time/.git/logs/HEAD</name>
@@ -1757,584 +1752,304 @@
 			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266TrueRandom/Release/core/umm_malloc.c.o</locationURI>
 		</link>
 		<link>
-			<name>webSockets/.git/logs/HEAD</name>
+			<name>ESP8266Base32/.git/logs/refs/heads</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>ESP8266Base32/.git/logs/refs/remotes</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>ESP8266Base32/.git/objects/2a/12ac220b555ca0391bb52d41d403419d7ed81e</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/logs/HEAD</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266Base32/.git/objects/2a/12ac220b555ca0391bb52d41d403419d7ed81e</locationURI>
 		</link>
 		<link>
-			<name>webSockets/.git/logs/refs</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/03</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/06</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/08</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/0a</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/0f</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/26</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/28</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/2a</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/33</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/39</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/3c</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/3d</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/3f</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/43</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/45</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/47</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/53</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/55</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/5b</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/5e</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/62</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/6a</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/73</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/75</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/76</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/79</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/7a</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/7d</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/7e</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/7f</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/80</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/81</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/87</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/88</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/89</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/94</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/97</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/9a</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/9d</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/b4</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/b6</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/b7</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/b9</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/c2</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/cb</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/ce</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/d0</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/d4</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/da</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/e5</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/ea</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/ec</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/f3</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/f8</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/fa</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/fc</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/pack</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/refs/heads</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/refs/remotes</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/refs/tags</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>webSockets/examples/Nginx/esp8266.ssl.reverse.proxy.conf</name>
+			<name>ESP8266Base32/.git/objects/2e/f8729c55b881f9496aeda62033fb634e8de1ff</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/examples/Nginx/esp8266.ssl.reverse.proxy.conf</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266Base32/.git/objects/2e/f8729c55b881f9496aeda62033fb634e8de1ff</locationURI>
 		</link>
 		<link>
-			<name>webSockets/examples/WebSocketClient/WebSocketClient.ino</name>
+			<name>ESP8266Base32/.git/objects/4e/26b2a229fc7d9d8fcd7011b2289fd079f243a1</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/examples/WebSocketClient/WebSocketClient.ino</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266Base32/.git/objects/4e/26b2a229fc7d9d8fcd7011b2289fd079f243a1</locationURI>
 		</link>
 		<link>
-			<name>webSockets/examples/WebSocketClientAVR/WebSocketClientAVR.ino</name>
+			<name>ESP8266Base32/.git/objects/b8/bd0267bdf1a5e02793430b53cbbebd6c257f6f</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/examples/WebSocketClientAVR/WebSocketClientAVR.ino</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266Base32/.git/objects/b8/bd0267bdf1a5e02793430b53cbbebd6c257f6f</locationURI>
 		</link>
 		<link>
-			<name>webSockets/examples/WebSocketClientSSL/WebSocketClientSSL.ino</name>
+			<name>ESP8266Base32/.git/objects/d8/f5c5379b23053aef08df404206a5a7b51292b2</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/examples/WebSocketClientSSL/WebSocketClientSSL.ino</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266Base32/.git/objects/d8/f5c5379b23053aef08df404206a5a7b51292b2</locationURI>
 		</link>
 		<link>
-			<name>webSockets/examples/WebSocketServer/WebSocketServer.ino</name>
+			<name>ESP8266Base32/.git/objects/de/1e515fffcdb024e257c6c0efe8a11841919a02</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/examples/WebSocketServer/WebSocketServer.ino</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266Base32/.git/objects/de/1e515fffcdb024e257c6c0efe8a11841919a02</locationURI>
 		</link>
 		<link>
-			<name>webSockets/examples/WebSocketServer/WebSocketServerHttpHeaderValidation.ino</name>
+			<name>ESP8266Base32/.git/refs/heads/master</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/examples/WebSocketServer/WebSocketServerHttpHeaderValidation.ino</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266Base32/.git/refs/heads/master</locationURI>
 		</link>
 		<link>
-			<name>webSockets/examples/WebSocketServer_LEDcontrol/WebSocketServer_LEDcontrol.ino</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/examples/WebSocketServer_LEDcontrol/WebSocketServer_LEDcontrol.ino</locationURI>
-		</link>
-		<link>
-			<name>webSockets/src/libb64/AUTHORS</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/src/libb64/AUTHORS</locationURI>
-		</link>
-		<link>
-			<name>webSockets/src/libb64/LICENSE</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/src/libb64/LICENSE</locationURI>
-		</link>
-		<link>
-			<name>webSockets/src/libb64/cdecode.c</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/src/libb64/cdecode.c</locationURI>
-		</link>
-		<link>
-			<name>webSockets/src/libb64/cdecode_inc.h</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/src/libb64/cdecode_inc.h</locationURI>
-		</link>
-		<link>
-			<name>webSockets/src/libb64/cencode.c</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/src/libb64/cencode.c</locationURI>
-		</link>
-		<link>
-			<name>webSockets/src/libb64/cencode_inc.h</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/src/libb64/cencode_inc.h</locationURI>
-		</link>
-		<link>
-			<name>webSockets/src/libsha1/libsha1.c</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/src/libsha1/libsha1.c</locationURI>
-		</link>
-		<link>
-			<name>webSockets/src/libsha1/libsha1.h</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/src/libsha1/libsha1.h</locationURI>
-		</link>
-		<link>
-			<name>webSockets/tests/webSocketServer/index.js</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/tests/webSocketServer/index.js</locationURI>
-		</link>
-		<link>
-			<name>webSockets/tests/webSocketServer/package.json</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/tests/webSocketServer/package.json</locationURI>
-		</link>
-		<link>
-			<name>mqtt/.git/logs/refs/heads</name>
+			<name>ESP8266Base32/.git/refs/remotes/origin</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>mqtt/.git/logs/refs/remotes</name>
+			<name>ESP8266Complexify/.git/logs/refs/heads</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>mqtt/.git/objects/pack/pack-3598ad3e520310598a90b001bafc262a87a3b635.idx</name>
+			<name>ESP8266Complexify/.git/logs/refs/remotes</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>ESP8266Complexify/.git/objects/3b/a0a5e11e7e97b79915f61f3ffaccd98da72e29</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266Complexify/.git/objects/3b/a0a5e11e7e97b79915f61f3ffaccd98da72e29</locationURI>
+		</link>
+		<link>
+			<name>ESP8266Complexify/.git/objects/66/3755dfb0d84d5569325e8d1c081241f91225e9</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266Complexify/.git/objects/66/3755dfb0d84d5569325e8d1c081241f91225e9</locationURI>
+		</link>
+		<link>
+			<name>ESP8266Complexify/.git/objects/9e/8c1100fe5417aa0bc8bc6bb61849dedad47b9e</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266Complexify/.git/objects/9e/8c1100fe5417aa0bc8bc6bb61849dedad47b9e</locationURI>
+		</link>
+		<link>
+			<name>ESP8266Complexify/.git/objects/b5/7054841ac6389b21d29b4ba1e297884010bd3f</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266Complexify/.git/objects/b5/7054841ac6389b21d29b4ba1e297884010bd3f</locationURI>
+		</link>
+		<link>
+			<name>ESP8266Complexify/.git/objects/cd/3907fb42c3621bc6ba01bddc2e54652ebf76df</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266Complexify/.git/objects/cd/3907fb42c3621bc6ba01bddc2e54652ebf76df</locationURI>
+		</link>
+		<link>
+			<name>ESP8266Complexify/.git/objects/d2/09802d888c4a318fdb0fbe43d2d75dc3283fab</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266Complexify/.git/objects/d2/09802d888c4a318fdb0fbe43d2d75dc3283fab</locationURI>
+		</link>
+		<link>
+			<name>ESP8266Complexify/.git/objects/d7/cd951add49d31cfc25c3815e0be4806940a414</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266Complexify/.git/objects/d7/cd951add49d31cfc25c3815e0be4806940a414</locationURI>
+		</link>
+		<link>
+			<name>ESP8266Complexify/.git/objects/e5/d115a8c68c70ae0d9c0821715585aa0d37fa34</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266Complexify/.git/objects/e5/d115a8c68c70ae0d9c0821715585aa0d37fa34</locationURI>
+		</link>
+		<link>
+			<name>ESP8266Complexify/.git/objects/f1/c207af147c106fce656efaa221a5c3ee7a61fe</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266Complexify/.git/objects/f1/c207af147c106fce656efaa221a5c3ee7a61fe</locationURI>
+		</link>
+		<link>
+			<name>ESP8266Complexify/.git/objects/f2/908bc579f06518e534d0433027466938491ba8</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266Complexify/.git/objects/f2/908bc579f06518e534d0433027466938491ba8</locationURI>
+		</link>
+		<link>
+			<name>ESP8266Complexify/.git/refs/heads/master</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266Complexify/.git/refs/heads/master</locationURI>
+		</link>
+		<link>
+			<name>ESP8266Complexify/.git/refs/remotes/origin</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>pubsubclient/.git/logs/refs/heads</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>pubsubclient/.git/logs/refs/remotes</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>pubsubclient/.git/objects/pack/pack-3598ad3e520310598a90b001bafc262a87a3b635.idx</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/git/pubsubclient/.git/objects/pack/pack-3598ad3e520310598a90b001bafc262a87a3b635.idx</locationURI>
 		</link>
 		<link>
-			<name>mqtt/.git/objects/pack/pack-3598ad3e520310598a90b001bafc262a87a3b635.pack</name>
+			<name>pubsubclient/.git/objects/pack/pack-3598ad3e520310598a90b001bafc262a87a3b635.pack</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/git/pubsubclient/.git/objects/pack/pack-3598ad3e520310598a90b001bafc262a87a3b635.pack</locationURI>
 		</link>
 		<link>
-			<name>mqtt/.git/refs/heads/master</name>
+			<name>pubsubclient/.git/refs/heads/master</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/git/pubsubclient/.git/refs/heads/master</locationURI>
 		</link>
 		<link>
-			<name>mqtt/.git/refs/remotes/origin</name>
+			<name>pubsubclient/.git/refs/remotes/origin</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>mqtt/.git/refs/tags/2.4</name>
+			<name>pubsubclient/.git/refs/tags/2.4</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/git/pubsubclient/.git/refs/tags/2.4</locationURI>
 		</link>
 		<link>
-			<name>mqtt/.git/refs/tags/v1.1</name>
+			<name>pubsubclient/.git/refs/tags/v1.1</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/git/pubsubclient/.git/refs/tags/v1.1</locationURI>
 		</link>
 		<link>
-			<name>mqtt/.git/refs/tags/v1.2</name>
+			<name>pubsubclient/.git/refs/tags/v1.2</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/git/pubsubclient/.git/refs/tags/v1.2</locationURI>
 		</link>
 		<link>
-			<name>mqtt/.git/refs/tags/v1.3</name>
+			<name>pubsubclient/.git/refs/tags/v1.3</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/git/pubsubclient/.git/refs/tags/v1.3</locationURI>
 		</link>
 		<link>
-			<name>mqtt/.git/refs/tags/v1.4</name>
+			<name>pubsubclient/.git/refs/tags/v1.4</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/git/pubsubclient/.git/refs/tags/v1.4</locationURI>
 		</link>
 		<link>
-			<name>mqtt/.git/refs/tags/v1.5</name>
+			<name>pubsubclient/.git/refs/tags/v1.5</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/git/pubsubclient/.git/refs/tags/v1.5</locationURI>
 		</link>
 		<link>
-			<name>mqtt/.git/refs/tags/v1.6</name>
+			<name>pubsubclient/.git/refs/tags/v1.6</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/git/pubsubclient/.git/refs/tags/v1.6</locationURI>
 		</link>
 		<link>
-			<name>mqtt/.git/refs/tags/v1.7</name>
+			<name>pubsubclient/.git/refs/tags/v1.7</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/git/pubsubclient/.git/refs/tags/v1.7</locationURI>
 		</link>
 		<link>
-			<name>mqtt/.git/refs/tags/v1.8</name>
+			<name>pubsubclient/.git/refs/tags/v1.8</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/git/pubsubclient/.git/refs/tags/v1.8</locationURI>
 		</link>
 		<link>
-			<name>mqtt/.git/refs/tags/v1.9</name>
+			<name>pubsubclient/.git/refs/tags/v1.9</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/git/pubsubclient/.git/refs/tags/v1.9</locationURI>
 		</link>
 		<link>
-			<name>mqtt/.git/refs/tags/v1.9.1</name>
+			<name>pubsubclient/.git/refs/tags/v1.9.1</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/git/pubsubclient/.git/refs/tags/v1.9.1</locationURI>
 		</link>
 		<link>
-			<name>mqtt/.git/refs/tags/v2.0</name>
+			<name>pubsubclient/.git/refs/tags/v2.0</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/git/pubsubclient/.git/refs/tags/v2.0</locationURI>
 		</link>
 		<link>
-			<name>mqtt/.git/refs/tags/v2.1</name>
+			<name>pubsubclient/.git/refs/tags/v2.1</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/git/pubsubclient/.git/refs/tags/v2.1</locationURI>
 		</link>
 		<link>
-			<name>mqtt/.git/refs/tags/v2.2</name>
+			<name>pubsubclient/.git/refs/tags/v2.2</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/git/pubsubclient/.git/refs/tags/v2.2</locationURI>
 		</link>
 		<link>
-			<name>mqtt/.git/refs/tags/v2.3</name>
+			<name>pubsubclient/.git/refs/tags/v2.3</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/git/pubsubclient/.git/refs/tags/v2.3</locationURI>
 		</link>
 		<link>
-			<name>mqtt/.git/refs/tags/v2.5</name>
+			<name>pubsubclient/.git/refs/tags/v2.5</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/git/pubsubclient/.git/refs/tags/v2.5</locationURI>
 		</link>
 		<link>
-			<name>mqtt/.git/refs/tags/v2.6</name>
+			<name>pubsubclient/.git/refs/tags/v2.6</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/git/pubsubclient/.git/refs/tags/v2.6</locationURI>
 		</link>
 		<link>
-			<name>thingspeak/.git/logs/refs/heads</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>thingspeak/.git/logs/refs/remotes</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>thingspeak/.git/objects/pack/pack-7d91d9c3cfb5803be02270af08a0f1bdd229d943.idx</name>
+			<name>pubsubclient/tests/src/lib/Arduino.h</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/thingspeak-arduino/.git/objects/pack/pack-7d91d9c3cfb5803be02270af08a0f1bdd229d943.idx</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/git/pubsubclient/tests/src/lib/Arduino.h</locationURI>
 		</link>
 		<link>
-			<name>thingspeak/.git/objects/pack/pack-7d91d9c3cfb5803be02270af08a0f1bdd229d943.pack</name>
+			<name>pubsubclient/tests/src/lib/BDDTest.cpp</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/thingspeak-arduino/.git/objects/pack/pack-7d91d9c3cfb5803be02270af08a0f1bdd229d943.pack</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/git/pubsubclient/tests/src/lib/BDDTest.cpp</locationURI>
 		</link>
 		<link>
-			<name>thingspeak/.git/refs/heads/master</name>
+			<name>pubsubclient/tests/src/lib/BDDTest.h</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/thingspeak-arduino/.git/refs/heads/master</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/git/pubsubclient/tests/src/lib/BDDTest.h</locationURI>
 		</link>
 		<link>
-			<name>thingspeak/.git/refs/remotes/origin</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>thingspeak/.git/refs/tags/1.0.1</name>
+			<name>pubsubclient/tests/src/lib/Buffer.cpp</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/thingspeak-arduino/.git/refs/tags/1.0.1</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/git/pubsubclient/tests/src/lib/Buffer.cpp</locationURI>
 		</link>
 		<link>
-			<name>thingspeak/.git/refs/tags/1.1.0</name>
+			<name>pubsubclient/tests/src/lib/Buffer.h</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/thingspeak-arduino/.git/refs/tags/1.1.0</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/git/pubsubclient/tests/src/lib/Buffer.h</locationURI>
 		</link>
 		<link>
-			<name>thingspeak/.git/refs/tags/1.1.1</name>
+			<name>pubsubclient/tests/src/lib/Client.h</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/thingspeak-arduino/.git/refs/tags/1.1.1</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/git/pubsubclient/tests/src/lib/Client.h</locationURI>
 		</link>
 		<link>
-			<name>thingspeak/.git/refs/tags/v1.0.0</name>
+			<name>pubsubclient/tests/src/lib/IPAddress.cpp</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/thingspeak-arduino/.git/refs/tags/v1.0.0</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/git/pubsubclient/tests/src/lib/IPAddress.cpp</locationURI>
 		</link>
 		<link>
-			<name>thingspeak/extras/test/testBegin/testBegin.ino</name>
+			<name>pubsubclient/tests/src/lib/IPAddress.h</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/thingspeak-arduino/extras/test/testBegin/testBegin.ino</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/git/pubsubclient/tests/src/lib/IPAddress.h</locationURI>
 		</link>
 		<link>
-			<name>thingspeak/extras/test/testReadField/testReadField.ino</name>
+			<name>pubsubclient/tests/src/lib/ShimClient.cpp</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/thingspeak-arduino/extras/test/testReadField/testReadField.ino</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/git/pubsubclient/tests/src/lib/ShimClient.cpp</locationURI>
 		</link>
 		<link>
-			<name>thingspeak/extras/test/testSetField/testSetField.ino</name>
+			<name>pubsubclient/tests/src/lib/ShimClient.h</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/thingspeak-arduino/extras/test/testSetField/testSetField.ino</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/git/pubsubclient/tests/src/lib/ShimClient.h</locationURI>
 		</link>
 		<link>
-			<name>thingspeak/extras/test/testWriteField/testWriteField.ino</name>
+			<name>pubsubclient/tests/src/lib/Stream.cpp</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/thingspeak-arduino/extras/test/testWriteField/testWriteField.ino</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/git/pubsubclient/tests/src/lib/Stream.cpp</locationURI>
+		</link>
+		<link>
+			<name>pubsubclient/tests/src/lib/Stream.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/git/pubsubclient/tests/src/lib/Stream.h</locationURI>
+		</link>
+		<link>
+			<name>pubsubclient/tests/src/lib/trace.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/git/pubsubclient/tests/src/lib/trace.h</locationURI>
 		</link>
 		<link>
 			<name>time/.git/logs/refs/heads</name>
@@ -2437,484 +2152,54 @@
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>webSockets/.git/logs/refs/heads</name>
+			<name>ESP8266Base32/.git/logs/refs/heads/master</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266Base32/.git/logs/refs/heads/master</locationURI>
+		</link>
+		<link>
+			<name>ESP8266Base32/.git/logs/refs/remotes/origin</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>webSockets/.git/logs/refs/remotes</name>
+			<name>ESP8266Base32/.git/refs/remotes/origin/HEAD</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266Base32/.git/refs/remotes/origin/HEAD</locationURI>
+		</link>
+		<link>
+			<name>ESP8266Complexify/.git/logs/refs/heads/master</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266Complexify/.git/logs/refs/heads/master</locationURI>
+		</link>
+		<link>
+			<name>ESP8266Complexify/.git/logs/refs/remotes/origin</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>webSockets/.git/objects/03/94d9815dc14238b232633da3959aacb82c8982</name>
+			<name>ESP8266Complexify/.git/refs/remotes/origin/master</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/03/94d9815dc14238b232633da3959aacb82c8982</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266Complexify/.git/refs/remotes/origin/master</locationURI>
 		</link>
 		<link>
-			<name>webSockets/.git/objects/06/e76adead5093ecf48355be2e71cb1a2a4380f2</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/06/e76adead5093ecf48355be2e71cb1a2a4380f2</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/08/248e96d279ebf8c40e7edef5ae7454db96d91f</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/08/248e96d279ebf8c40e7edef5ae7454db96d91f</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/0a/b5ed65dff82715cd68f068a2d2ac53c0d737c3</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/0a/b5ed65dff82715cd68f068a2d2ac53c0d737c3</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/0f/d8e2e2cc8c884eb56f30ecba4951785998b2b6</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/0f/d8e2e2cc8c884eb56f30ecba4951785998b2b6</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/26/5f0baf86d76413b6bd3d540ff253bc50b01c93</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/26/5f0baf86d76413b6bd3d540ff253bc50b01c93</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/28/20c9d3c3445af0addc2b15799b9bdc9bb49e86</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/28/20c9d3c3445af0addc2b15799b9bdc9bb49e86</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/2a/289dcaf32a03a22b7174e8f8b91a9230027fed</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/2a/289dcaf32a03a22b7174e8f8b91a9230027fed</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/2a/9edec19eb9140000a8175ae604a2f4487dc128</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/2a/9edec19eb9140000a8175ae604a2f4487dc128</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/33/6ee3a3c2c60f7198d004c37772ae83a14676eb</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/33/6ee3a3c2c60f7198d004c37772ae83a14676eb</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/39/38ec0450e7199141d8c7efcc62a9f22a68c6b5</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/39/38ec0450e7199141d8c7efcc62a9f22a68c6b5</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/39/ca53a060ddf7ebf2bb13744ad381a7bf490e38</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/39/ca53a060ddf7ebf2bb13744ad381a7bf490e38</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/3c/89b9dd7a4758257d2101900b19093273fadc19</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/3c/89b9dd7a4758257d2101900b19093273fadc19</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/3c/b509cd8b814ed408167515bb991c7e05ae386d</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/3c/b509cd8b814ed408167515bb991c7e05ae386d</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/3d/e365503e01314329ceefe67d1c3a9073954649</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/3d/e365503e01314329ceefe67d1c3a9073954649</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/3f/a1d69b7190519cf19809353d84d524dc47bbf7</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/3f/a1d69b7190519cf19809353d84d524dc47bbf7</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/43/dc38d3eb726f02f7d7e4664e116827d30f6ab6</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/43/dc38d3eb726f02f7d7e4664e116827d30f6ab6</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/45/8385085fc05f53e2b83c167b3c7dd14298d4f9</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/45/8385085fc05f53e2b83c167b3c7dd14298d4f9</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/47/2643459ae51083ddc840a7f170402b77326927</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/47/2643459ae51083ddc840a7f170402b77326927</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/47/63fbc745f7f7ce0c57bbb6375dfa26ef0fb39c</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/47/63fbc745f7f7ce0c57bbb6375dfa26ef0fb39c</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/53/23b84e2486fb894955764a0776fdf3601bc129</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/53/23b84e2486fb894955764a0776fdf3601bc129</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/53/641d23b9cb0b9e370c5117c2857db440e959d8</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/53/641d23b9cb0b9e370c5117c2857db440e959d8</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/55/0e607a4e54e1ac500b44a62ef19de951b6830f</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/55/0e607a4e54e1ac500b44a62ef19de951b6830f</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/5b/278d3c7f35e6afa1bec81456290a441bb85045</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/5b/278d3c7f35e6afa1bec81456290a441bb85045</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/5e/24c333cadd93dd1516169f096fc66f896147ba</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/5e/24c333cadd93dd1516169f096fc66f896147ba</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/62/1a4ac538801552eefc4575679fa60b24c40436</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/62/1a4ac538801552eefc4575679fa60b24c40436</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/6a/71583210cb4b007cf2d4e8f769be168cc78506</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/6a/71583210cb4b007cf2d4e8f769be168cc78506</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/73/64d7647b7a5c5a861f550010e4d022d0cdae3c</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/73/64d7647b7a5c5a861f550010e4d022d0cdae3c</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/75/7a2cf71839767ce81f8968d46ef8a1ad2e2233</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/75/7a2cf71839767ce81f8968d46ef8a1ad2e2233</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/76/09388aacd4b2b74ac270711bf375aa3f78d5d5</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/76/09388aacd4b2b74ac270711bf375aa3f78d5d5</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/79/362384257645885b1d7aec16cec9973e4b0ba9</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/79/362384257645885b1d7aec16cec9973e4b0ba9</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/7a/93c0e648c7a2f0158f6adafdd112deb835bde4</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/7a/93c0e648c7a2f0158f6adafdd112deb835bde4</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/7d/131ab1b03188716de8a4e984a18008feb61fb4</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/7d/131ab1b03188716de8a4e984a18008feb61fb4</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/7e/5c64a5735b107e9d0a0c50d0399dccfa253f8d</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/7e/5c64a5735b107e9d0a0c50d0399dccfa253f8d</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/7f/afa6acd0bd785d101f6db75effe8c9aa4c970d</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/7f/afa6acd0bd785d101f6db75effe8c9aa4c970d</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/7f/cc16e05730be7de7f59c7b5a0273a887f4ed63</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/7f/cc16e05730be7de7f59c7b5a0273a887f4ed63</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/80/3cc70417aec658ffd0363eeedc4f690527fa8b</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/80/3cc70417aec658ffd0363eeedc4f690527fa8b</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/81/5093a123588c8c3bed0b0f96f9c0754367d7ac</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/81/5093a123588c8c3bed0b0f96f9c0754367d7ac</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/81/90e8121c64865f5309ae81ecaa01fb5169612d</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/81/90e8121c64865f5309ae81ecaa01fb5169612d</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/87/0619d70ae671d939355fef8c11fb2927c0a69e</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/87/0619d70ae671d939355fef8c11fb2927c0a69e</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/88/f026bd917e351499b5c5780455c8f7d3f187cb</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/88/f026bd917e351499b5c5780455c8f7d3f187cb</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/89/f103cf3f341271849808444a9dc962e94d5c76</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/89/f103cf3f341271849808444a9dc962e94d5c76</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/94/51d376beeb6cf594985b42a6b4d1784d9ec55d</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/94/51d376beeb6cf594985b42a6b4d1784d9ec55d</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/97/443ae7774a3f5ec0de2a6a8f9ad034d2c9fe1f</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/97/443ae7774a3f5ec0de2a6a8f9ad034d2c9fe1f</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/9a/41377cf6002e126b37c3ca52adb0e36709bc86</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/9a/41377cf6002e126b37c3ca52adb0e36709bc86</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/9d/44a7cf15a8cfe1cee9cbf2627038341c91d63d</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/9d/44a7cf15a8cfe1cee9cbf2627038341c91d63d</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/b4/d21987c8826660b949b6c2a3bc34f9cffb6555</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/b4/d21987c8826660b949b6c2a3bc34f9cffb6555</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/b6/b1541481495915f264e27642ee11c40702327b</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/b6/b1541481495915f264e27642ee11c40702327b</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/b7/8199fd9e20c7673d66d6bb41d9bf5f2e295302</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/b7/8199fd9e20c7673d66d6bb41d9bf5f2e295302</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/b9/5d7560b243607216a7d6d708d9482670269895</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/b9/5d7560b243607216a7d6d708d9482670269895</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/c2/457bf64387fecb7f2f856e5d3061f23722d004</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/c2/457bf64387fecb7f2f856e5d3061f23722d004</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/cb/8a926486f50f6a731c1ac2e9d9643ef577e8f3</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/cb/8a926486f50f6a731c1ac2e9d9643ef577e8f3</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/ce/bc8aa7467641c6151b759f26ea8e40b9926eb5</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/ce/bc8aa7467641c6151b759f26ea8e40b9926eb5</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/d0/3f8400fafa725990908d981f483889f0af8e77</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/d0/3f8400fafa725990908d981f483889f0af8e77</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/d4/071cbab82f1ab0cb9935d9a3ee95f3acc50efe</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/d4/071cbab82f1ab0cb9935d9a3ee95f3acc50efe</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/da/58fa355f8a423bac4c7cfa288fdde2655cc7a8</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/da/58fa355f8a423bac4c7cfa288fdde2655cc7a8</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/e5/89b40b2582cc8a0b4ef0cfd2ce1d1ed5b9357d</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/e5/89b40b2582cc8a0b4ef0cfd2ce1d1ed5b9357d</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/ea/9691277c94c17b0bedc8e4db1b55866bc0abda</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/ea/9691277c94c17b0bedc8e4db1b55866bc0abda</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/ea/af7317998c68368a73dca18c40d731addd5d60</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/ea/af7317998c68368a73dca18c40d731addd5d60</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/ec/5aa89fa5a08d951baab74f63782bc223b806ab</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/ec/5aa89fa5a08d951baab74f63782bc223b806ab</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/ec/bc7393c33cee5fe7d3df655badf80c10e1a09c</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/ec/bc7393c33cee5fe7d3df655badf80c10e1a09c</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/f3/10628d3dc89ce1d340aee56ac78bb0d31a883b</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/f3/10628d3dc89ce1d340aee56ac78bb0d31a883b</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/f3/de0e7bd686e6ad788084250a48f9b8cf058d77</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/f3/de0e7bd686e6ad788084250a48f9b8cf058d77</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/f8/88e639794c18b05082f663ffec7ca72fabce34</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/f8/88e639794c18b05082f663ffec7ca72fabce34</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/fa/1be7bc67854b7c3dffbbdf24ad245e14c77707</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/fa/1be7bc67854b7c3dffbbdf24ad245e14c77707</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/fc/04c6aec3fe9faadc3c7bf79ece4d13e74a999a</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/fc/04c6aec3fe9faadc3c7bf79ece4d13e74a999a</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/pack/pack-1e17f36d987330bdffbc792bf6508d59aad4d3ad.idx</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/pack/pack-1e17f36d987330bdffbc792bf6508d59aad4d3ad.idx</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/pack/pack-1e17f36d987330bdffbc792bf6508d59aad4d3ad.pack</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/pack/pack-1e17f36d987330bdffbc792bf6508d59aad4d3ad.pack</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/pack/pack-9b3d260958e42e37c2f41788dd6d5c5bed348947.idx</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/pack/pack-9b3d260958e42e37c2f41788dd6d5c5bed348947.idx</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/pack/pack-9b3d260958e42e37c2f41788dd6d5c5bed348947.pack</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/pack/pack-9b3d260958e42e37c2f41788dd6d5c5bed348947.pack</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/pack/pack-f533df46d4f612ea1d204015d108288a64138887.idx</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/pack/pack-f533df46d4f612ea1d204015d108288a64138887.idx</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/pack/pack-f533df46d4f612ea1d204015d108288a64138887.pack</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/pack/pack-f533df46d4f612ea1d204015d108288a64138887.pack</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/pack/pack-fdf5ee912febcad145077201a06f537cfe4d805e.idx</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/pack/pack-fdf5ee912febcad145077201a06f537cfe4d805e.idx</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/objects/pack/pack-fdf5ee912febcad145077201a06f537cfe4d805e.pack</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/objects/pack/pack-fdf5ee912febcad145077201a06f537cfe4d805e.pack</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/refs/heads/Docs</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/refs/heads/Docs</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/refs/heads/HttpHeaderEvents</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/refs/heads/HttpHeaderEvents</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/refs/heads/master</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/refs/heads/master</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/refs/remotes/origin</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/refs/tags/1.0</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/refs/tags/1.0</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/refs/tags/1.1</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/refs/tags/1.1</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/refs/tags/1.2</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/refs/tags/1.2</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/refs/tags/1.3</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/refs/tags/1.3</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/refs/tags/1.4</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/refs/tags/1.4</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/refs/tags/2.0-alpha1</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/refs/tags/2.0-alpha1</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/refs/tags/2.0.1</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/refs/tags/2.0.1</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/refs/tags/2.0.2</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/refs/tags/2.0.2</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/refs/tags/2.0.3</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/refs/tags/2.0.3</locationURI>
-		</link>
-		<link>
-			<name>mqtt/.git/logs/refs/heads/master</name>
+			<name>pubsubclient/.git/logs/refs/heads/master</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/git/pubsubclient/.git/logs/refs/heads/master</locationURI>
 		</link>
 		<link>
-			<name>mqtt/.git/logs/refs/remotes/origin</name>
+			<name>pubsubclient/.git/logs/refs/remotes/origin</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>mqtt/.git/refs/remotes/origin/gh-pages</name>
+			<name>pubsubclient/.git/refs/remotes/origin/gh-pages</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/git/pubsubclient/.git/refs/remotes/origin/gh-pages</locationURI>
 		</link>
 		<link>
-			<name>mqtt/.git/refs/remotes/origin/master</name>
+			<name>pubsubclient/.git/refs/remotes/origin/master</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/git/pubsubclient/.git/refs/remotes/origin/master</locationURI>
-		</link>
-		<link>
-			<name>thingspeak/.git/logs/refs/heads/master</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/thingspeak-arduino/.git/logs/refs/heads/master</locationURI>
-		</link>
-		<link>
-			<name>thingspeak/.git/logs/refs/remotes/origin</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>thingspeak/.git/refs/remotes/origin/master</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/thingspeak-arduino/.git/refs/remotes/origin/master</locationURI>
 		</link>
 		<link>
 			<name>time/.git/logs/refs/heads/master</name>
@@ -2967,79 +2252,24 @@
 			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266TrueRandom/Release/core/core/umm_malloc/subdir.mk</locationURI>
 		</link>
 		<link>
-			<name>webSockets/.git/logs/refs/heads/Docs</name>
+			<name>ESP8266Base32/.git/logs/refs/remotes/origin/HEAD</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/logs/refs/heads/Docs</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266Base32/.git/logs/refs/remotes/origin/HEAD</locationURI>
 		</link>
 		<link>
-			<name>webSockets/.git/logs/refs/heads/HttpHeaderEvents</name>
+			<name>ESP8266Complexify/.git/logs/refs/remotes/origin/master</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/logs/refs/heads/HttpHeaderEvents</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266Complexify/.git/logs/refs/remotes/origin/master</locationURI>
 		</link>
 		<link>
-			<name>webSockets/.git/logs/refs/heads/master</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/logs/refs/heads/master</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/logs/refs/remotes/origin</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/refs/remotes/origin/ATmega</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/refs/remotes/origin/ATmega</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/refs/remotes/origin/Docs</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/refs/remotes/origin/Docs</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/refs/remotes/origin/HttpHeaderEvents</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/refs/remotes/origin/HttpHeaderEvents</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/refs/remotes/origin/async</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/refs/remotes/origin/async</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/refs/remotes/origin/httpHeaderEvents</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/refs/remotes/origin/httpHeaderEvents</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/refs/remotes/origin/master</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/refs/remotes/origin/master</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/refs/remotes/origin/nginx</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/refs/remotes/origin/nginx</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/refs/remotes/origin/sync</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/refs/remotes/origin/sync</locationURI>
-		</link>
-		<link>
-			<name>mqtt/.git/logs/refs/remotes/origin/gh-pages</name>
+			<name>pubsubclient/.git/logs/refs/remotes/origin/gh-pages</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/git/pubsubclient/.git/logs/refs/remotes/origin/gh-pages</locationURI>
 		</link>
 		<link>
-			<name>mqtt/.git/logs/refs/remotes/origin/master</name>
+			<name>pubsubclient/.git/logs/refs/remotes/origin/master</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/git/pubsubclient/.git/logs/refs/remotes/origin/master</locationURI>
-		</link>
-		<link>
-			<name>thingspeak/.git/logs/refs/remotes/origin/master</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/thingspeak-arduino/.git/logs/refs/remotes/origin/master</locationURI>
 		</link>
 		<link>
 			<name>time/.git/logs/refs/remotes/origin/master</name>
@@ -3055,46 +2285,6 @@
 			<name>trueRandom/.git/logs/refs/remotes/origin/useGetCycleCount</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/git/ESP8266TrueRandom/.git/logs/refs/remotes/origin/useGetCycleCount</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/logs/refs/remotes/origin/ATmega</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/logs/refs/remotes/origin/ATmega</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/logs/refs/remotes/origin/Docs</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/logs/refs/remotes/origin/Docs</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/logs/refs/remotes/origin/HttpHeaderEvents</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/logs/refs/remotes/origin/HttpHeaderEvents</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/logs/refs/remotes/origin/async</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/logs/refs/remotes/origin/async</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/logs/refs/remotes/origin/httpHeaderEvents</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/logs/refs/remotes/origin/httpHeaderEvents</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/logs/refs/remotes/origin/master</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/logs/refs/remotes/origin/master</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/logs/refs/remotes/origin/nginx</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/logs/refs/remotes/origin/nginx</locationURI>
-		</link>
-		<link>
-			<name>webSockets/.git/logs/refs/remotes/origin/sync</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/git/arduinoWebSockets/.git/logs/refs/remotes/origin/sync</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>

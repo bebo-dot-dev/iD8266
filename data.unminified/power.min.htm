@@ -89,63 +89,7 @@
 										</select>
 									</div>
 									<a role="button" tabindex="0" data-trigger="focus" class="info" data-po="po" title="Power Off Length" data-placement="bottom" data-content="Configure the length of time the device will remain powered down in deep sleep mode"> <span>i</span> </a>								    
-								</div>								
-								<div class="panel panel-default">
-									<div class="panel-heading" data-toggle="collapse" data-target="#loggingSection">
-										<h3 class="panel-title">Logging</h3>
-									</div>	
-									<div id="loggingSection" class="panel-body collapse">
-										<div class="form-group">
-											<div class="formCtrl">
-												<label for="logToThingSpeak">Enable ThingSpeak</label>
-												<input type="checkbox" class="form-control" id="logToThingSpeak" name="LogToThingSpeak" >
-											</div>
-											<a role="button" tabindex="0" data-trigger="focus" class="info" data-po="po" title="Enable ThingSpeak" data-placement="bottom" data-html="true" data-content="Enables/disables power event logging to ThingSpeak for this device.<br/><br/>See&nbsp;<a href='https://thingspeak.com/' target='_blank'>ThingSpeak</a>&nbsp;for details"> <span>i</span> </a>
-										</div>
-										<div class="thingspeak dnone">
-											<div class="form-group">
-												<div class="formCtrl">
-													<label for="thingSpeakChannel">ThingSpeak Channel</label>
-													<input type="text" class="form-control w100 number" id="thingSpeakChannel" name="ThingSpeakChannel" maxlength="32" >
-												</div>
-												<a role="button" tabindex="5" data-trigger="focus" class="info" data-po="po" title="ThingSpeak Channel" data-placement="bottom" data-content="The target ThingSpeak Channel for power management event logging"> <span>i</span> </a>
-											    <span id="thingSpeakChannelValFail" class="valFail">* A valid channel number is required</span>
-											</div>
-											<div class="form-group">
-												<div class="formCtrl">
-													<label for="thingSpeakApiKey">ThingSpeak API Key</label>
-													<input type="text" class="form-control valtxt apiKey" id="thingSpeakApiKey" name="ThingSpeakApiKey" maxlength="32" >
-												</div>
-												<a role="button" tabindex="6" data-trigger="focus" class="info" data-po="po" title="ThingSpeak API Key" data-placement="bottom" data-content="The corresponding API key for the channel configured for power management event logging"> <span>i</span> </a>
-											    <span id="thingSpeakApiKeyValFail" class="valFail">* A valid API key is required</span>
-											</div>
-										</div>								
-										<div class="form-group">
-											<div class="formCtrl">
-												<label for="httpLoggingEnabled">Enable HTTP Logging</label>
-												<input type="checkbox" class="form-control" id="httpLoggingEnabled" name="httpLoggingEnabled" >
-											</div>
-											<a role="button" tabindex="1" data-trigger="focus" class="info" data-po="po" title="Enable HTTP Logging" data-placement="bottom" data-html="true" data-content="Enables/disables power event logging to any web server via the HTTP protocol for this device.<br/><br/>The target host can be on the local network or the internet. It's possible to use this feature chained with other external services e.g.&nbsp;<a href='https://uk.mathworks.com/help/thingspeak/thingtweet-app.html' target='_blank'>ThingTweet</a>&nbsp;and&nbsp;<a href='https://ifttt.com/wtf' target='_blank'>IFTTT</a>&nbsp;to extend this device's range/flexibility"> <span>i</span> </a>
-										</div>
-										<div class="httplogging dnone">
-											<div class="form-group">
-												<div class="formCtrl">
-													<label for="httpLoggingHost">HTTP Logging Host</label>
-													<input type="text" class="form-control valtxt" id="httpLoggingHost" name="httpLoggingHost" maxlength="32" >
-												</div>
-												<a role="button" tabindex="1" data-trigger="focus" class="info" data-po="po" title="HTTP Logging Host" data-placement="bottom" data-content="The hostname of the server to log to e.g. api.thingspeak.com"> <span>i</span> </a>
-											    <span id="httpLoggingHostValFail" class="valFail">* A valid host is required</span>
-											</div>
-											<div class="form-group">
-												<div class="formCtrl">
-													<label for="httpLoggingUri">HTTP Logging URI</label>
-													<input type="text" class="form-control" id="httpLoggingUri" name="httpLoggingUri" maxlength="128" >
-												</div>
-												<a role="button" tabindex="2" data-trigger="focus" class="info" data-po="po" title="HTTP Logging URI" data-placement="bottom" data-html="true" data-content="The URI path to include in the request.<br/><br/>The URI can include any required query string parameters that are necessary for the request to succeed i.e. an API key / password etc.<br/><br/>e.g.&nbsp;/apps/thingtweet/1/statuses/update?key=E8L860U5PZ4LYAOD&status="> <span>i</span> </a>								    
-											</div>								
-										</div>
-									</div>
-								</div>								
+								</div>																
 							</div>																				
 						</div>
 						<button id="savePwrMgmtSettings" type="button" class="btn btn-default dnone">

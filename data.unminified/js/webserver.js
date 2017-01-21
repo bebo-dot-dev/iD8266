@@ -47,7 +47,6 @@ $(document).ready(function() {
 
 	function initState(server) {
 
-		$("#adminPwd").val(server.adminPwd);
 		$("#webserverPort").val(server.webserverPort);
 		$("#websocketServerPort").val(server.websocketServerPort);
 		server.includeServerHeader == "true" ? $("#includeServerHeader").prop('checked', true) : $("#includeServerHeader").prop('checked', false);
@@ -75,8 +74,7 @@ $(document).ready(function() {
 			}
 			return val;
 		}
-		
-		valid &= ipValid('#adminPwd', '#adminPwdValFail', 8);
+				
 		valid &= ipValid('#webserverPort', '#webserverPortValFail', null, 1, 65535);
 		valid &= ipValid('#websocketServerPort', '#websocketServerPortValFail', null, 1, 65535);
 		valid &= ipValid('#serverHeader', '#serverHeaderValFail', 8);
@@ -89,13 +87,7 @@ $(document).ready(function() {
 	});
 	$(document).on('keydown', 'input', function() {
 		$('button[type=submit]').show();
-	});
-	$(document).on('focus', '#adminPwd', function() {
-		$(this)[0].type = 'text';
-	});
-	$(document).on('blur', '#adminPwd', function() {
-		$(this)[0].type = 'password';
-	});
+	});	
 	$(document).on('click', 'button[type=submit]', function(e) {
 		if (!checkValid()) {
 			e.preventDefault();

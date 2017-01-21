@@ -40,7 +40,6 @@ $(document).ready(function() {
 
 	function initState(r) {
 
-		var isInput = false;
 		var valid = true;
 		if (r.Mode) {
 			//digital
@@ -48,7 +47,6 @@ $(document).ready(function() {
 			switch(r.Mode) {
 			case '1':
 			case '2':
-				isInput = true;
 				$('#dMode').text(r.Mode == '1' ? '(Digital Input)' : '(Digital Input with Pullup)');
 				$('.range-slider').hide();
 				$('#switch').attr('disabled', 'disabled');
@@ -56,7 +54,8 @@ $(document).ready(function() {
 				r.Value == '0' ? $('#switch').prop('checked', false) : $('#switch').prop('checked', true);
 				break;
 			case '3':
-				$('#dMode').text('(Digital Output)');
+			case '5':
+				$('#dMode').text(r.Mode == '3' ? '(Digital Output)' : 'Digistat MK2');
 				$('.range-slider').hide();
 				$('#switch').removeAttr('disabled');
 				$('.onoffswitch').show();
@@ -69,6 +68,14 @@ $(document).ready(function() {
 				$('.range-slider__range').val(r.Value);
 				$('.range-slider_value').text(r.Value);
 				break;
+			case '6':
+				$('#aNameTitle').text(r.Name);
+				$('#aType').text('DHT22');
+				$('#aValue').text(r.Value);
+				$('#aUnitStr').text(String.fromCharCode(176) + 'C');
+				$('#a2Value').text(r.Value2);
+				$('#a2UnitStr').text('%');
+				break;
 			default:
 				valid = false;
 				$('#analogPanel').hide();
@@ -76,8 +83,15 @@ $(document).ready(function() {
 				break;
 			}
 			if (valid) {
-				$('#analogPanel').hide();
-				$('#digitalPanel').show();
+				if (r.Mode != '6') {
+					$('#analogPanel').hide();
+					$('#digitalPanel').show();
+				} else {
+					$('#digitalPanel').hide();
+					$('#aRawSection').hide();					
+					$('#a2Section').show();					
+					$('#analogPanel').show();
+				}
 			} else
 				$('#mainPnl .panel-body').text(r.Name + ' is configured as unused');
 
@@ -85,11 +99,10 @@ $(document).ready(function() {
 			//analog
 			$('#aNameTitle').text(r.A0Name);
 			if (r.A0Mode == '1') {
-				isInput = true;
-				$('#a0Calculated').text(r.A0Calculated);
-				$('#a0UnitStr').text(r.A0UnitStr);
-				$('#a0Value').text(r.A0Value);
-				$('#a0Voltage').text(r.A0Voltage);
+				$('#aValue').text(r.A0Calculated);
+				$('#aUnitStr').text(r.A0UnitStr);
+				$('#aRawValue').text(r.A0Value);
+				$('#aVoltage').text(r.A0Voltage);
 				$('#digitalPanel').hide();
 				$('#analogPanel').show();
 			} else {
@@ -161,33 +174,39 @@ $(document).ready(function() {
 				case '1':
 				case '2':
 				case '3':
+				case '5':
 					j.Value == '0' ? $('#switch').prop('checked', false) : $('#switch').prop('checked', true);
 					break;
 				case '3':
 					$('.range-slider__range').val(j.Value);
 					$('.range-slider_value').text(j.Value);
 					break;
+				case '6':
+					$('#aValue').text(j.Value);
+					$('#a2Value').text(j.Value2);
+					break;
 				}
 			} else {
 				//analog				
-				$('#a0Value').text(j.Value);
-				$('#a0Voltage').text(j.Voltage);
-				$('#a0Calculated').text(j.Calculated);
+				$('#aValue').text(j.Calculated);
+				$('#aRawValue').text(j.Value);
+				$('#aVoltage').text(j.Voltage);				
 			}
 		};
 	};
 	
 	$(document).on('change', '#switch', function() {
-		if ((d) && (d.Mode) && (d.Mode == '3')) {
+		if ((d) && (d.Mode) && ((d.Mode == '3') || (d.Mode == '5'))) {
 			var bitVal = $(this).prop('checked') ? '1' : '0';
 			var qs = '?d=' + d.Idx + '&value=' + bitVal;
+			var ajaxTimeout = d.peripheralType && d.peripheralType == '1' ? 8000 : 5000;
 			$.ajax({
 				url : '/digitalWrite' + qs,
 				dataType : 'json',
-				timeout : 5000
+				timeout : ajaxTimeout
 			}).fail(function(jqXHR, textStatus, errorThrown) {
 				if (jqXHR.status == '403') {
-					window.location = "/logon";
+					window.location = "/login.cm";
 				} else {
 					console.log('digitalWrite ajax call failure', jqXHR, textStatus, errorThrown);					
 				}
@@ -205,7 +224,7 @@ $(document).ready(function() {
 				timeout : 5000
 			}).fail(function(jqXHR, textStatus, errorThrown) {
 				if (jqXHR.status == '403') {
-					window.location = "/logon";
+					window.location = "/login.cm";
 				} else {
 					console.log('analogWrite ajax call failure', jqXHR, textStatus, errorThrown);
 				}

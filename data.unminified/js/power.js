@@ -5,32 +5,7 @@ $.ajaxSetup({
 $(document).ready(function() {
 
 	$('[data-po=po]').popover();
-
-	$('.valtxt').mask('AAAAAAAABBBBBBBBBBBBBBBBBBBBBBBB', {
-		translation : {
-			'A' : {
-				pattern : /[A-Za-z0-9_.-]/
-			},
-			'B' : {
-				pattern : /[A-Za-z0-9_.-]/,
-				optional : true
-			}
-		}
-	});
-
-	$('.number').mask('ABBBBBBB', {
-		translation : {
-			'A' : {
-				pattern : /[0-9]/
-			},
-			'B' : {
-				pattern : /[0-9]/,
-				optional : true
-			}
-		},
-		clearIfNotMatch : true
-	});
-
+	
 	$.ajax({
 		url : 'getPowerMgmtData',
 		dataType : 'json'
@@ -49,57 +24,15 @@ $(document).ready(function() {
 		r.enabled == 'true' ? $('#enabled').prop('checked', true) : $('#enabled').prop('checked', false);
 		$('#onLength').val(r.onLength);
 		$('#offLength').val(r.offLength);
-					
-		r.logToThingSpeak == 'true' ? $('#logToThingSpeak').prop('checked', true) : $('#logToThingSpeak').prop('checked', false);
-		if (r.thingSpeakChannel != '0') {
-		
-			$('#thingSpeakChannel').val(r.thingSpeakChannel);
-			var url = 'https://thingspeak.com/channels/' + r.thingSpeakChannel;
-			$('#thingSpeakApiKey').parent().parent().after('<a href="' + url + '" target="_blank">' + url + '</a><br/><br/>');
-		}
-		
-		$('#thingSpeakApiKey').val(r.thingSpeakApiKey);
-		$('#thingSpeakApiKey')[0].type = 'password';
-		
-		r.httpLoggingEnabled == 'true' ? $('#httpLoggingEnabled').prop('checked', true) : $('#httpLoggingEnabled').prop('checked', false);		
-		$('#httpLoggingHost').val(r.httpLoggingHost);
-		$('#httpLoggingUri').val(r.httpLoggingUri);		
-						
+											
 		checkSectionDisplay();
 		buildScheduleDisplay(r.schedule);		
 		
 		$('#loading').hide();
 		$('#mainPnl').fadeIn();
 	};
-
-	function checkValid() {
-
-		var valid = true;
-
-		function ipValid(elemId, valId, minValue, maxValue) {
-			var val = true;
-			if (($(elemId).val().length == 0) || ((minValue) && parseInt($(elemId).val()) < minValue) || ((maxValue) && parseInt($(elemId).val()) > maxValue)) {
-				val = false;
-				$(valId).css('display', 'block');
-			} else {
-				$(valId).css('display', 'none');
-			}
-			return val;
-		}
-
-		if ($('#thingSpeakEnabled').prop('checked')) {			
-			valid &= ipValid('#thingSpeakChannel', '#thingSpeakChannelValFail');
-			valid &= ipValid('#thingSpeakApiKey', '#thingSpeakApiKeyValFail');							
-		}
-		
-		if ($('#httpLoggingEnabled').prop('checked')) {			
-			valid &= ipValid('#httpLoggingHost', '#httpLoggingHostValFail');			
-		}
-
-		return valid;
-	};
-
-	$(document).on('change', '#enabled, #logToThingSpeak, #httpLoggingEnabled, #powerFrm select', function() {
+	
+	$(document).on('change', '#enabled, #powerFrm select', function() {
 		checkSectionDisplay();
 		if ($('#enabled').prop('checked')) {
 			$('#generalParamSection').collapse('show');
@@ -111,25 +44,8 @@ $(document).ready(function() {
 		if ($('#enabled').prop('checked'))
 			$('.pwrMgmtPnl').fadeIn();
 		else
-			$('.pwrMgmtPnl').hide();
-			
-		checkThingSpeakDisplay();
-		checkHttpLoggingDisplay();
-	}
-	
-	function checkThingSpeakDisplay() {
-		if ($('#logToThingSpeak').prop('checked'))
-			$('.thingspeak').fadeIn();
-		else
-			$('.thingspeak').fadeOut();
-	}
-	
-	function checkHttpLoggingDisplay() {
-		if ($('#httpLoggingEnabled').prop('checked'))
-			$('.httplogging').fadeIn();
-		else
-			$('.httplogging').fadeOut();
-	}
+			$('.pwrMgmtPnl').hide();				
+	}	
 	
 	function buildScheduleDisplay(schedules) {
 	
@@ -189,26 +105,23 @@ $(document).ready(function() {
 		$('#savePwrMgmtSettings').show();
 	});
 		
-	$(document).on('click', '#savePwrMgmtSettings', function(e) {
-		if (checkValid()) {
-			$('#loggingSection').collapse('hide');
-			$('#savePwrMgmtSettings').hide();
-			var postData = $('#powerFrm').serialize(); 
-			$.ajax({
-				url : 'powerMgmt',
-				dataType : 'json',
-				data : postData,
-				method : 'POST'
-			}).done(function(data, textStatus, jqXHR) {
-				saveFeedback('#generalSaveSuccess');
-			}).fail(function(jqXHR, textStatus, errorThrown) {
-				if (jqXHR.status == '403') {
-					window.location = '/login.cm';
-				} else {
-					console.log('powerMgmt ajax call failure', jqXHR, textStatus, errorThrown);
-				}
-			});			
-		}
+	$(document).on('click', '#savePwrMgmtSettings', function(e) {				
+		$('#savePwrMgmtSettings').hide();
+		var postData = $('#powerFrm').serialize(); 
+		$.ajax({
+			url : 'powerMgmt',
+			dataType : 'json',
+			data : postData,
+			method : 'POST'
+		}).done(function(data, textStatus, jqXHR) {
+			saveFeedback('#generalSaveSuccess');
+		}).fail(function(jqXHR, textStatus, errorThrown) {
+			if (jqXHR.status == '403') {
+				window.location = '/login.cm';
+			} else {
+				console.log('powerMgmt ajax call failure', jqXHR, textStatus, errorThrown);
+			}
+		});		
 	});
 	
 	$(document).on('click', '#saveSchedule', function(e) {		

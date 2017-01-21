@@ -380,3 +380,18 @@ table tr td:nth-child(2) {
   color: #ff0000;
   display: none;
 }
+
+.progress {
+	width: 82%;
+	margin-bottom: -3px;
+}
+
+.complexity {
+	margin-left: 5px;
+}
+
+.totpQrCode {
+	height: 225px;
+	width: 225px;
+	padding: 10px;
+}

@@ -29,6 +29,7 @@ const uint32_t TWO_MIN_MILLIS = (ONE_MIN_MILLIS * 2);
 const uint32_t FIVE_MIN_MILLIS = (ONE_MIN_MILLIS * 5);
 const uint32_t FIFTEEN_MIN_MILLIS = (ONE_MIN_MILLIS * 15);
 const uint32_t ONE_HOUR_MILLIS = (ONE_MIN_MILLIS * 60);
+const uint32_t ONE_MIN_MICROS = ((ONE_MIN_MILLIS) * 1000);
 const uint32_t FIVE_MIN_MICROS = ((ONE_MIN_MILLIS * 5) * 1000);
 const uint32_t THIRTY_MIN_MICROS = ((ONE_MIN_MILLIS * 30) * 1000);
 const uint32_t ONE_HOUR_MICROS = ((ONE_MIN_MILLIS * 60) * 1000);
@@ -72,36 +73,29 @@ struct scheduleData {
 	uint8_t hour;						//the schedule hour
 	powerDownLength offLength;			//describes how long to sleep for
 
-} __attribute__ ((__packed__));
+};
 
 struct powerMgmtData {
 
 	bool enabled;						//global on/off switch
 	powerOnLength onLength;				//describes how long to stay awake when woken / powered on
 	powerDownLength offLength;			//describes how long to sleep for
-	//logging configuration
-	bool httpLoggingEnabled;
-	char httpLoggingHost[MAX_NAME_STR];
-	char httpLoggingUri[LARGE_STRMAX];
-	bool logToThingSpeak;
-	unsigned long thingSpeakChannel;
-	char thingSpeakApiKey[MAX_NAME_STR];
+
 	//automated long term scheduled power down data
 	scheduleData schedules[MAX_SCHEDULES];
 
-} __attribute__ ((__packed__));
+};
 
 struct rtcData {
 	//uint32_t crc32;
-	bool initialized;
-	byte sleepCount;
 	byte targetSleepCount;
 	uint32_t pwrDownLength;
 	powerEventType eventType;
 	WakeMode wakeMode;
 	time_t lastSleepTimestamp;
 	bool lastSleepAdjusted;
-};
+	bool shortSleep;
+} __attribute__ ((aligned(4)));
 
 class PowerManager {
 public:
@@ -114,26 +108,24 @@ public:
 	void ICACHE_FLASH_ATTR logBoot();
 	void ICACHE_FLASH_ATTR processPowerEvents();
 	static void ICACHE_FLASH_ATTR initRtcStoreData();
+	bool ICACHE_FLASH_ATTR isSingleCycleEnabled();
 private:
 	rst_reason resetReason;
 	powerEventType wakeEventType;
 	unsigned long wakeupTime;	//storage for millis() at wake up / power on time
 	time_t wakeTimestamp;  //storage for now() at wake up / power on time
-	unsigned long lastThingSpeakLog;
-	WiFiClient* pwrMgmtWifiClient;
-	WiFiClient* ICACHE_FLASH_ATTR getWifiClient();
-	scheduleData* ICACHE_FLASH_ATTR getScheduledPowerDownData();
+	scheduleData* ICACHE_FLASH_ATTR getScheduledPowerDownData(int hour);
 	bool ICACHE_FLASH_ATTR powerOnLengthExpired();
+	uint32_t ICACHE_FLASH_ATTR getSleepInterval(powerDownLength length, bool ntpAdjust = true);
 	void ICACHE_FLASH_ATTR getRtcStoreData(powerDownLength length, powerEventType eventType);
 	String ICACHE_FLASH_ATTR getEventTypeString(powerEventType eventType);
 	void ICACHE_FLASH_ATTR deepSleep(bool sleepLoggingEnabled = true);
-	int ICACHE_FLASH_ATTR logToThingSpeak(powerEventType eventType);
-	bool ICACHE_FLASH_ATTR logToHttpServer(powerEventType eventType);
 	void ICACHE_FLASH_ATTR checkLengthySleep();
+	bool ICACHE_FLASH_ATTR checkShortSleep(bool canSleepNow = false);
 	uint32_t ICACHE_FLASH_ATTR calculateCRC32(const uint8_t *data, size_t length);
 	void ICACHE_FLASH_ATTR adjustPowerDownLength();
-	uint32_t ICACHE_FLASH_ATTR getThirtyMinuteInterval();
-	uint32_t ICACHE_FLASH_ATTR getOneHourInterval();
+	uint32_t ICACHE_FLASH_ATTR getThirtyMinuteInterval(bool ntpAdjust);
+	uint32_t ICACHE_FLASH_ATTR getOneHourInterval(bool ntpAdjust);
 };
 
 extern struct rtcData rtcConfigData;

@@ -120,8 +120,9 @@ time_t ICACHE_FLASH_ATTR Ntp::getNtpTime() {
 		delay(10);
 	}
 
-	APP_SERIAL_DEBUG("Get NTP time timeout\n");
-	return 0; // return 0 if unable to get the time
+	APP_SERIAL_DEBUG("Get NTP time timeout - restarting\n");
+	ESP.restart();
+	return 0;
 
 }
 
@@ -210,5 +211,14 @@ String ICACHE_FLASH_ATTR Ntp::getDeviceUptimeString() {
 			String(uptime.hours) + getAppStr(appStrType::ntpHours) +
 			String(uptime.mins) + getAppStr(appStrType::ntpMins) +
 			String(uptime.secs) + getAppStr(appStrType::ntpSecs);
+
+}
+
+/*
+ * returns the current time as UTC (timezone offset removed)
+ */
+ICACHE_FLASH_ATTR time_t Ntp::getUtcTimeNow() {
+
+	return now() - timezone;
 
 }

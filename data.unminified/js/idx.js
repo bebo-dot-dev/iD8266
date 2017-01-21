@@ -16,10 +16,12 @@ var updateUI = (function update(d) {
 			{
 				case '1':
 				case '2':
+				case '6':
 					localStorage.setItem('d' + i + 'Info', 'Monitor "' + gpio.Name + '"');
 					break;
 				case '3':
 				case '4':
+				case '5':
 					localStorage.setItem('d' + i + 'Info', 'Control "' + gpio.Name + '"');
 					break;
 				default:

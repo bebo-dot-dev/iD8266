@@ -53,7 +53,8 @@ gulp.task('inline', function() {
     return gulp.src('data.unminified/*.htm')
         .pipe(inline({
             base: 'data.unminified/',
-            css: cleancss
+            css: cleancss,
+            disabledTypes: ['svg', 'img']
         }))
         .pipe(htmlmin({
             collapseWhitespace: true,
@@ -80,7 +81,8 @@ gulp.task('html', function() {
 	.pipe(inline({
 	    base: 'data.unminified/',
 	    js: uglify,
-	    css: cleancss
+	    css: cleancss,
+        disabledTypes: ['svg', 'img']
 	 }))
         .pipe(gzip())
         .pipe(gulp.dest('data'));

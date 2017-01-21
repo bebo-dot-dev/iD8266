@@ -73,19 +73,7 @@ $(document).ready(function() {
 		$("#mqttServerBrokerIp").text(d.mqttServerBrokerIp);
 		$("#mqttServerBrokerPort").text(d.mqttServerBrokerPort);
 		$("#mqttConnected").text(d.mqttConnected);
-		
-		d = diags.loggingData;
-		$("#thingSpeakEnabled").text(d.thingSpeakEnabled);
-		$("#httpLoggingEnabled").text(d.httpLoggingEnabled);
-		
-		if (d.httpLoggingEnabled == "true") {
-			$("#httpLoggingHost").text(d.httpLoggingHost);
-			$("#httpLoggingUri").text(d.httpLoggingUri);			
-			$("#httpLoggingLastUri").text(d.httpLoggingLastUri);
-			$("#httpLoggingLastCallOk").text(d.httpLoggingLastUri !== "" ? d.httpLoggingLastCallOk : "TBD");
-			$(".httpLogging").show();
-		}
-					
+							
 		d = diags.regionalSettings;
 		$("#ntpEnabled").text(d.ntpEnabled);
 		$("#ntpLocale").text(d.ntpLocale);

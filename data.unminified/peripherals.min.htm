@@ -1,0 +1,124 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Peripherals</title>
+		<link href="css/bootstrap.min.css" media="all" rel="stylesheet" />
+		<link href="css/app.css" media="all" rel="stylesheet" />
+	</head>
+	<body>
+		<div class="container">
+			<nav class="navbar navbar-default">
+				<div class="container-fluid">
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+							<span class="sr-only">Toggle navigation</span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+						<a class="navbar-brand" href="/"> Peripherals </a>
+					</div>
+					<div id="navbar" class="navbar-collapse collapse">
+						<ul class="navbar-nav list-inline">
+							<li>
+								<a href="/">
+								<button type="button" class="btn btn-default navbar-btn">
+									Home
+								</button></a>
+							</li>
+							<li>
+								<a href="/logoff">
+								<button type="button" class="btn btn-default navbar-btn">
+									Log Off
+								</button></a>
+							</li>
+						</ul>
+					</div><!--/.nav-collapse -->
+				</div><!--/.container-fluid -->
+			</nav>
+			<div id="loading" class="alert alert-success" role="alert"><strong>Please wait</strong> loading...</div>
+			<div id="mainPnl" class="dnone">								
+				<form id="peripheralsFrm" method='post' enctype='multipart/form-data' autocomplete='off'>						
+					<div id="peripheralSaveSuccess" class="form-group dnone">
+						<div class="alert alert-success" role="alert"> 
+							<strong>Done!</strong> Peripherals updated and activated 
+						</div>
+					</div>
+					<div id="newPeripheralSection" class="panel panel-default">
+						<div class="panel-heading" data-toggle="collapse" data-target="#newPeripheral">
+							<h3 class="panel-title">New Peripheral</h3>
+						</div>		
+						<div id="newPeripheral" class="panel-body collapse">
+							<div class="form-group">
+								<div class="formCtrl">
+									<label for="peripheralType">Type</label>
+									<select class="form-control" id="peripheralType">
+										<option value="1" >Digistat Mk2</option>
+										<option value="2">DHT22</option>												
+									</select>
+								</div>
+								<a role="button" tabindex="0" data-trigger="focus" class="info" data-po="po" title="Type" data-placement="bottom" data-content="Select the peripheral type to add"> <span>i</span> </a>
+							</div>
+							<div class="form-group">
+								<div class="formCtrl">
+									<label for="pinIdx">GPIO Pin</label>
+									<select class="form-control" id="pinIdx">
+										<option value="0">0</option>
+										<option value="1">1</option>
+										<option value="2">2</option>
+										<option value="3">3</option>
+										<option value="4">4</option>												
+									</select>
+								</div>
+								<a role="button" tabindex="1" data-trigger="focus" class="info" data-po="po" title="GPIO Pin" data-placement="bottom" data-content="Select the associated GPIO I/O pin for this peripheral"> <span>i</span> </a>								    
+							</div>
+							<div class="form-group">
+								<div class="formCtrl">
+									<label for="name">Name</label>
+									<input type="text" class="form-control valtxt" id="name" name="name" maxlength="32" >
+								</div>
+								<a role="button" tabindex="2" data-trigger="focus" class="info" data-po="po" title="Name" data-placement="bottom" data-content="Enter a meaningful name for this peripheral"> <span>i</span> </a>
+							    <span id="nameValFail" class="valFail">* A valid name is required</span>
+							</div>
+							<div class="form-group">
+								<div class="formCtrl">
+									<label for="default">Default Value</label>
+									<select class="form-control" id="default">
+										<option value="0">0</option>
+										<option value="1">1</option>																					
+									</select>
+								</div>
+								<a role="button" tabindex="3" data-trigger="focus" class="info" data-po="po" title="Default Value" data-placement="bottom" data-content="Configure a default value for this peripheral. This value is used to initialize the state of the pin at device startup time."> <span>i</span> </a>							    
+							</div>										
+							<div class="form-group">
+								<div class="formCtrl">											
+									<button id="savePeripheral" type="button" class="btn btn-default">
+										Submit
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div id="peripheralTableSection" class="dnone">
+						<table id="peripheralTable" class="table table-bordered table-striped">										
+					        <thead>
+					        	<tr>
+					        		<td>Type</td>
+					        		<td>Pin</td>
+					        		<td>Name</td>
+					        		<td></td>
+					        	</tr>
+					        </thead>
+							<tbody>
+							</tbody>
+						</table>
+					</div>																		
+				</form>				
+			</div>
+		</div>
+		<script src="js/jquery-2.2.0.min.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		<script src="js/peripherals.js"></script>
+	</body>
+</html>

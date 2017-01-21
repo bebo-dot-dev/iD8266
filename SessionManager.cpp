@@ -45,11 +45,11 @@ String ICACHE_FLASH_ATTR SessionManager::addWebSession()
 	return EMPTY_STR;
 }
 
-bool ICACHE_FLASH_ATTR SessionManager::webSessionExists(String sessionId) {
+bool ICACHE_FLASH_ATTR SessionManager::webSessionExists(String &sessionId) {
 
   webSession *s;
   if (!sessionId.equals(EMPTY_STR)) {
-	  for (int i = 0; i < MAX_WEB_SESSIONS; i++)
+	  for (byte i = 0; i < MAX_WEB_SESSIONS; i++)
 	  {
 		s = &appConfigData.webSessions[i];
 		if (strcmp(s->sessionId, sessionId.c_str()) == 0) {
@@ -72,10 +72,10 @@ bool ICACHE_FLASH_ATTR SessionManager::webSessionExists(String sessionId) {
 
 }
 
-bool ICACHE_FLASH_ATTR SessionManager::freeSession(String sessionId) {
+bool ICACHE_FLASH_ATTR SessionManager::freeSession(String &sessionId) {
 
   webSession *s;
-  for (int i = 0; i < MAX_WEB_SESSIONS; i++)
+  for (byte i = 0; i < MAX_WEB_SESSIONS; i++)
   {
     s = &appConfigData.webSessions[i];
     if (strcmp(s->sessionId, sessionId.c_str()) == 0) {

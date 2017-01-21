@@ -8,7 +8,7 @@
 #ifndef SOCKETSERVER_H_
 #define SOCKETSERVER_H_
 
-#include "/home/joe/git/arduinoWebSockets/src/WebSocketsServer.h"
+#include "WebSocketsServer.h"
 #include "GPIOManager.h"
 
 class SocketServer {
@@ -16,7 +16,10 @@ public:
 	ICACHE_FLASH_ATTR SocketServer(uint16_t socketServerPort);
 	ICACHE_FLASH_ATTR virtual ~SocketServer();
 
-	static bool ICACHE_FLASH_ATTR broadcastGPIOChange(gpioType type, uint8_t pinIdx);
+	static bool ICACHE_FLASH_ATTR broadcastGPIOChange(
+		ioType type,
+		peripheralType pType,
+		uint8_t deviceIdx);
 
 	static void ICACHE_FLASH_ATTR handleRequests();
 private:

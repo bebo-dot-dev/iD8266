@@ -2,11 +2,13 @@
 #include "flashAppData.h"
 #include "build_defs.h"
 #include "utils.h"
-#include "mutex.h"
 #include <ESP8266WebServer.h>
 #include <FS.h>
 #include "NetworkServices.h"
 #include "SessionManager.h"
+#include "ESP8266TOTP.h"
+#include "Complexify.h"
+
 
 ESP8266WebServer* webserver;
 
@@ -19,8 +21,6 @@ bool firmwareUploadFail = false;
 unsigned long rebootTimeStamp = 0;
 unsigned long lastHeapCheck = 0;
 
-static mutex_t requestMutex;
-
 enum jsonResponseType
 {
 	networkSettings = 0,
@@ -30,10 +30,12 @@ enum jsonResponseType
 	diagnosticsData = 4,
 	mqttData = 5,
 	gpioData = 6,
-	loggingData = 7,
-	homePageData = 8,
-	powerMgmtData = 9,
-	powerMgmtScheduleData = 10
+	homePageData = 7,
+	powerMgmtData = 8,
+	powerMgmtScheduleData = 9,
+	securityData = 10,
+	totpQrCodeUriData = 11,
+	peripheralsData = 12
 };
 
 String ICACHE_FLASH_ATTR schemeAndDomain() {
@@ -59,7 +61,7 @@ String ICACHE_FLASH_ATTR schemeAndDomain() {
 /*
  * converts a session cookieVal string to an unsigned long sessionId value
  */
-String ICACHE_FLASH_ATTR getSessionIdFromCookieVal(String cookieVal) {
+String ICACHE_FLASH_ATTR getSessionIdFromCookieVal(const String &cookieVal) {
 
 	String sessionId = EMPTY_STR;
 	if (cookieVal.indexOf(getAppStr(appStrType::sessionId)) != -1) {
@@ -85,14 +87,18 @@ String ICACHE_FLASH_ATTR getSessionCookieValFromHttpHeader() {
 /*
  * returns an indicator whether the sessionId cookie value represents an active session
  */
-bool ICACHE_FLASH_ATTR isAuthenticated(String sessionCookieVal) {
+bool ICACHE_FLASH_ATTR isAuthenticated(const String &sessionCookieVal) {
 
-	if (sessionCookieVal == EMPTY_STR)
-		sessionCookieVal = getSessionCookieValFromHttpHeader();
+	String cookieVal;
+	if (sessionCookieVal.equals(EMPTY_STR)) {
+		cookieVal = getSessionCookieValFromHttpHeader();
+	} else {
+		cookieVal = sessionCookieVal;
+	}
 
-	if (sessionCookieVal != EMPTY_STR) {
-		String sessionId = getSessionIdFromCookieVal(sessionCookieVal);
-		bool isAuthed = !sessionId.equals(EMPTY_STR) ? SessionMngr.webSessionExists(sessionId) : false;
+	if (!cookieVal.equals(EMPTY_STR)) {
+		cookieVal = getSessionIdFromCookieVal(cookieVal);
+		bool isAuthed = !cookieVal.equals(EMPTY_STR) ? SessionMngr.webSessionExists(cookieVal) : false;
 		return isAuthed;
 	}
 	return false;
@@ -119,7 +125,7 @@ void ICACHE_FLASH_ATTR includeNoCacheHeaders() {
 	webserver->sendHeader(getAppStr(appStrType::cacheControl), getAppStr(appStrType::noCacheControlPolicy));
 }
 
-String ICACHE_FLASH_ATTR getContentType(String filename) {
+String ICACHE_FLASH_ATTR getContentType(const String &filename) {
 	if (filename.endsWith(getAppStr(appStrType::htmExtension)))
 		return getAppStr(appStrType::htmlContentType);
 	else if (filename.endsWith(getAppStr(appStrType::htmlExtension)))
@@ -147,7 +153,7 @@ String ICACHE_FLASH_ATTR getContentType(String filename) {
 	return getAppStr(appStrType::textContentType);
 }
 
-bool ICACHE_FLASH_ATTR returnStreamedFile(String path, String contentType) {
+bool ICACHE_FLASH_ATTR returnStreamedFile(const String &path, const String &contentType) {
 
 	String acceptEncodingStr = getAppStr(appStrType::acceptEncoding);
 	String ifModifiedSinceStr = getAppStr(appStrType::ifModifiedSince);
@@ -175,15 +181,12 @@ bool ICACHE_FLASH_ATTR returnStreamedFile(String path, String contentType) {
 		gzipFileExists = SPIFFS.exists(pathWithGz);
 	}
 
-	if ((gzipEnabled && gzipFileExists) || (SPIFFS.exists(path))) {
-		if (gzipEnabled && gzipFileExists) {
-			path += getAppStr(appStrType::gzExtension);
-		}
+	if (gzipEnabled && gzipFileExists) {
 
 		includeDefaultHeaders();
 		yield();
 
-		File file = SPIFFS.open(path, "r");
+		File file = SPIFFS.open(pathWithGz, "r");
 		//stream back to client
 		webserver->streamFile(file, contentType);
 		file.close();
@@ -194,39 +197,40 @@ bool ICACHE_FLASH_ATTR returnStreamedFile(String path, String contentType) {
 
 }
 
-bool ICACHE_FLASH_ATTR returnResource(String path, bool requiresAuth = true) {
+bool ICACHE_FLASH_ATTR returnResource(const String &path, bool requiresAuth = true) {
 
-	if (GetMutex(&requestMutex)) {
+	String contentType = getContentType(path);
 
-		String contentType = getContentType(path);
+	bool isAuthed = requiresAuth ? isAuthenticated() : true;
+	bool hasDefaultPwd = (strcmp(DEFAULT_PWD, appConfigData.adminPwd) == 0);
+	if (requiresAuth && !isAuthed && path.indexOf(getAppStr(appStrType::loginMin)) == -1 && path.indexOf(getAppStr(appStrType::logonStr)) == -1) {
 
-		bool isAuthed = requiresAuth ? isAuthenticated() : true;
+		//return a 301 redirect to the logon resource content
+		redirect(getAppStr(appStrType::loginStr), contentType);
+		return true;
 
-		if (requiresAuth && !isAuthed && path.indexOf(getAppStr(appStrType::loginMin)) == -1 && path.indexOf(getAppStr(appStrType::logonStr)) == -1) {
-
-			//return a 301 redirect to the logon resource content
-			includeNoCacheHeaders();
-			webserver->sendHeader(getAppStr(appStrType::locationStr), schemeAndDomain() + getAppStr(appStrType::loginStr));
-			webserver->send(301, contentType, EMPTY_STR);
-
-			ReleaseMutex(&requestMutex);
-			return true;
-
-		} else {
-
-			bool result = returnStreamedFile(path, contentType);
-			ReleaseMutex(&requestMutex);
-			return result;
-
-		}
 	}
+	else if (requiresAuth && isAuthed && hasDefaultPwd && path.indexOf(getAppStr(appStrType::password)) == -1) {
+
+		//return a 301 redirect to the change password resource content
+		redirect(getAppStr(appStrType::passwordStr), contentType);
+		return true;
+
+	}
+	else {
+
+		bool result = returnStreamedFile(path, contentType);
+		return result;
+
+	}
+
 	return false;
 }
 
 //writes current flash configuration data and either reboots the device or sends a JSON response
 void ICACHE_FLASH_ATTR persistConfig(bool reboot = true) {
 
-	setAppData();
+	FlashAppDataMngr.setAppData();
 
 	if(reboot) {
 
@@ -243,73 +247,119 @@ void ICACHE_FLASH_ATTR persistConfig(bool reboot = true) {
 
 void ICACHE_FLASH_ATTR handleFirmwareUpload() {
 
-	// handler for firmware file upload and flash
-	// firmware flash is handled via the UpdaterClass.
-	// See Updater.h in the core for details
+	if (isAuthenticated()) {
+		// handler for firmware file upload and flash
+		// firmware flash is handled via the UpdaterClass.
+		// See Updater.h in the core for details
 
-	HTTPUpload& upload = webserver->upload();
+		HTTPUpload& upload = webserver->upload();
 
-	if (upload.status == UPLOAD_FILE_START) {
+		if (upload.status == UPLOAD_FILE_START) {
 
-		WiFiUDP::stopAll();
+			WiFiUDP::stopAll();
 
-		APP_SERIAL_DEBUG("Firmware update: %s\n", upload.filename.c_str());
+			APP_SERIAL_DEBUG("Firmware update: %s\n", upload.filename.c_str());
 
-		firmwareUploadFail = false;
+			firmwareUploadFail = false;
 
-		if (!upload.filename.endsWith(getAppStr(appStrType::binExtension))) {
-			firmwareUploadFail = true;
-			return;
+			if (!upload.filename.endsWith(getAppStr(appStrType::binExtension))) {
+				firmwareUploadFail = true;
+				return;
+			}
+
+			uint32_t maxSketchSpace = (ESP.getFreeSketchSpace() - 0x1000) & 0xFFFFF000;
+			if (!Update.begin(maxSketchSpace)) {  //start with max available size
+				Update.printError(Serial);
+			}
+
+			NetworkSvcMngr.powerManager->isDisabled = true;
+
+		} else if (upload.status == UPLOAD_FILE_WRITE) {
+
+			APP_SERIAL_DEBUG(".");
+			if (Update.write(upload.buf, upload.currentSize) != upload.currentSize) {
+				Update.printError(Serial);
+			}
+			yield();
+
+		} else if (upload.status == UPLOAD_FILE_END) {
+
+			if (Update.end(true)) { //true to set the size to the current progress
+				APP_SERIAL_DEBUG("Firmware update Success\nUpload size: %d\nRebooting...", upload.totalSize);
+			} else {
+				Update.printError(Serial);
+			}
+
+		} else if (upload.status == UPLOAD_FILE_ABORTED) {
+
+			NetworkSvcMngr.powerManager->isDisabled = false;
+			Update.end();
+			APP_SERIAL_DEBUG("Firmware update was aborted\n");
+
 		}
 
-		uint32_t maxSketchSpace = (ESP.getFreeSketchSpace() - 0x1000) & 0xFFFFF000;
-		if (!Update.begin(maxSketchSpace)) {  //start with max available size
-			Update.printError(Serial);
-		}
-
-		NetworkServiceManager.powerManager->isDisabled = true;
-
-	} else if (upload.status == UPLOAD_FILE_WRITE) {
-
-		APP_SERIAL_DEBUG(".");
-		if (Update.write(upload.buf, upload.currentSize) != upload.currentSize) {
-			Update.printError(Serial);
-		}
 		yield();
 
-	} else if (upload.status == UPLOAD_FILE_END) {
+	} else {
 
-		if (Update.end(true)) { //true to set the size to the current progress
-			APP_SERIAL_DEBUG("Firmware update Success\nUpload size: %d\nRebooting...", upload.totalSize);
-		} else {
-			Update.printError(Serial);
-		}
-
-	} else if (upload.status == UPLOAD_FILE_ABORTED) {
-
-		NetworkServiceManager.powerManager->isDisabled = false;
-		Update.end();
-		APP_SERIAL_DEBUG("Firmware update was aborted\n");
+		redirect(getAppStr(appStrType::loginStr), getAppStr(appStrType::htmlContentType));
 
 	}
-
-	yield();
 }
 
+/*
+ * returns an indicator whether the totp parameter passed to the server matches the current otp
+ * calculated from the epoch and current secret key bytes
+ */
+bool ICACHE_FLASH_ATTR isTotpTokenValid() {
+
+	String argName = getAppStr(appStrType::totp);
+	if (webserver->hasArg(argName)) {
+		String suppliedTotp = webserver->arg(argName);
+
+		char *endptr;
+		int suppliedOtp = strtoul(suppliedTotp.c_str(), &endptr, 10);
+
+		//check the supplied OTP against the current secret key
+		return ((*endptr == '\0') &&
+				(ESP8266TOTP::IsTokenValid(
+						NetworkSvcMngr.ntpManager->getUtcTimeNow(),
+						appConfigData.otp.keyBytes,
+						suppliedOtp)));
+	} else {
+		return false;
+	}
+
+}
+
+/*
+ * handles a logon attempt. returns a valid session and redirects if successful
+ */
 void ICACHE_FLASH_ATTR handleLogon() {
 
-	String pwdStr = getAppStr(appStrType::passwordStr);
+	String argName = getAppStr(appStrType::pwd);
 
-	if (webserver->hasArg(pwdStr)) {
-		String suppliedPwd = webserver->arg(pwdStr);
+	if (webserver->hasArg(argName)) {
+
+		String pwd = webserver->arg(argName);
 
 		String sessionId = EMPTY_STR;
-		bool pwdMatch = (strcmp(suppliedPwd.c_str(), appConfigData.adminPwd) == 0);
+		bool pwdMatch = (strcmp(pwd.c_str(), appConfigData.adminPwd) == 0);
 		if (pwdMatch) {
-			sessionId = SessionMngr.addWebSession();
-		}
 
-		includeNoCacheHeaders();
+			if ((appConfigData.otp.enabled) &&
+				(NetworkSvcMngr.ntpEnabled) &&
+				(NetworkSvcMngr.ntpManager->syncResponseReceived)) {
+
+				//check the supplied OTP against the persisted secret key
+				if (isTotpTokenValid()) {
+					sessionId = SessionMngr.addWebSession();
+				}
+
+			} else {
+				sessionId = SessionMngr.addWebSession();
+			}
+		}
 
 		if ((pwdMatch) && (!sessionId.equals(EMPTY_STR))) {
 
@@ -319,8 +369,7 @@ void ICACHE_FLASH_ATTR handleLogon() {
 			webserver->sendHeader(getAppStr(appStrType::setCookie), sessionCookieStr);
 
 			//return a 301 redirect to the root /
-			webserver->sendHeader(getAppStr(appStrType::locationStr), schemeAndDomain() + getAppStr(appStrType::forwardSlash));
-			webserver->send(301, getAppStr(appStrType::htmlContentType), EMPTY_STR);
+			redirect(getAppStr(appStrType::forwardSlash), getAppStr(appStrType::htmlContentType));
 
 		} else {
 
@@ -344,13 +393,12 @@ void ICACHE_FLASH_ATTR handleLogoff() {
 
 		//session cookie wipeout and redirect to logon
 		webserver->sendHeader(getAppStr(appStrType::setCookie), getAppStr(appStrType::resetCookie));
-		includeNoCacheHeaders();
-		webserver->sendHeader(getAppStr(appStrType::locationStr), schemeAndDomain() + getAppStr(appStrType::loginStr));
-		webserver->send(301, getAppStr(appStrType::htmlContentType), EMPTY_STR);
+		redirect(getAppStr(appStrType::loginStr), getAppStr(appStrType::htmlContentType));
 
 	} else {
-		webserver->sendHeader(getAppStr(appStrType::locationStr), schemeAndDomain() + getAppStr(appStrType::loginStr));
-		webserver->send(301, getAppStr(appStrType::htmlContentType), EMPTY_STR);
+
+		redirect(getAppStr(appStrType::loginStr), getAppStr(appStrType::htmlContentType));
+
 	}
 }
 
@@ -525,9 +573,6 @@ String ICACHE_FLASH_ATTR getWebserverSettings() {
 
 	String json = getAppStr(appStrType::openBrace);
 
-	aStr = String(appConfigData.adminPwd);
-	json += getAppStr(appStrType::escapedAdminPwd) + aStr + escapedCommaChar;
-
 	sprintf(cstr, intPlaceholder.c_str(), appConfigData.webserverPort);
 	aStr = String(cstr);
 	json += getAppStr(appStrType::escapedWebserverPort) + aStr + escapedCommaChar;
@@ -614,11 +659,11 @@ String ICACHE_FLASH_ATTR getRegionalSettings() {
 	aStr = String(appConfigData.ntpLocale);
 	json += getAppStr(appStrType::escapedNtpLocale) + aStr + getAppStr(appStrType::escapedQuote);
 
-	if (NetworkServiceManager.ntpEnabled) {
+	if (NetworkSvcMngr.ntpEnabled) {
 
 		json += getAppStr(appStrType::comma);
 
-		NetworkServiceManager.ntpManager->syncResponseReceived ?
+		NetworkSvcMngr.ntpManager->syncResponseReceived ?
 			json += getAppStr(appStrType::syncResponseReceivedTrue) :
 			json += getAppStr(appStrType::syncResponseReceivedFalse);
 
@@ -637,21 +682,21 @@ String ICACHE_FLASH_ATTR getRegionalSettings() {
 		json += getAppStr(appStrType::escapedSecond) + aStr + escapedCommaChar;
 
 
-		aStr = String(year(NetworkServiceManager.ntpManager->lastSync));
+		aStr = String(year(NetworkSvcMngr.ntpManager->lastSync));
 		json += getAppStr(appStrType::escapedLastSyncYear) + aStr + escapedCommaChar;
-		aStr = String(month(NetworkServiceManager.ntpManager->lastSync));
+		aStr = String(month(NetworkSvcMngr.ntpManager->lastSync));
 		json += getAppStr(appStrType::escapedLastSyncMonth) + aStr + escapedCommaChar;
-		aStr = String(day(NetworkServiceManager.ntpManager->lastSync));
+		aStr = String(day(NetworkSvcMngr.ntpManager->lastSync));
 		json += getAppStr(appStrType::escapedLastSyncDay) + aStr + escapedCommaChar;
 
-		aStr = String(hour(NetworkServiceManager.ntpManager->lastSync));
+		aStr = String(hour(NetworkSvcMngr.ntpManager->lastSync));
 		json += getAppStr(appStrType::escapedLastSyncHour) + aStr + escapedCommaChar;
-		aStr = String(minute(NetworkServiceManager.ntpManager->lastSync));
+		aStr = String(minute(NetworkSvcMngr.ntpManager->lastSync));
 		json += getAppStr(appStrType::escapedLastSyncMinute) + aStr + escapedCommaChar;
-		aStr = String(second(NetworkServiceManager.ntpManager->lastSync));
+		aStr = String(second(NetworkSvcMngr.ntpManager->lastSync));
 		json += getAppStr(appStrType::escapedLastSyncSecond) + aStr + escapedCommaChar;
 
-		aStr = String(NetworkServiceManager.ntpManager->lastSyncRetries);
+		aStr = String(NetworkSvcMngr.ntpManager->lastSyncRetries);
 		json += getAppStr(appStrType::escapedLastSyncRetries) + aStr + getAppStr(appStrType::escapedQuote);
 	}
 
@@ -683,9 +728,6 @@ String ICACHE_FLASH_ATTR getRuntimeJsonData() {
 	json += getAppStr(appStrType::escapedClientIp) + clientIp + escapedCommaChar;
 	json += getAppStr(appStrType::escapedBinaryBytes) + String(ESP.getSketchSize()) + escapedCommaChar;
 	json += getAppStr(appStrType::escapedFreeBytes) + String(ESP.getFreeSketchSpace()) + escapedCommaChar;
-	json += getAppStr(appStrType::wdtResetCount) + String(appConfigData.wdtResetCount) + escapedCommaChar;
-	json += getAppStr(appStrType::exceptionResetCount) + String(appConfigData.exceptionResetCount) + escapedCommaChar;
-	json += getAppStr(appStrType::softWdtResetCount) + String(appConfigData.softWdtResetCount) + escapedCommaChar;
 	json += getAppStr(appStrType::escapedDeviceUpTime) + Ntp::getDeviceUptimeString() + getAppStr(appStrType::escapedQuote);
 
 	json += getAppStr(appStrType::closeBrace);
@@ -698,12 +740,12 @@ String ICACHE_FLASH_ATTR getRuntimeJsonData() {
  */
 String ICACHE_FLASH_ATTR getGpioDataByIdx(uint8_t idx, bool allData) {
 
-	String escapedCommaChar = getAppStr(appStrType::escapedComma);
-	String quote = getAppStr(appStrType::escapedQuote);
+	String escapedCommaStr = getAppStr(appStrType::escapedComma);
+	String escapedQuoteStr = getAppStr(appStrType::escapedQuote);
 
 	String json = getAppStr(appStrType::openBrace);
 
-	if (idx >= 0 && idx < MAX_GPIO) {
+	if (idx >= 0 && idx < MAX_DEVICES) {
 
 		if (allData) {
 			appConfigData.mqttSystemEnabled
@@ -719,18 +761,38 @@ String ICACHE_FLASH_ATTR getGpioDataByIdx(uint8_t idx, bool allData) {
 					appConfigData.mqttServerBrokerIp[2],
 					appConfigData.mqttServerBrokerIp[3]);
 
-			json += getAppStr(appStrType::escapedMqttServerBrokerIp) + String(ipcstr) + escapedCommaChar;
-			json += getAppStr(appStrType::escapedMqttServerBrokerPort) + String(appConfigData.mqttServerBrokerPort) + escapedCommaChar;
-			json += getAppStr(appStrType::escapedMqttUsername) + String(appConfigData.mqttUsername) + escapedCommaChar;
-			json += getAppStr(appStrType::escapedMqttPassword) + String(appConfigData.mqttPassword) + escapedCommaChar;
+			json += getAppStr(appStrType::escapedMqttServerBrokerIp) + String(ipcstr) + escapedCommaStr;
+			json += getAppStr(appStrType::escapedMqttServerBrokerPort) + String(appConfigData.mqttServerBrokerPort) + escapedCommaStr;
+			json += getAppStr(appStrType::escapedMqttUsername) + String(appConfigData.mqttUsername) + escapedCommaStr;
+			json += getAppStr(appStrType::escapedMqttPassword) + String(appConfigData.mqttPassword) + escapedCommaStr;
 			json += getAppStr(appStrType::escapedWebserver) + getWebserverSettings() + getAppStr(appStrType::comma);
 		}
 
-		json += getAppStr(appStrType::escapedIdxStr) + String(idx) + escapedCommaChar;
-		json += getAppStr(appStrType::escapedName) + String(appConfigData.gpio.digitalIO[idx].digitalName) + escapedCommaChar;
-		json += getAppStr(appStrType::escapedMode) + String(appConfigData.gpio.digitalIO[idx].digitalPinMode) + escapedCommaChar;
-		json += getAppStr(appStrType::escapedDefault) + String(appConfigData.gpio.digitalIO[idx].defaultValue) + escapedCommaChar;
-		json += getAppStr(appStrType::escapedValueStr) + String(appConfigData.gpio.digitalIO[idx].lastValue) + quote;
+		json += getAppStr(appStrType::escapedIdxStr) + String(idx) + escapedCommaStr;
+		json += getAppStr(appStrType::escapedName) + String(appConfigData.gpio.digitals[idx].name) + escapedCommaStr;
+		json += getAppStr(appStrType::escapedMode) + String(appConfigData.gpio.digitals[idx].pinMode) + escapedCommaStr;
+		json += getAppStr(appStrType::escapedDefault) + String(appConfigData.gpio.digitals[idx].defaultValue) + escapedCommaStr;
+
+		peripheralData *peripheral = GPIOMngr.getPeripheralByPinIdx(idx);
+		if (peripheral != NULL) {
+			//include the data of the peripheral configured to use this pinIdx
+			json += getAppStr(appStrType::escapedPeripheralType) + String(peripheral->type) + escapedCommaStr;
+
+			switch (peripheral->type) {
+				case peripheralType::digistatMk2:
+					json += getAppStr(appStrType::escapedValueStr) + String(peripheral->base.lastValue) + escapedQuoteStr;
+					break;
+				case peripheralType::dht22:
+					json += getAppStr(appStrType::escapedValueStr) + String(peripheral->lastAnalogValue1, 1) + escapedCommaStr;
+					json += getAppStr(appStrType::escapedValue2Str) + String(peripheral->lastAnalogValue2, 1) + escapedQuoteStr;
+					break;
+				default:
+					break;
+			}
+
+		} else {
+			json += getAppStr(appStrType::escapedValueStr) + String(appConfigData.gpio.digitals[idx].lastValue) + escapedQuoteStr;
+		}
 	}
 
 	json += getAppStr(appStrType::closeBrace);
@@ -761,7 +823,7 @@ String ICACHE_FLASH_ATTR getMqttData() {
 	json += getAppStr(appStrType::escapedMqttServerBrokerPort)	 + String(appConfigData.mqttServerBrokerPort) + escapedCommaChar;
 	json += getAppStr(appStrType::escapedMqttUsername) + String(appConfigData.mqttUsername) + escapedCommaChar;
 	json += getAppStr(appStrType::escapedMqttPassword) + String(appConfigData.mqttPassword) + escapedCommaChar;
-	((appConfigData.mqttSystemEnabled) && (NetworkServiceManager.mqttConnected()))
+	((appConfigData.mqttSystemEnabled) && (NetworkSvcMngr.mqttConnected()))
 		? json += getAppStr(appStrType::mqttConnectedTrue)
 		: json += getAppStr(appStrType::mqttConnectedFalse);
 
@@ -781,7 +843,7 @@ String ICACHE_FLASH_ATTR getGpioData(bool allData) {
 		String idxStr = webserver->arg(getAppStr(appStrType::dStr));
 		char *endptr;
 		idx = strtoul(idxStr.c_str(), &endptr, 10);
-		if ((*endptr == '\0') && (idx >= 0 && idx < MAX_GPIO))
+		if ((*endptr == '\0') && (idx >= 0 && idx < MAX_DEVICES))
 			specificIdx = true;
 		else
 			return EMPTY_STR;
@@ -819,95 +881,14 @@ String ICACHE_FLASH_ATTR getGpioData(bool allData) {
 	//continue on and return everything
 	json += getAppStr(appStrType::gpioArrayWithCommaPrefix);
 
-	for(uint8_t idx = 0; idx < MAX_GPIO; idx++) {
+	for(uint8_t idx = 0; idx < MAX_DEVICES; idx++) {
 		json += getGpioDataByIdx(idx, false);
-		if(idx != MAX_GPIO -1)
+		if(idx != MAX_DEVICES -1)
 			json += commaStr;
 	}
 
 	json += "]}";
 
-	return json;
-}
-
-/*
- * returns a json string containing gpio logging configuration data for a specific gpio pin
- */
-String ICACHE_FLASH_ATTR getGpioLoggingDataByIdx(uint8_t idx) {
-
-	String escapedCommaChar = getAppStr(appStrType::escapedComma);
-
-	String json = getAppStr(appStrType::openBrace);
-
-	digitalData *io;
-	if (idx >= 0 && idx < MAX_GPIO) {
-
-		io = &appConfigData.gpio.digitalIO[idx];
-		json += getAppStr(appStrType::escapedLowerName) + String(io->digitalName) + escapedCommaChar;
-		io->logToThingSpeak
-			? json += getAppStr(appStrType::logToThingSpeakTrue)
-			: json += getAppStr(appStrType::logToThingSpeakFalse);
-		json += getAppStr(appStrType::escapedThingSpeakChannel) + String(io->thingSpeakChannel) + escapedCommaChar;
-		json += getAppStr(appStrType::escapedThingSpeakApiKey) + String(io->thingSpeakApiKey) + escapedCommaChar;
-		io->httpLoggingEnabled
-			? json += getAppStr(appStrType::httpLoggingEnabledTrue)
-			: json += getAppStr(appStrType::httpLoggingEnabledFalse);
-
-	}
-
-	json += getAppStr(appStrType::closeBrace);
-	return json;
-
-}
-
-String ICACHE_FLASH_ATTR getLoggingData() {
-
-	String escapedCommaChar = getAppStr(appStrType::escapedComma);
-
-	String json = getAppStr(appStrType::openBrace);
-
-	appConfigData.thingSpeakEnabled
-		? json += getAppStr(appStrType::thingSpeakEnabledTrue)
-		: json += getAppStr(appStrType::thingSpeakEnabledFalse);
-
-	appConfigData.httpLoggingEnabled
-		? json += getAppStr(appStrType::httpLoggingEnabledTrueWithComma)
-		: json += getAppStr(appStrType::httpLoggingEnabledFalseWithComma);
-
-	json += getAppStr(appStrType::escapedHttpLoggingHost) + String(appConfigData.httpLoggingHost) + escapedCommaChar;
-	json += getAppStr(appStrType::escapedHttpLoggingUri) + String(appConfigData.httpLoggingUri) + escapedCommaChar;
-	//json += "\"httpLoggingHostSslFingerprint\": \"" + String(appConfigData.httpLoggingHostSslFingerprint) + escapedCommaChar;
-
-	json += getAppStr(appStrType::lastThingSpeakResponseCode) + String(NetworkServiceManager.thingSpeakLoggingData.lastThingSpeakResponseCode) + escapedCommaChar;
-
-	NetworkServiceManager.httpLoggingData.lastCallOk
-		? json += getAppStr(appStrType::httpLoggingLastCallOkTrue)
-		: json += getAppStr(appStrType::httpLoggingLastCallOkFalse);
-
-	json += getAppStr(appStrType::httpLoggingLastUri) + NetworkServiceManager.httpLoggingData.lastUri + escapedCommaChar;
-
-	json += getAppStr(appStrType::gpioArray);
-
-	String commaChar = getAppStr(appStrType::comma);
-	for(uint8_t idx = 0; idx < MAX_GPIO; idx++) {
-		json += getGpioLoggingDataByIdx(idx);
-		if(idx != MAX_GPIO -1)
-			json += commaChar;
-	}
-
-	json += "],";
-
-	json += getAppStr(appStrType::analogName) + String(appConfigData.gpio.analogName) + escapedCommaChar;
-	appConfigData.gpio.analogLogToThingSpeak
-		? json += getAppStr(appStrType::analogLogToThingSpeakTrue)
-		: json += getAppStr(appStrType::analogLogToThingSpeakFalse);
-	json += getAppStr(appStrType::analogThingSpeakChannel) + String(appConfigData.gpio.analogThingSpeakChannel) + escapedCommaChar;
-	json += getAppStr(appStrType::analogThingSpeakApiKey) + String(appConfigData.gpio.analogThingSpeakApiKey) + escapedCommaChar;
-	appConfigData.gpio.analogHttpLoggingEnabled
-		? json += getAppStr(appStrType::analogHttpLoggingEnabledTrue)
-		: json += getAppStr(appStrType::analogHttpLoggingEnabledFalse);
-
-	json += getAppStr(appStrType::closeBrace);
 	return json;
 }
 
@@ -924,8 +905,7 @@ String ICACHE_FLASH_ATTR getDiagnosticsData() {
 	json += getAppStr(appStrType::dnsSettingsStr) + getDnsSettings() + commaStr;
 	json += getAppStr(appStrType::webserverSettingsStr) + getWebserverSettings() + commaStr;
 	json += getAppStr(appStrType::regionalSettingsStr) + getRegionalSettings() + commaStr;
-	json += getAppStr(appStrType::mqttDataStr) + getMqttData() + commaStr;
-	json += getAppStr(appStrType::loggingDataStr) + getLoggingData();
+	json += getAppStr(appStrType::mqttDataStr) + getMqttData();
 	json += getAppStr(appStrType::closeBrace);
 	return json;
 
@@ -1019,68 +999,183 @@ String ICACHE_FLASH_ATTR getPowerMgmtData() {
 
 	json += getAppStr(appStrType::escapedOffLength) + String(appConfigData.powerMgmt.offLength) + commaChar;
 
-	appConfigData.powerMgmt.httpLoggingEnabled
-		? json += getAppStr(appStrType::httpLoggingEnabledTrueWithComma)
-		: json += getAppStr(appStrType::httpLoggingEnabledFalseWithComma);
-
-	json += getAppStr(appStrType::escapedHttpLoggingHost) + String(appConfigData.powerMgmt.httpLoggingHost) + commaChar;
-	json += getAppStr(appStrType::escapedHttpLoggingUri) + String(appConfigData.powerMgmt.httpLoggingUri) + commaChar;
-
-	appConfigData.powerMgmt.logToThingSpeak
-		? json += getAppStr(appStrType::logToThingSpeakTrue)
-		: json += getAppStr(appStrType::logToThingSpeakFalse);
-
-	json += getAppStr(appStrType::escapedThingSpeakChannel) + String(appConfigData.powerMgmt.thingSpeakChannel) + commaChar;
-	json += getAppStr(appStrType::escapedThingSpeakApiKey) + String(appConfigData.powerMgmt.thingSpeakApiKey) + commaChar;
-
 	json += getPowerMgmtScheduleData(false);
 
 	json += getAppStr(appStrType::closeBrace);
 	return json;
 }
 
-bool ICACHE_FLASH_ATTR handleGetJsonResponse(jsonResponseType type) {
+/*
+ * returns a json string containing security related data
+ */
+String ICACHE_FLASH_ATTR getSecurityData() {
 
-	if (isAuthenticated()) {
+	String json = EMPTY_STR;
+	json += getAppStr(appStrType::openBrace);
 
-		String json;
+	appConfigData.ntpEnabled ?
+		json += getAppStr(appStrType::ntpEnabledTrue) :
+		json += getAppStr(appStrType::ntpEnabledFalse);
 
-		switch(type)
-		{
-			case networkSettings:
-				json = getNetSettings();
-				break;
-			case dnsSettings:
-				json = getDnsSettings();
-				break;
-			case webserverSettings:
-				json = getWebserverSettings();
-				break;
-			case regionalSettings:
-				json = getRegionalSettings();
-				break;
-			case diagnosticsData:
-				json = getDiagnosticsData();
-				break;
-			case mqttData:
-				json = getMqttData();
-				break;
-			case gpioData:
-				json = getGpioData(true);
-				break;
-			case loggingData:
-				json = getLoggingData();
-				break;
-			case homePageData:
-				json = getHomePageData();
-				break;
-			case powerMgmtData:
-				json = getPowerMgmtData();
-				break;
-			case powerMgmtScheduleData:
-				json = getPowerMgmtScheduleData();
+	//totp is only when enabled when ntp is enabled and working correctly
+	((appConfigData.otp.enabled) &&
+	(NetworkSvcMngr.ntpEnabled) &&
+	(NetworkSvcMngr.ntpManager->syncResponseReceived)) ?
+		json += getAppStr(appStrType::totpEnabledTrue) :
+		json += getAppStr(appStrType::totpEnabledFalse);
+
+	json += getAppStr(appStrType::closeBrace);
+	return json;
+}
+
+/*
+ * Returns a json string containing a TOTP QR code uri for a brand new TOTP secret key code.
+ * Calling this method creates a new TOTP secret key, stores it in flash and also
+ * switches off TOTP in preparation for subsequent activation when the correct token is HTTP POST'd
+ * back via submitTotpToken / handleSubmitTotpToken
+ */
+String ICACHE_FLASH_ATTR getTotpQrCodeUriData() {
+
+	String json = EMPTY_STR;
+	json += getAppStr(appStrType::openBrace);
+
+	if ((NetworkSvcMngr.ntpEnabled) &&
+		(NetworkSvcMngr.ntpManager->syncResponseReceived) &&
+		(ESP8266TOTP::GetNewKey(appConfigData.otp.keyBytes))) {
+
+		appConfigData.otp.enabled = false;
+
+		String argName = getAppStr(appStrType::totpOff);
+		if (webserver->hasArg(argName)) {
+			FlashAppDataMngr.setAppData();
 		}
 
+		String qrCodeUri = ESP8266TOTP::GetQrCodeImageUri(appConfigData.otp.keyBytes, appConfigData.hostName, "Intelligent%20Devices");
+
+		json += getAppStr(appStrType::totpQrCodeUri) + qrCodeUri + getAppStr(appStrType::escapedQuote);
+	}
+
+	json += getAppStr(appStrType::closeBrace);
+	return json;
+
+}
+
+/*
+ * returns a json string containing peripheral configuration and state data for a specific deviceIdx
+ */
+String ICACHE_FLASH_ATTR getPeripheralDataByIdx(uint8_t deviceIdx) {
+
+	String escapedCommaChar = getAppStr(appStrType::escapedComma);
+	String quote = getAppStr(appStrType::escapedQuote);
+
+	String json = getAppStr(appStrType::openBrace);
+
+	if (deviceIdx >= 0 && deviceIdx < MAX_DEVICES) {
+
+		peripheralData *peripheral = &appConfigData.device.peripherals[deviceIdx];
+
+		json += getAppStr(appStrType::escapedIdxStr) + String(deviceIdx) + escapedCommaChar;
+		json += getAppStr(appStrType::escapedPeripheralType) + String(peripheral->type) + escapedCommaChar;
+		json += getAppStr(appStrType::escapedPeripheralPin) + String(peripheral->pinIdx) + escapedCommaChar;
+		json += getAppStr(appStrType::escapedName) + String(peripheral->base.name) + quote;
+
+	}
+
+	json += getAppStr(appStrType::closeBrace);
+	return json;
+
+}
+
+/*
+ * returns a json string containing peripheral configuration data
+ */
+String ICACHE_FLASH_ATTR getPeripheralsData() {
+
+	String json;
+	String commaChar = getAppStr(appStrType::comma);
+
+	json += getAppStr(appStrType::openBrace);
+	json += getAppStr(appStrType::peripheralArray);
+
+	peripheralData *peripheral;
+
+	for(uint8_t deviceIdx = 0; deviceIdx < MAX_DEVICES; deviceIdx++) {
+
+		peripheral = &appConfigData.device.peripherals[deviceIdx];
+		if (peripheral->type != peripheralType::unspecified) {
+			json += getPeripheralDataByIdx(deviceIdx);
+			if(deviceIdx != MAX_DEVICES -1) {
+				json += commaChar;
+			}
+		}
+	}
+
+	if (json.endsWith(commaChar)) {
+		json = json.substring(0, json.length() - 1);
+	}
+
+	json += "]";
+
+	json += getAppStr(appStrType::closeBrace);
+
+	return json;
+}
+
+String ICACHE_FLASH_ATTR GetJsonData(jsonResponseType type) {
+
+	String json;
+
+	switch(type)
+	{
+		case networkSettings:
+			json = getNetSettings();
+			break;
+		case dnsSettings:
+			json = getDnsSettings();
+			break;
+		case webserverSettings:
+			json = getWebserverSettings();
+			break;
+		case regionalSettings:
+			json = getRegionalSettings();
+			break;
+		case diagnosticsData:
+			json = getDiagnosticsData();
+			break;
+		case mqttData:
+			json = getMqttData();
+			break;
+		case gpioData:
+			json = getGpioData(true);
+			break;
+		case homePageData:
+			json = getHomePageData();
+			break;
+		case powerMgmtData:
+			json = getPowerMgmtData();
+			break;
+		case powerMgmtScheduleData:
+			json = getPowerMgmtScheduleData();
+			break;
+		case securityData:
+			json = getSecurityData();
+			break;
+		case totpQrCodeUriData:
+			json = getTotpQrCodeUriData();
+			break;
+		case peripheralsData:
+			json = getPeripheralsData();
+			break;
+	}
+
+	return json;
+}
+
+bool ICACHE_FLASH_ATTR handleGetJsonResponse(jsonResponseType type) {
+
+	if (type == jsonResponseType::securityData || isAuthenticated()) {
+
+		String json = GetJsonData(type);
 		includeNoCacheHeaders();
 		webserver->send(200, getAppStr(appStrType::jsonContentType), json);
 		return true;
@@ -1093,7 +1188,7 @@ bool ICACHE_FLASH_ATTR handleGetJsonResponse(jsonResponseType type) {
 	}
 }
 
-void ICACHE_FLASH_ATTR saveIpAddress(uint8_t *byteArr, String ipaddrStr) {
+void ICACHE_FLASH_ATTR saveIpAddress(uint8_t *byteArr, String &ipaddrStr) {
 
 	IPAddress ipaddr;
 	bool parseSuccess;
@@ -1170,7 +1265,13 @@ void ICACHE_FLASH_ATTR handleSaveNetSettings() {
 						saveIpAddress(appConfigData.networkApDns2Ip, netApDns2IpStr);
 					}
 				}
+
+				if (!appConfigData.ntpEnabled) {
+					//auto ntp client switch on
+					appConfigData.ntpEnabled = true;
+				}
 			}
+
 			persistConfig();
 		}
 
@@ -1179,7 +1280,6 @@ void ICACHE_FLASH_ATTR handleSaveNetSettings() {
 		webserver->send(403, getAppStr(appStrType::textContentType), getAppStr(appStrType::accessDenied));
 
 	}
-
 }
 
 /*
@@ -1235,7 +1335,7 @@ void ICACHE_FLASH_ATTR handleSaveDnsSettings() {
  */
 void ICACHE_FLASH_ATTR handleReboot() {
 	if (isAuthenticated()) {
-		NetworkServiceManager.powerManager->isDisabled = true;
+		NetworkSvcMngr.powerManager->isDisabled = true;
 		returnResource(getAppStr(appStrType::updateDoneMinHtm));
 		rebootTimeStamp = millis() + 1000;
 
@@ -1249,8 +1349,8 @@ void ICACHE_FLASH_ATTR handleReboot() {
  */
 void ICACHE_FLASH_ATTR handleReset() {
 	if (isAuthenticated()) {
-		NetworkServiceManager.powerManager->isDisabled = true;
-		initFlash(true, false);
+		NetworkSvcMngr.powerManager->isDisabled = true;
+		FlashAppDataMngr.initFlash(true, false);
 		returnResource(getAppStr(appStrType::updateDoneMinHtm));
 		rebootTimeStamp = millis() + 1000;
 
@@ -1270,10 +1370,6 @@ void ICACHE_FLASH_ATTR handleSaveWebserverSettings() {
 
 		uint16_t wordval;
 		String argStr;
-
-		argStr = webserver->arg(getAppStr(appStrType::adminPwd));
-		if (argStr.length() >= 8)
-			strncpy(appConfigData.adminPwd, argStr.c_str(), STRMAX);
 
 		argStr = webserver->arg(getAppStr(appStrType::webserverPort));
 		wordval = strtoul(argStr.c_str(), NULL, 10);
@@ -1303,7 +1399,6 @@ void ICACHE_FLASH_ATTR handleSaveWebserverSettings() {
 }
 
 
-
 /*
  regional settings postback save handler
  */
@@ -1329,7 +1424,7 @@ void ICACHE_FLASH_ATTR handleSaveRegionalSettings() {
 
 		String ntpSyncIntervalStr = webserver->arg(getAppStr(appStrType::ntpSyncInterval));
 		time_t timeVal = strtol(ntpSyncIntervalStr.c_str(), NULL, 10);
-		if (timeVal >= 10800)
+		if (timeVal >= 3600)
 			appConfigData.ntpSyncInterval = timeVal;
 
 		String ntpLocaleStr = webserver->arg(getAppStr(appStrType::ntpLocale));
@@ -1350,7 +1445,7 @@ void ICACHE_FLASH_ATTR handleSaveRegionalSettings() {
  */
 void ICACHE_FLASH_ATTR saveGpioDataByIdx(uint8_t idx) {
 
-	if (idx >= 0 && idx < MAX_GPIO) {
+	if (idx >= 0 && idx < MAX_DEVICES) {
 
 		String argName;
 		String argStr;
@@ -1363,7 +1458,13 @@ void ICACHE_FLASH_ATTR saveGpioDataByIdx(uint8_t idx) {
 			argStr = webserver->arg(argName.c_str());
 			ubyteval = strtoul(argStr.c_str(), &endptr, 10);
 			if ((*endptr == '\0') && (ubyteval >= 0 && ubyteval <= 4)) {
-				appConfigData.gpio.digitalIO[idx].digitalPinMode = (digitalMode)ubyteval;
+				digitalMode pinMode = (digitalMode)ubyteval;
+				if (pinMode != digitalMode::digitalNotInUse) {
+					//this GPIO is being specifically configured in some way so drop any
+					//peripherals configured for this pin
+					GPIOMngr.removePeripheralsByPinIdx(idx);
+				}
+				appConfigData.gpio.digitals[idx].pinMode = pinMode;
 			}
 		}
 
@@ -1371,7 +1472,7 @@ void ICACHE_FLASH_ATTR saveGpioDataByIdx(uint8_t idx) {
 		if(webserver->hasArg(argName)) {
 			argStr = webserver->arg(argName.c_str());
 			if (argStr.length() > 0)
-				strncpy(appConfigData.gpio.digitalIO[idx].digitalName, argStr.c_str(), STRMAX);
+				strncpy(appConfigData.gpio.digitals[idx].name, argStr.c_str(), STRMAX);
 		}
 
 		argName = pre + getAppStr(appStrType::Default);
@@ -1380,17 +1481,17 @@ void ICACHE_FLASH_ATTR saveGpioDataByIdx(uint8_t idx) {
 			ubyteval = strtoul(argStr.c_str(), &endptr, 10);
 			if ((*endptr == '\0') && (ubyteval >= 0 && ubyteval <= 255)) {
 
-				switch (appConfigData.gpio.digitalIO[idx].digitalPinMode)
+				switch (appConfigData.gpio.digitals[idx].pinMode)
 				{
 				case digitalOutput:
 					if ((ubyteval == 0) || (ubyteval == 1)) {
-						appConfigData.gpio.digitalIO[idx].defaultValue = ubyteval;
+						appConfigData.gpio.digitals[idx].defaultValue = ubyteval;
 					} else {
-						appConfigData.gpio.digitalIO[idx].defaultValue = 0;
+						appConfigData.gpio.digitals[idx].defaultValue = 0;
 					}
 					break;
 				default:
-					appConfigData.gpio.digitalIO[idx].defaultValue = ubyteval;
+					appConfigData.gpio.digitals[idx].defaultValue = ubyteval;
 					break;
 				}
 			}
@@ -1459,7 +1560,7 @@ void ICACHE_FLASH_ATTR handleSaveGpioSettings() {
 		double doubleVal;
 		char *endptr;
 
-		for(uint8_t idx = 0; idx < MAX_GPIO; idx++) {
+		for(uint8_t idx = 0; idx < MAX_DEVICES; idx++) {
 			saveGpioDataByIdx(idx);
 		}
 
@@ -1519,12 +1620,9 @@ bool ICACHE_FLASH_ATTR handleDigitalWrite() {
 		uint8_t pinIdx = strtoul(webserver->arg(getAppStr(appStrType::dStr)).c_str(), &pinIdxEndPtr, 10);
 		uint8_t digitalValue = strtoul(webserver->arg(getAppStr(appStrType::valueStr)).c_str(), &valueEndPtr, 10);
 
-		if ((*pinIdxEndPtr == '\0') && (*valueEndPtr == '\0')) {
-			bool result = GPIOMngr.gpioDigitalWrite(pinIdx, digitalValue);
-			webserver->send(200, getAppStr(appStrType::jsonContentType), result ? getAppStr(appStrType::jsonResultOk) : getAppStr(appStrType::jsonResultFailed));
-			return result;
-		} else
-			webserver->send(500, getAppStr(appStrType::textContentType), getAppStr(appStrType::fail));
+		bool result = GPIOMngr.gpioDigitalWrite(pinIdx, digitalValue);
+		webserver->send(200, getAppStr(appStrType::jsonContentType), result ? getAppStr(appStrType::jsonResultOk) : getAppStr(appStrType::jsonResultFailed));
+		return result;
 
 	} else {
 
@@ -1559,128 +1657,6 @@ bool ICACHE_FLASH_ATTR handleAnalogWrite() {
 }
 
 /*
- * gpio logging settings postback save handler for a single GPIO pin
- */
-void ICACHE_FLASH_ATTR saveGpioLoggingDataByIdx(uint8_t idx) {
-
-	String on = getAppStr(appStrType::onStr);
-
-	if (idx >= 0 && idx < MAX_GPIO) {
-
-		String argName;
-		String argStr;
-		unsigned long ulongval;
-		char *endptr;
-
-		String pre = getAppStr(appStrType::dStr) + String(idx);
-
-		argName = pre + getAppStr(appStrType::LogToThingSpeak);
-		if(webserver->hasArg(argName)) {
-			argStr = webserver->arg(argName);
-			appConfigData.gpio.digitalIO[idx].logToThingSpeak = (argStr.equals(on));
-		} else
-			appConfigData.gpio.digitalIO[idx].logToThingSpeak = false;
-
-		argName = pre + getAppStr(appStrType::ThingSpeakChannel);
-		argStr = webserver->arg(argName);
-		ulongval = strtoul(argStr.c_str(), &endptr, 10);
-		if (*endptr == '\0') {
-			appConfigData.gpio.digitalIO[idx].thingSpeakChannel = ulongval;
-		}
-
-		argName = pre + getAppStr(appStrType::ThingSpeakApiKey);
-		argStr = webserver->arg(argName);
-		if (argStr.length() > 0)
-			strncpy(appConfigData.gpio.digitalIO[idx].thingSpeakApiKey, argStr.c_str(), STRMAX);
-
-		argName = pre + getAppStr(appStrType::HttpLoggingEnabled);
-		if(webserver->hasArg(argName)) {
-			argStr = webserver->arg(argName);
-			appConfigData.gpio.digitalIO[idx].httpLoggingEnabled = (argStr.equals(on));
-		} else
-			appConfigData.gpio.digitalIO[idx].httpLoggingEnabled = false;
-
-	}
-}
-
-/*
- * logging settings postback save handler
- */
-void ICACHE_FLASH_ATTR handleSaveLoggingSettings() {
-
-	if (isAuthenticated()) {
-
-		String argStr;
-		unsigned long ulongval;
-		char *endptr;
-
-		String on = getAppStr(appStrType::onStr);
-
-		if(webserver->hasArg(getAppStr(appStrType::thingSpeakEnabled))) {
-			argStr = webserver->arg(getAppStr(appStrType::thingSpeakEnabled));
-			appConfigData.thingSpeakEnabled = (argStr.equals(on));
-		} else
-			appConfigData.thingSpeakEnabled = false;
-
-		if(webserver->hasArg(getAppStr(appStrType::httpLoggingEnabled))) {
-			argStr = webserver->arg(getAppStr(appStrType::httpLoggingEnabled));
-			appConfigData.httpLoggingEnabled = (argStr.equals(on));
-		} else
-			appConfigData.httpLoggingEnabled = false;
-
-		argStr = webserver->arg(getAppStr(appStrType::httpLoggingHost));
-		if (argStr.length() > 0) {
-			strncpy(appConfigData.httpLoggingHost, argStr.c_str(), STRMAX);
-			if ((!appConfigData.powerMgmt.httpLoggingEnabled) && (strcmp(appConfigData.powerMgmt.httpLoggingHost, EMPTY_STR) == 0)) {
-				strncpy(appConfigData.powerMgmt.httpLoggingHost, argStr.c_str(), STRMAX);
-			}
-		}
-
-		argStr = webserver->arg(getAppStr(appStrType::httpLoggingUri));
-		strncpy(appConfigData.httpLoggingUri, argStr.c_str(), LARGESTRMAX);
-		if ((!appConfigData.powerMgmt.httpLoggingEnabled) && (strcmp(appConfigData.powerMgmt.httpLoggingUri, EMPTY_STR) == 0)) {
-			strncpy(appConfigData.powerMgmt.httpLoggingUri, argStr.c_str(), LARGESTRMAX);
-		}
-
-		//argStr = webserver->arg(getAppStr(appStrType::httpLoggingHostSslFingerprint));
-		//strncpy(appConfigData.httpLoggingHostSslFingerprint, argStr.c_str(), DOUBLESTRMAX);
-
-		for(uint8_t idx = 0; idx < MAX_GPIO; idx++) {
-			saveGpioLoggingDataByIdx(idx);
-		}
-
-		if(webserver->hasArg(getAppStr(appStrType::a0LogToThingSpeak))) {
-			argStr = webserver->arg(getAppStr(appStrType::a0LogToThingSpeak));
-			appConfigData.gpio.analogLogToThingSpeak = (argStr.equals(on));
-		} else
-			appConfigData.gpio.analogLogToThingSpeak = false;
-
-		argStr = webserver->arg(getAppStr(appStrType::a0ThingSpeakChannel));
-		ulongval = strtoul(argStr.c_str(), &endptr, 10);
-		if (*endptr == '\0') {
-			appConfigData.gpio.analogThingSpeakChannel = ulongval;
-		}
-
-		argStr = webserver->arg(getAppStr(appStrType::a0ThingSpeakApiKey));
-		if (argStr.length() > 0)
-			strncpy(appConfigData.gpio.analogThingSpeakApiKey, argStr.c_str(), STRMAX);
-
-		if(webserver->hasArg(getAppStr(appStrType::a0HttpLoggingEnabled))) {
-			argStr = webserver->arg(getAppStr(appStrType::a0HttpLoggingEnabled));
-			appConfigData.gpio.analogHttpLoggingEnabled = (argStr.equals(on));
-		} else
-			appConfigData.gpio.analogHttpLoggingEnabled = false;
-
-		persistConfig();
-
-	} else {
-
-		webserver->send(403, getAppStr(appStrType::textContentType), getAppStr(appStrType::accessDenied));
-
-	}
-}
-
-/*
  * power management settings AJAX postback save handler
  */
 void ICACHE_FLASH_ATTR handleSavePowerMgmtSettings() {
@@ -1689,7 +1665,6 @@ void ICACHE_FLASH_ATTR handleSavePowerMgmtSettings() {
 
 		String argStr;
 		uint8_t ubyteval;
-		unsigned long ulongval;
 		char *endptr;
 
 		String on = getAppStr(appStrType::onStr);
@@ -1699,8 +1674,6 @@ void ICACHE_FLASH_ATTR handleSavePowerMgmtSettings() {
 			appConfigData.powerMgmt.enabled = (argStr.equals(on));
 		} else
 			appConfigData.powerMgmt.enabled = false;
-
-
 
 		argStr = webserver->arg(getAppStr(appStrType::onLength));
 		ubyteval = strtoul(argStr.c_str(), &endptr, 10);
@@ -1714,42 +1687,7 @@ void ICACHE_FLASH_ATTR handleSavePowerMgmtSettings() {
 			appConfigData.powerMgmt.offLength = (powerDownLength)ubyteval;
 		}
 
-		if(webserver->hasArg(getAppStr(appStrType::httpLoggingEnabled))) {
-			argStr = webserver->arg(getAppStr(appStrType::httpLoggingEnabled));
-			appConfigData.powerMgmt.httpLoggingEnabled = (argStr.equals(on));
-		} else
-			appConfigData.powerMgmt.httpLoggingEnabled = false;
-
-		argStr = webserver->arg(getAppStr(appStrType::httpLoggingHost));
-		if (argStr.length() > 0) {
-			strncpy(appConfigData.powerMgmt.httpLoggingHost, argStr.c_str(), STRMAX);
-			if ((!appConfigData.httpLoggingEnabled) && (strcmp(appConfigData.httpLoggingHost, EMPTY_STR) == 0)) {
-				strncpy(appConfigData.httpLoggingHost, argStr.c_str(), STRMAX);
-			}
-		}
-
-		argStr = webserver->arg(getAppStr(appStrType::httpLoggingUri));
-		strncpy(appConfigData.powerMgmt.httpLoggingUri, argStr.c_str(), LARGESTRMAX);
-		if ((!appConfigData.httpLoggingEnabled) && (strcmp(appConfigData.httpLoggingUri, EMPTY_STR) == 0)) {
-			strncpy(appConfigData.httpLoggingUri, argStr.c_str(), LARGESTRMAX);
-		}
-
-		if(webserver->hasArg(getAppStr(appStrType::LogToThingSpeak))) {
-			argStr = webserver->arg(getAppStr(appStrType::LogToThingSpeak));
-			appConfigData.powerMgmt.logToThingSpeak = (argStr.equals(on));
-		} else
-			appConfigData.powerMgmt.logToThingSpeak = false;
-
-		argStr = webserver->arg(getAppStr(appStrType::ThingSpeakChannel));
-		ulongval = strtoul(argStr.c_str(), &endptr, 10);
-		if (*endptr == '\0') {
-			appConfigData.powerMgmt.thingSpeakChannel = ulongval;
-		}
-
-		argStr = webserver->arg(getAppStr(appStrType::ThingSpeakApiKey));
-		strncpy(appConfigData.powerMgmt.thingSpeakApiKey, argStr.c_str(), STRMAX);
-
-		NetworkServiceManager.powerManager->delaySleep();
+		NetworkSvcMngr.powerManager->delaySleep();
 
 		persistConfig(false);
 
@@ -1805,8 +1743,8 @@ void ICACHE_FLASH_ATTR handleAddPowerMgmtSchedule() {
 		}
 
 		if (valid) {
-			if (NetworkServiceManager.powerManager->addSchedule(weekday, hour, offLength)) {
-				setAppData();
+			if (NetworkSvcMngr.powerManager->addSchedule(weekday, hour, offLength)) {
+				FlashAppDataMngr.setAppData();
 			}
 		}
 
@@ -1834,12 +1772,176 @@ void ICACHE_FLASH_ATTR handleRemovePowerMgmtSchedule() {
 		argStr = webserver->arg(getAppStr(appStrType::idxStr));
 		scheduleIdx = strtoul(argStr.c_str(), &endptr, 10);
 		if (*endptr == '\0') {
-			if (NetworkServiceManager.powerManager->removeSchedule(scheduleIdx)) {
-				setAppData();
+			if (NetworkSvcMngr.powerManager->removeSchedule(scheduleIdx)) {
+				FlashAppDataMngr.setAppData();
 			}
 		}
 
 		handleGetJsonResponse(powerMgmtScheduleData);
+
+
+	} else {
+
+		webserver->send(403, getAppStr(appStrType::textContentType), getAppStr(appStrType::accessDenied));
+
+	}
+}
+
+/*
+ * password change postback handler
+ */
+void ICACHE_FLASH_ATTR handleChangePassword() {
+
+	if (isAuthenticated()) {
+
+		String pwd = webserver->arg(getAppStr(appStrType::pwd));
+		String confirmPwd = webserver->arg(getAppStr(appStrType::confirmPwd));
+
+		if ((pwd.equals(confirmPwd)) && (Complexify::IsPasswordValid(pwd))) {
+
+			strncpy(appConfigData.adminPwd, pwd.c_str(), STRMAX);
+
+			bool hasDefaultApPwd = (strcmp(DEFAULT_PWD, appConfigData.deviceApPwd) == 0);
+			if (hasDefaultApPwd) {
+				//if the deviceApPwd is weak, change it to this new complex password too
+				strncpy(appConfigData.deviceApPwd, pwd.c_str(), STRMAX);
+			}
+
+			FlashAppDataMngr.setAppData();
+			handleLogoff();
+
+		} else {
+
+			redirect(getAppStr(appStrType::passwordStr), getAppStr(appStrType::htmlContentType));
+
+		}
+
+	} else {
+
+		webserver->send(403, getAppStr(appStrType::textContentType), getAppStr(appStrType::accessDenied));
+
+	}
+}
+
+/*
+ * totp token postback handler
+ */
+void ICACHE_FLASH_ATTR handleSubmitTotpToken() {
+
+	if (isAuthenticated()) {
+
+		if ((NetworkSvcMngr.ntpEnabled) &&
+			(NetworkSvcMngr.ntpManager->syncResponseReceived)) {
+
+			if (isTotpTokenValid()) {
+				appConfigData.otp.enabled = true;
+				FlashAppDataMngr.setAppData();
+			}
+
+		}
+
+		handleGetJsonResponse(securityData);
+
+
+	} else {
+
+		webserver->send(403, getAppStr(appStrType::textContentType), getAppStr(appStrType::accessDenied));
+
+	}
+
+}
+
+/*
+ * add peripheral AJAX postback save handler
+ */
+void ICACHE_FLASH_ATTR handleAddPeripheral() {
+
+	if (isAuthenticated()) {
+
+		String argStr;
+		peripheralType pType;
+		String peripheralName;
+		uint8_t pinIdx;
+		uint8_t defaultValue;
+		uint8_t ubyteVal;
+
+		char *endptr;
+
+		bool valid = true;
+
+		argStr = webserver->arg(getAppStr(appStrType::peripheralTypeStr));
+		ubyteVal = strtoul(argStr.c_str(), &endptr, 10);
+		if (*endptr == '\0' && ubyteVal >=0 && ubyteVal <= peripheralType::maxPeripheralType) {
+			pType = (peripheralType)ubyteVal;
+		} else {
+			valid = false;
+		}
+
+		if (valid) {
+			argStr = webserver->arg(getAppStr(appStrType::Name));
+			if (argStr.length() > 0) {
+				peripheralName = String(argStr);
+			} else {
+				valid = false;
+			}
+		}
+
+		if (valid) {
+			argStr = webserver->arg(getAppStr(appStrType::idxStr));
+			ubyteVal = strtoul(argStr.c_str(), &endptr, 10);
+			if (*endptr == '\0') {
+				pinIdx = ubyteVal;
+			} else {
+				valid = false;
+			}
+		}
+
+		if(valid) {
+			argStr = webserver->arg(getAppStr(appStrType::Default));
+			ubyteVal = strtoul(argStr.c_str(), &endptr, 10);
+			if ((*endptr == '\0') && (ubyteVal >= 0 && ubyteVal <= 255)) {
+				defaultValue = ubyteVal;
+			} else {
+				valid = false;
+			}
+		}
+
+		if (valid) {
+			if (GPIOMngr.addPeripheral(pType, peripheralName, pinIdx, defaultValue)) {
+				FlashAppDataMngr.setAppData();
+			}
+		}
+
+		handleGetJsonResponse(peripheralsData);
+
+
+	} else {
+
+		webserver->send(403, getAppStr(appStrType::textContentType), getAppStr(appStrType::accessDenied));
+
+	}
+}
+
+/*
+ * remove peripheral AJAX postback save handler
+ */
+void ICACHE_FLASH_ATTR handleRemovePeripheral() {
+
+	if (isAuthenticated()) {
+
+		String argStr;
+		uint8_t deviceIdx;
+		char *endptr;
+
+		argStr = webserver->arg(getAppStr(appStrType::idxStr));
+		deviceIdx = strtoul(argStr.c_str(), &endptr, 10);
+		if (*endptr == '\0') {
+			if (GPIOMngr.removePeripheral(deviceIdx)) {
+				FlashAppDataMngr.setAppData();
+			}
+		}
+
+		handleGetJsonResponse(peripheralsData);
 
 
 	} else {
@@ -1976,6 +2078,16 @@ void ICACHE_FLASH_ATTR handleFileUpload() {
 	}
 }
 
+/*
+ * returns a redirect to the given target
+ */
+void ICACHE_FLASH_ATTR redirect(const String &target, const String &contentType) {
+
+	includeNoCacheHeaders();
+	webserver->sendHeader(getAppStr(appStrType::locationStr), schemeAndDomain() + target);
+	webserver->send(301, contentType, EMPTY_STR);
+
+}
 
 
 /*
@@ -2069,14 +2181,17 @@ bool ICACHE_FLASH_ATTR configureWebServices() {
 				return false;
 			}
 
+			if (requestUri.equals(getAppStr(appStrType::getSecurityDataStr))) {
+				return handleGetJsonResponse(securityData);
+			}
+			if (requestUri.equals(getAppStr(appStrType::getHomePageDataStr))) {
+				return handleGetJsonResponse(homePageData);
+			}
 			if (requestUri.equals(getAppStr(appStrType::getNetSettingsStr))) {
 				return handleGetJsonResponse(networkSettings);
 			}
 			if (requestUri.equals(getAppStr(appStrType::getDnsSettingsStr))) {
 				return handleGetJsonResponse(dnsSettings);
-			}
-			if (requestUri.equals(getAppStr(appStrType::getHomePageDataStr))) {
-				return handleGetJsonResponse(homePageData);
 			}
 			if (requestUri.equals(getAppStr(appStrType::getWebserverSettingsStr))) {
 				return handleGetJsonResponse(webserverSettings);
@@ -2093,14 +2208,17 @@ bool ICACHE_FLASH_ATTR configureWebServices() {
 			if (requestUri.equals(getAppStr(appStrType::getGpioDataStr))) {
 				return handleGetJsonResponse(gpioData);
 			}
-			if (requestUri.equals(getAppStr(appStrType::getLoggingDataStr))) {
-				return handleGetJsonResponse(loggingData);
-			}
 			if (requestUri.equals(getAppStr(appStrType::getPowerMgmtDataStr))) {
 				return handleGetJsonResponse(powerMgmtData);
 			}
 			if (requestUri.equals(getAppStr(appStrType::getPowerMgmtScheduleDataStr))) {
 				return handleGetJsonResponse(powerMgmtScheduleData);
+			}
+			if (requestUri.equals(getAppStr(appStrType::getTotpQrCodeDataStr))) {
+				return handleGetJsonResponse(totpQrCodeUriData);
+			}
+			if (requestUri.equals(getAppStr(appStrType::getPeripheralsDataStr))) {
+				return handleGetJsonResponse(peripheralsData);
 			}
 
 			return false;
@@ -2173,20 +2291,25 @@ bool ICACHE_FLASH_ATTR configureWebServices() {
 
 	webserver->on(getAppStr(appStrType::analogWriteStr).c_str(), HTTP_GET, handleAnalogWrite);
 
-	webserver->on(getAppStr(appStrType::logging).c_str(), HTTP_POST, handleSaveLoggingSettings);
-
 	webserver->on(getAppStr(appStrType::powerMgmtStr).c_str(), HTTP_POST, handleSavePowerMgmtSettings);
 
 	webserver->on(getAppStr(appStrType::addPowerMgmtScheduleStr).c_str(), HTTP_POST, handleAddPowerMgmtSchedule);
 
 	webserver->on(getAppStr(appStrType::removePowerMgmtScheduleStr).c_str(), HTTP_POST, handleRemovePowerMgmtSchedule);
 
-	/*
-	webserver->on("/test", HTTP_GET, []() {
-		bool success = NetworkServiceManager.powerManager->logToHttpServer(powerEventType::automatedSleepEvent);
-		webserver->send(200, getAppStr(appStrType::textContentType), success ? "success" : "fail");
-	});
-	*/
+	webserver->on(getAppStr(appStrType::password).c_str(), HTTP_POST, handleChangePassword);
+
+	webserver->on(getAppStr(appStrType::submitTotpTokenStr).c_str(), HTTP_POST, handleSubmitTotpToken);
+
+	webserver->on(getAppStr(appStrType::addPeripheralStr).c_str(), HTTP_POST, handleAddPeripheral);
+
+	webserver->on(getAppStr(appStrType::removePeripheralStr).c_str(), HTTP_POST, handleRemovePeripheral);
+
+
+	/*webserver->on("/test", HTTP_GET, []() {
+
+	});*/
+
 
 	//404 handler
 	webserver->onNotFound([]() {
@@ -2216,14 +2339,12 @@ bool ICACHE_FLASH_ATTR configureWebServices() {
 	lastHeapCheck = millis();
 	rebootTimeStamp = 0;
 
-	CreateMutex(&requestMutex);
-
 	APP_SERIAL_DEBUG("Webserver started\n");
 
 	return serverStarted;
 }
 
-void ICACHE_FLASH_ATTR processWebClientRequest() {
+void ICACHE_FLASH_ATTR processWebClientRequests() {
 
 	webserver->handleClient();
 

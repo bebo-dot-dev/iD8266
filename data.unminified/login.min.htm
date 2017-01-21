@@ -21,20 +21,29 @@
 						<div id="pwd" class="form-group">
 							<div class="formCtrl">
 								<label for="pwdIp">Password</label>
-								<input type="password" class="form-control" id="pwdIp" name="password" placeholder="Password" maxlength="32">
+								<input type="password" class="form-control" id="pwdIp" name="pwd" placeholder="Password" maxlength="32">
+							</div>							
+							<a role="button" tabindex="0" data-trigger="focus" class="info" data-po="po" title="Password" data-placement="bottom" data-content="Input your password and hit submit to login. The default password is 'password1234' and you will be prompted to change the password on first login."> <span>i</span> </a>
+							<span id="pwdValFail" class="valFail">* A valid password is required</span>
+						</div>
+						<div id="totpPnl" class="form-group dnone">
+							<div class="formCtrl">
+								<label for="totp">TOTP</label>
+								<input type="password" class="form-control number" id="totp" name="totp" placeholder="TOTP" maxlength="6">
 							</div>
-							<a role="button" tabindex="0" data-trigger="focus" class="info" data-po="po" title="Password" data-placement="bottom" data-content="Input your password and hit submit to login. The default password is 'password1234'."> <span>i</span> </a>
+							<a role="button" tabindex="1" data-trigger="focus" class="info" data-po="po" title="TOTP" data-placement="bottom" data-content="Input your OTP secondary authentication password and hit submit to login."> <span>i</span> </a>
+							<span id="otpValFail" class="valFail">* A valid OTP is required</span>
 						</div>
 						<button type="submit" class="btn btn-default">
 							Submit
 						</button>
-						<span id="pwdValFail" class="valFail">* A valid password is required</span>
 					</form>
 				</div>
 			</div>
 		</div>
 		<script src="js/jquery-2.2.0.min.js"></script>
 		<script src="js/bootstrap.min.js"></script>
-		<script src="js/login.js"></script>
+		<script src="js/jquery.mask.min.js"></script>
+		<script src="js/login.js"></script>		
 	</body>
 </html>

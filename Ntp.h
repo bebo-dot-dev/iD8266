@@ -10,7 +10,7 @@
 
 #include <ESP8266WiFi.h>
 #include <WiFiUdp.h>
-#include "/home/joe/git/Time/Time.h"
+#include "Time.h"
 #include "utils.h"
 
 #define NTP_PACKET_SIZE 48 // NTP time is in the first 48 bytes of message
@@ -46,6 +46,7 @@ public:
 	static ICACHE_FLASH_ATTR String iso8601DateTime();
 	static ICACHE_FLASH_ATTR deviceUptime getDeviceUptime();
 	static ICACHE_FLASH_ATTR String getDeviceUptimeString();
+	static ICACHE_FLASH_ATTR time_t getUtcTimeNow();
 	void ICACHE_FLASH_ATTR processTime();
 
 private:

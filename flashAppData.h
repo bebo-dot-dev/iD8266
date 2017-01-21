@@ -2,11 +2,13 @@
 
 #define FLASH_APP_DATA_H
 
+#include <EEPROM.h>
 #include <ESP8266WiFi.h>
 #include "applicationStrings.h"
 #include "GPIOManager.h"
 #include "SessionManager.h"
 #include "PowerManager.h"
+#include "ESP8266TOTP.h"
 
 enum ipMode { Dhcp = 0, Static = 1 };
 
@@ -14,10 +16,16 @@ enum ipMode { Dhcp = 0, Static = 1 };
 #define DOUBLESTRMAX 64
 #define LARGESTRMAX 128
 #define STRLOCALE 6
+#define JJS8266_INIT_MARKER_LENGTH 16
 #define EMPTY_STR ""
+#define DEFAULT_PWD "password1234"
+
+struct markerData {
+	char marker[JJS8266_INIT_MARKER_LENGTH];
+};
 
 struct appData {
-  
+
 	bool initialized;
 
 	//describes the wifiMode the device operates as: WIFI_OFF = 0, WIFI_STA = 1, WIFI_AP = 2, WIFI_AP_STA = 3
@@ -65,12 +73,9 @@ struct appData {
 	//web sessions survive a reboot
 	webSession webSessions[MAX_WEB_SESSIONS];
 
-	uint32 wdtResetCount;
-	uint32 exceptionResetCount;
-	uint32 softWdtResetCount;
-
 	//gpio configuration storage data
 	gpioStorage gpio;
+	peripheralStorage device;
 
 	//mqtt global params
 	bool mqttSystemEnabled;
@@ -79,29 +84,41 @@ struct appData {
 	char mqttUsername[STRMAX];
 	char mqttPassword[STRMAX];
 
-	//thingspeak global params
-	bool thingSpeakEnabled;
-
-	//http server logging global params
-	bool httpLoggingEnabled;
-	char httpLoggingHost[STRMAX];
-	char httpLoggingUri[LARGESTRMAX];
-	//char httpLoggingHostSslFingerprint[DOUBLESTRMAX]; not enough memory to support SSL
-
 	//power management / deep sleep configuration data
 	powerMgmtData powerMgmt;
 
+	//google authenticator secondary auth data
+	totpData otp;
 
-} __attribute__ ((__packed__));
 
-//the global device wide appConfigData appData
+};
+
+const size_t markerDataSize = sizeof(markerData);
+const size_t appDataSize = sizeof(appData);
+const size_t appFlashSize = (markerDataSize + appDataSize);
+
+/*
+ * The FlashAppDataManager class that wraps EEPROM and SPIFFS management functionality
+ */
+class FlashAppDataManager {
+private:
+	bool eepromInit;
+	bool startMarkerPresent();
+	void writeStartMarker();
+	void initAppDataToFactoryDefaults();
+	void clearFlash();
+	void formatSPIFFS();
+public:
+	FlashAppDataManager();
+	appData initFlash(bool forceInit = false, bool formatFileSystem = false);
+	appData getAppData();
+	void setAppData();
+};
+
+extern struct markerData appMarkerData;
+
 extern struct appData appConfigData;
 
-void trackSystemResetEvents();
-appData initFlash(bool forceInit = false, bool formatFileSystem = false, bool trackSystemReset = false);
-appData getAppData();
-void setAppData();
-void clearFlash();
-void formatSPIFFS();
+extern FlashAppDataManager FlashAppDataMngr;
 
 #endif // FLASH_APP_DATA_H

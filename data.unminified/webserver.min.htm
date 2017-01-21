@@ -40,15 +40,7 @@
 			<div class="alert alert-success" role="alert"><strong>Please wait</strong> loading settings...</div>
 			<div id="mainPnl" class="panel panel-default dnone">
 				<div class="panel-body">
-					<form id="webserverFrm" method='post' action='/webserver' enctype='multipart/form-data' autocomplete='off'>
-						<div class="form-group">
-							<div class="formCtrl">
-								<label for="adminPwd">Administrator Password</label>
-								<input type="password" class="form-control valtxt" id="adminPwd" name="adminPwd" >
-							</div>
-							<a role="button" tabindex="0" data-trigger="focus" class="info" data-po="po" title="Administrator Password" data-placement="bottom" data-content="Configure the administrator password for access to this device website. Min length is 8 characters."> <span>i</span> </a>
-							<span id="adminPwdValFail" class="valFail">* A valid password is required</span>
-						</div>
+					<form id="webserverFrm" method='post' action='/webserver' enctype='multipart/form-data' autocomplete='off'>						
 						<div class="form-group">
 							<div class="formCtrl">
 								<label for="webserverPort">Web Server Port</label>

@@ -10,6 +10,8 @@
 
 void setup() {
 
+	WiFi.persistent(false);
+
 	rst_info *resetInfo = ESP.getResetInfoPtr();
 	if (resetInfo->reason == rst_reason::REASON_EXCEPTION_RST) {
 
@@ -21,18 +23,23 @@ void setup() {
 #ifdef APP_SERIAL_DEBUG
 		Serial.begin(115200, SERIAL_8N1);
 #endif
-
+		APP_SERIAL_DEBUG("\n");
 		APP_SERIAL_DEBUG("System startup\n");
 		APP_SERIAL_DEBUG("Last reset reason: %s\n", ESP.getResetInfo().c_str());
 		APP_SERIAL_DEBUG("SDK version: %s\n", ESP.getSdkVersion());
 
-		initFlash(false, false);
-		NetworkServiceManager.startNetworkServices(resetInfo);
+		FlashAppDataMngr.initFlash();
+
+		bool servicesStarted = NetworkSvcMngr.startNetworkServices(resetInfo);
+		if(!servicesStarted) {
+			APP_SERIAL_DEBUG("Network services failed to start. Restarting the device now.\n");
+			ESP.restart();
+		}
 	}
 }
 
 void loop() {
 
-  NetworkServiceManager.processRequests();
+  NetworkSvcMngr.processRequests();
   
 }

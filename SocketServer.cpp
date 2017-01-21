@@ -36,28 +36,60 @@ bool ICACHE_FLASH_ATTR SocketServer::validateHttpHeader(String headerName, Strin
 }
 
 /*
- * broadcasts the value of the given pinIdx to websocket connected clients
+ * broadcasts the value of the given deviceIdx to websocket connected clients
  */
-bool ICACHE_FLASH_ATTR SocketServer::broadcastGPIOChange(gpioType type, uint8_t pinIdx) {
-
-	int value =
-		type == digital
-		? appConfigData.gpio.digitalIO[pinIdx].lastValue
-		: appConfigData.gpio.analogRawValue;
-
+bool ICACHE_FLASH_ATTR SocketServer::broadcastGPIOChange(
+	ioType type,
+	peripheralType pType,
+	uint8_t deviceIdx)
+{
 	String escapedCommaStr = getAppStr(appStrType::escapedComma);
 	String escapedQuoteStr = getAppStr(appStrType::escapedQuote);
 
 	String json = getAppStr(appStrType::openBrace);
 
-	json += getAppStr(appStrType::gpioTypeStr) + String(type) + escapedCommaStr;
-	json += getAppStr(appStrType::escapedIdxStr) + String(pinIdx) + escapedCommaStr;
-	json += getAppStr(appStrType::escapedValueStr) + String(value) + escapedQuoteStr;
-
 	if (type == analog) {
 		json += getAppStr(appStrType::voltageStr) + String(appConfigData.gpio.analogVoltage) + escapedCommaStr;
-		json += getAppStr(appStrType::calculatedStr) + String(appConfigData.gpio.analogCalcVal) + escapedQuoteStr;
+		json += getAppStr(appStrType::calculatedStr) + String(appConfigData.gpio.analogCalcVal) + escapedCommaStr;
 	}
+
+	json += getAppStr(appStrType::gpioTypeStr) + String(type) + escapedCommaStr;
+	json += getAppStr(appStrType::escapedPeripheralType) + String(pType) + escapedCommaStr;
+	json += getAppStr(appStrType::escapedIdxStr) + String(deviceIdx) + escapedCommaStr;
+
+	if (pType == peripheralType::unspecified) {
+
+		int value =
+			type == digital
+			? appConfigData.gpio.digitals[deviceIdx].lastValue
+			: appConfigData.gpio.analogRawValue;
+
+		json += getAppStr(appStrType::escapedValueStr) + String(value) + escapedQuoteStr;
+
+	} else {
+
+		peripheralData *peripheral = &appConfigData.device.peripherals[deviceIdx];
+
+		switch (pType) {
+
+			case peripheralType::digistatMk2:
+				json += getAppStr(appStrType::escapedValueStr) + String(peripheral->base.lastValue) + escapedQuoteStr;
+				break;
+			case peripheralType::dht22:
+				json += getAppStr(appStrType::escapedValueStr) + String(peripheral->lastAnalogValue1, 1) + escapedCommaStr;
+				json += getAppStr(appStrType::escapedValue2Str) + String(peripheral->lastAnalogValue2, 1) + escapedQuoteStr;
+				break;
+			default:
+				break;
+
+		}
+
+	}
+
+
+
+
+
 
 	json += getAppStr(appStrType::closeBrace);
 

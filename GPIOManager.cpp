@@ -17,31 +17,6 @@
 GPIOManager GPIOMngr;
 
 /*
-void gpioInterrupt1(){
-	debugSerialPrint("gpioInterrupt1");
-	debugAPP_SERIAL_DEBUG(GPIOMngr.digitalPinMap[0]);
-}
-void gpioInterrupt2(){
-	debugSerialPrint("gpioInterrupt2");
-	debugAPP_SERIAL_DEBUG(GPIOMngr.digitalPinMap[1]);
-}
-void gpioInterrupt3(){
-	debugSerialPrint("gpioInterrupt3");
-	debugAPP_SERIAL_DEBUG(GPIOMngr.digitalPinMap[2]);
-}
-void gpioInterrupt4(){
-	debugSerialPrint("gpioInterrupt4");
-	debugAPP_SERIAL_DEBUG(GPIOMngr.digitalPinMap[3]);
-}
-void gpioInterrupt5(){
-	debugSerialPrint("gpioInterrupt5");
-	debugAPP_SERIAL_DEBUG(GPIOMngr.digitalPinMap[4]);
-}
-
-void (*interruptFunc[5]) (void);
-*/
-
-/*
  * defines the digital pin map for the appConfigData.digitalPinMode
  * 11 digital pins are available on an ESP12 however only 'safe' GPIO are surfaced
  * by this project - those pins defined by Kolban as low risk (page 125 of the book)
@@ -49,30 +24,26 @@ void (*interruptFunc[5]) (void);
  * https://github.com/esp8266/Arduino/blob/master/doc/reference.md#digital-io
  * http://www.esp8266.com/wiki/doku.php?id=esp8266-module-family#esp-12-e_q
  */
-const uint8_t GPIOManager::digitalPinMap[MAX_GPIO] =
-{
-	12,
-	13,
-	14,
-	4, //acts as GPIO or I2C SDA
-	5, //acts as GPIO or I2C SCL
-};
+const uint8_t GPIOManager::digitalPinMap[MAX_DEVICES] =
+	{
+		12,
+		13,
+		14,
+		4, //acts as GPIO or I2C SDA
+		5, //acts as GPIO or I2C SCL
+	};
 
 /*
  * constructor
  */
 ICACHE_FLASH_ATTR GPIOManager::GPIOManager() {
 
-	lastInputRead = 0;
+	lastProcess = 0;
+	lastDHTRead = 0;
 	initialized = false;
 
-	/*
-	interruptFunc[0] = gpioInterrupt1;
-	interruptFunc[1] = gpioInterrupt2;
-	interruptFunc[2] = gpioInterrupt3;
-	interruptFunc[3] = gpioInterrupt4;
-	interruptFunc[4] = gpioInterrupt5;
-	 */
+	digistat = NULL;
+	dht = NULL;
 
 	analogReadIndex = 0;
 	analogRunningTotal = 0;
@@ -88,6 +59,14 @@ ICACHE_FLASH_ATTR GPIOManager::GPIOManager() {
  */
 ICACHE_FLASH_ATTR GPIOManager::~GPIOManager() {
 
+	if (digistat != NULL) {
+		delete digistat;
+	}
+
+	if (dht != NULL) {
+		delete dht;
+	}
+
 }
 
 /*
@@ -95,62 +74,217 @@ ICACHE_FLASH_ATTR GPIOManager::~GPIOManager() {
  */
 void ICACHE_FLASH_ATTR GPIOManager::initialize() {
 
-	if(appConfigData.initialized) {
+	if (appConfigData.initialized) {
 
 		APP_SERIAL_DEBUG("GPIOManager::initialize\n");
 
-		//initialise digital IO pins
-		for(int pinIdx = 0; pinIdx < MAX_GPIO; pinIdx++) {
+		if (digistat != NULL) {
+			delete digistat;
+		}
 
-			uint8_t mappedPin = digitalPinMap[pinIdx];
-			digitalData digitalIO = appConfigData.gpio.digitalIO[pinIdx];
+		if (dht != NULL) {
+			delete dht;
+		}
 
-			switch (digitalIO.digitalPinMode)
-			{
-			case digitalInput:
+		//initialise devices
+		for (byte deviceIdx = 0; deviceIdx < MAX_DEVICES; deviceIdx++) {
 
-				APP_SERIAL_DEBUG("Pin %d (idx:%d, '%s') is INPUT\n", mappedPin, pinIdx, digitalIO.digitalName);
-				pinMode(mappedPin, INPUT);
+			uint8_t mappedPin = digitalPinMap[deviceIdx];
 
-				//TODO: attachInterrupt for CHANGE
-				//attachInterrupt(mappedPin, interruptFunc[i], CHANGE);
-				break;
-			case digitalInputPullup:
+			ioData digital = appConfigData.gpio.digitals[deviceIdx];
+			peripheralData *peripheral = &appConfigData.device.peripherals[deviceIdx];
 
-				APP_SERIAL_DEBUG("Pin %d (idx:%d, '%s') is INPUT_PULLUP\n", mappedPin, pinIdx, digitalIO.digitalName);
-				pinMode(mappedPin, INPUT_PULLUP);
+			switch (digital.pinMode) {
 
-				//TODO: attachInterrupt for CHANGE
-				//attachInterrupt(mappedPin, interruptFunc[i], CHANGE);
-				break;
-			case digitalOutput:
-			case digitalAnalogOutputPwm:
+				case digitalMode::digitalInput:
 
-				APP_SERIAL_DEBUG("Pin %d (idx:%d, '%s') is OUTPUT\n", mappedPin, pinIdx, digitalIO.digitalName);
-				pinMode(mappedPin, OUTPUT);
+					APP_SERIAL_DEBUG("Pin %d (idx:%d, '%s') is INPUT\n", mappedPin, deviceIdx, digital.name);
+					pinMode(mappedPin, INPUT);
 
-				//initialize the output to the configured default
-				if (digitalIO.digitalPinMode == digitalOutput) {
+					break;
+				case digitalMode::digitalInputPullup:
 
-					//initial digitalWrite on the pin configured as a digitalOutput
-					gpioDigitalWrite(pinIdx, (uint8_t)digitalIO.defaultValue);
+					APP_SERIAL_DEBUG("Pin %d (idx:%d, '%s') is INPUT_PULLUP\n", mappedPin, deviceIdx, digital.name);
+					pinMode(mappedPin, INPUT_PULLUP);
 
-				} else {
+					break;
+				case digitalMode::digitalOutput:
+				case digitalMode::digitalAnalogOutputPwm:
 
-					//initial analogWrite on the pin configured as digitalAnalogPwm
-					gpioAnalogWrite(pinIdx, digitalIO.defaultValue);
+					APP_SERIAL_DEBUG("Pin %d (idx:%d, '%s') is OUTPUT\n", mappedPin, deviceIdx, digital.name);
+					pinMode(mappedPin, OUTPUT);
 
+					//initialize the output to the configured default
+					if (digital.pinMode == digitalOutput) {
+						//initial digitalWrite on the pin configured as a digitalOutput
+						gpioDigitalWrite(deviceIdx, (uint8_t) digital.defaultValue);
+
+					} else {
+						//initial analogWrite on the pin configured as digitalAnalogPwm
+						gpioAnalogWrite(deviceIdx, digital.defaultValue);
+					}
+					break;
+
+				default:
+					//digitalNotInUse
+					break;
+			}
+
+			switch (peripheral->type) {
+				case peripheralType::digistatMk2:
+					if (digistat == NULL) {
+						digistat = new DigistatMk2_433(peripheral);
+						gpioDigitalWrite(deviceIdx, (uint8_t)peripheral->base.defaultValue);
+					}
+					break;
+				case peripheralType::dht22:
+					if (dht == NULL) {
+						dht = new DHT(mappedPin, DHT22);
+						dht->begin();
+					}
+					break;
+				default:
+					//no others yet supported
+					break;
+			}
+
+		}
+		APP_SERIAL_DEBUG("GPIOManager::initialize done\n");
+		initialized = true;
+	}
+}
+
+/*
+ * attempts to configure a peripheral for the given parameters in a free appConfigData.device.peripherals slot
+ */
+bool ICACHE_FLASH_ATTR GPIOManager::addPeripheral(peripheralType pType, String &peripheralName, uint8_t pinIdx, int defaultValue) {
+
+	bool peripheralAdded = false;
+
+	if (pType != peripheralType::unspecified) {
+
+		peripheralData *peripheral = NULL;
+
+		for(byte deviceIdx = 0; deviceIdx < MAX_DEVICES; deviceIdx++) {
+
+			peripheral = &appConfigData.device.peripherals[deviceIdx];
+
+			if ((peripheral->type == peripheralType::unspecified)) {
+
+				peripheral->type = pType;
+				strncpy(peripheral->base.name , peripheralName.c_str(), STRMAX);
+				peripheral->pinIdx = pinIdx;
+				peripheral->base.defaultValue = defaultValue;
+				peripheral->base.lastValue = UNDEFINED_GPIO;
+				peripheral->lastAnalogValue1 = UNDEFINED_GPIO;
+				peripheral->lastAnalogValue2 = UNDEFINED_GPIO;
+
+				switch (pType) {
+					case peripheralType::digistatMk2:
+						peripheral->base.pinMode = digitalMode::digitalOutputPeripheral;
+						appConfigData.gpio.digitals[deviceIdx].pinMode = digitalMode::digitalOutputPeripheral;
+						strncpy(appConfigData.gpio.digitals[deviceIdx].name , peripheralName.c_str(), STRMAX);
+						break;
+					case peripheralType::dht22:
+						peripheral->base.pinMode = digitalMode::digitalInputPeripheral;
+						appConfigData.gpio.digitals[deviceIdx].pinMode = digitalMode::digitalInputPeripheral;
+						strncpy(appConfigData.gpio.digitals[deviceIdx].name , peripheralName.c_str(), STRMAX);
+						break;
+					default:
+						break;
 				}
-				//TODO: attachInterrupt for CHANGE
-				//attachInterrupt(mappedPin, interruptFunc[i], CHANGE);
-				break;
-			default:
-				//digitalNotInUse
+
+				peripheralAdded = true;
+				initialize();
+
 				break;
 			}
 		}
-		initialized = true;
 	}
+
+	return peripheralAdded;
+
+}
+
+/*
+ * removes the peripheral in the appConfigData.device.peripherals[deviceIdx] slot
+ */
+bool ICACHE_FLASH_ATTR GPIOManager::removePeripheral(uint8_t deviceIdx) {
+
+	bool peripheralRemoved = false;
+
+	if (deviceIdx < MAX_DEVICES) {
+
+		peripheralData *peripheral = &appConfigData.device.peripherals[deviceIdx];
+
+		strncpy(peripheral->base.name , EMPTY_STR, STRMAX);
+
+		peripheral->base.pinMode = digitalMode::digitalNotInUse;
+		appConfigData.gpio.digitals[deviceIdx].pinMode = digitalMode::digitalNotInUse;
+
+		peripheral->base.defaultValue = 0;
+		peripheral->base.lastValue = UNDEFINED_GPIO;
+
+		peripheral->type = peripheralType::unspecified;
+		peripheral->pinIdx = UNDEFINED_GPIO_PIN;
+		peripheral->lastAnalogValue1 = UNDEFINED_GPIO;
+		peripheral->lastAnalogValue2 = UNDEFINED_GPIO;
+
+		initialize();
+
+		peripheralRemoved = true;
+
+	}
+
+	return peripheralRemoved;
+
+}
+
+/*
+ * removes all peripherals from all appConfigData.device.peripherals[deviceIdx] slots where the
+ * peripheral->pinIdx matches the given pinIdx
+ */
+bool ICACHE_FLASH_ATTR GPIOManager::removePeripheralsByPinIdx(uint8_t pinIdx) {
+
+	bool peripheralRemoved = false;
+
+	peripheralData *peripheral = NULL;
+
+	for(byte deviceIdx = 0; deviceIdx < MAX_DEVICES; deviceIdx++) {
+
+		peripheral = &appConfigData.device.peripherals[deviceIdx];
+
+		if ((peripheral->pinIdx == pinIdx)) {
+
+			peripheralRemoved |= removePeripheral(deviceIdx);
+
+			break;
+		}
+	}
+
+	return peripheralRemoved;
+
+}
+
+/*
+ * returns the first peripheral where the peripheral->pinIdx matches the given pinIdx
+ */
+peripheralData ICACHE_FLASH_ATTR *GPIOManager::getPeripheralByPinIdx(uint8_t pinIdx) {
+
+	peripheralData *peripheral = NULL;
+
+	for(byte deviceIdx = 0; deviceIdx < MAX_DEVICES; deviceIdx++) {
+
+		peripheral = &appConfigData.device.peripherals[deviceIdx];
+
+		if ((peripheral->pinIdx == pinIdx)) {
+
+			return peripheral;
+		}
+	}
+
+	return NULL;
+
 }
 
 /*
@@ -161,28 +295,25 @@ int ICACHE_FLASH_ATTR GPIOManager::gpioDigitalRead(uint8_t pinIdx) {
 
 	int state = UNDEFINED_GPIO;
 
-	if(pinIdx >= 0 && pinIdx < MAX_GPIO) {
+	if (pinIdx >= 0 && pinIdx < MAX_DEVICES) {
 
 		uint8_t mappedPin = digitalPinMap[pinIdx];
 
-		switch (appConfigData.gpio.digitalIO[pinIdx].digitalPinMode)
-		{
+		switch (appConfigData.gpio.digitals[pinIdx].pinMode) {
 		case digitalInput:
 		case digitalInputPullup:
 			//return the actual read state
 			state = digitalRead(mappedPin);
-			if(appConfigData.gpio.digitalIO[pinIdx].lastValue != state) {
-				appConfigData.gpio.digitalIO[pinIdx].lastValue = state;
+			if (appConfigData.gpio.digitals[pinIdx].lastValue != state) {
+				appConfigData.gpio.digitals[pinIdx].lastValue = state;
 
-				NetworkServiceManager.broadcastGPIOChange(
-					digital,
-					pinIdx);
+				NetworkSvcMngr.broadcastDeviceStateChange(ioType::digital, pinIdx);
 			}
 			break;
 		case digitalOutput:
 		case digitalAnalogOutputPwm:
 			//return the internally cached last written state
-			state = appConfigData.gpio.digitalIO[pinIdx].lastValue;
+			state = appConfigData.gpio.digitals[pinIdx].lastValue;
 			break;
 		default:
 			//digitalNotInUse
@@ -225,15 +356,14 @@ int ICACHE_FLASH_ATTR GPIOManager::gpioAnalogRead() {
 				? analogRunningTotal / analogReadIndex
 				: analogRunningTotal / MAX_ANALOG_READINGS;
 
-		if ((appConfigData.gpio.analogRawValue != rawVal) || (appConfigData.powerMgmt.enabled && appConfigData.powerMgmt.onLength == powerOnLength::zeroLength)) {
+		if ((appConfigData.gpio.analogRawValue != rawVal) ||
+			(appConfigData.powerMgmt.enabled && appConfigData.powerMgmt.onLength == powerOnLength::zeroLength)) {
 
 			appConfigData.gpio.analogRawValue = rawVal;
 			appConfigData.gpio.analogVoltage = appConfigData.gpio.analogRawValue / 1024.0;
 			appConfigData.gpio.analogCalcVal = (appConfigData.gpio.analogVoltage + appConfigData.gpio.analogOffset) * appConfigData.gpio.analogMultiplier;
 
-			NetworkServiceManager.broadcastGPIOChange(
-				analog,
-				0);
+			NetworkSvcMngr.broadcastDeviceStateChange(ioType::analog, 0);
 		}
 	}
 
@@ -244,28 +374,45 @@ int ICACHE_FLASH_ATTR GPIOManager::gpioAnalogRead() {
  * Writes a digital GPIO value to a pin and stores the value.
  * The pin must be configured as digitalOutput and the given value must be either LOW or HIGH
  */
-bool ICACHE_FLASH_ATTR GPIOManager::gpioDigitalWrite(uint8_t pinIdx, uint8_t value, bool suppressMqtt) {
+bool ICACHE_FLASH_ATTR GPIOManager::gpioDigitalWrite(
+		uint8_t pinIdx,
+		uint8_t value,
+		bool suppressMqtt) {
 
-	if(pinIdx >= 0 && pinIdx < MAX_GPIO) {
+	if (pinIdx >= 0 && pinIdx < MAX_DEVICES) {
 
-		uint8_t mappedPin = digitalPinMap[pinIdx];
+		if (value == LOW || value == HIGH) {
 
-		if (appConfigData.gpio.digitalIO[pinIdx].digitalPinMode == digitalOutput) {
+			if (appConfigData.gpio.digitals[pinIdx].pinMode == digitalMode::digitalOutput) {
 
-			if(value == LOW || value == HIGH) {
-
-				APP_SERIAL_DEBUG("Writing digital output value %d for pin %d (idx:%d, '%s')\n", value, mappedPin, pinIdx, appConfigData.gpio.digitalIO[pinIdx].digitalName);
+				uint8_t mappedPin = digitalPinMap[pinIdx];
+				APP_SERIAL_DEBUG("Writing digital output value %d for pin %d (idx:%d, '%s')\n", value, mappedPin, pinIdx, appConfigData.gpio.digitals[pinIdx].name);
 
 				digitalWrite(mappedPin, value);
-				appConfigData.gpio.digitalIO[pinIdx].lastValue = value;
+				appConfigData.gpio.digitals[pinIdx].lastValue = value;
 
-				NetworkServiceManager.broadcastGPIOChange(
-					digital,
+				NetworkSvcMngr.broadcastDeviceStateChange(
+					ioType::digital,
 					pinIdx,
+					peripheralType::unspecified,
 					!suppressMqtt);
 
-				return true;
+			} else if (appConfigData.gpio.digitals[pinIdx].pinMode == digitalMode::digitalOutputPeripheral) {
+
+				if (digistat != NULL) {
+					digistat->Switch(value);
+					appConfigData.gpio.digitals[pinIdx].lastValue = value;
+
+					NetworkSvcMngr.broadcastDeviceStateChange(
+						ioType::digital,
+						pinIdx,
+						peripheralType::digistatMk2,
+						!suppressMqtt);
+
+				}
 			}
+
+			return true;
 		}
 	}
 	return false;
@@ -275,24 +422,28 @@ bool ICACHE_FLASH_ATTR GPIOManager::gpioDigitalWrite(uint8_t pinIdx, uint8_t val
  * Writes an analog GPIO value to a pin and stores the value.
  * The pin must be configured as digitalAnalogOutputPwm and the given value must be between MIN_ANALOG and MAX_ANALOG
  */
-bool ICACHE_FLASH_ATTR GPIOManager::gpioAnalogWrite(uint8_t pinIdx, int value, bool suppressMqtt) {
+bool ICACHE_FLASH_ATTR GPIOManager::gpioAnalogWrite(
+		uint8_t pinIdx,
+		int value,
+		bool suppressMqtt) {
 
-	if(pinIdx >= 0 && pinIdx < MAX_GPIO) {
+	if (pinIdx >= 0 && pinIdx < MAX_DEVICES) {
 
 		uint8_t mappedPin = digitalPinMap[pinIdx];
 
-		if (appConfigData.gpio.digitalIO[pinIdx].digitalPinMode == digitalAnalogOutputPwm) {
+		if (appConfigData.gpio.digitals[pinIdx].pinMode == digitalAnalogOutputPwm) {
 
-			if(value >= MIN_ANALOG && value <= MAX_ANALOG) {
+			if (value >= MIN_ANALOG && value <= MAX_ANALOG) {
 
-				APP_SERIAL_DEBUG("Writing analog PWM output value %d for pin %d (idx:%d, '%s')\n", value, mappedPin, pinIdx, appConfigData.gpio.digitalIO[pinIdx].digitalName);
+				APP_SERIAL_DEBUG("Writing analog PWM output value %d for pin %d (idx:%d, '%s')\n", value, mappedPin, pinIdx, appConfigData.gpio.digitals[pinIdx].name);
 
 				analogWrite(mappedPin, value);
-				appConfigData.gpio.digitalIO[pinIdx].lastValue = value;
+				appConfigData.gpio.digitals[pinIdx].lastValue = value;
 
-				NetworkServiceManager.broadcastGPIOChange(
-					digital,
+				NetworkSvcMngr.broadcastDeviceStateChange(
+					ioType::digital,
 					pinIdx,
+					peripheralType::unspecified,
 					!suppressMqtt);
 
 				return true;
@@ -302,90 +453,142 @@ bool ICACHE_FLASH_ATTR GPIOManager::gpioAnalogWrite(uint8_t pinIdx, int value, b
 	return false;
 }
 
-
 /*
- * reads configured GPIO inputs and broadcasts GPIO state to websocket connected clients
- * this is a loop function
+ * returns the analog A0 pin value via an analogRead function call
+ * analogPinMode must == analogEnabled otherwise the UNDEFINED_GPIO value is returned
  */
-void ICACHE_FLASH_ATTR GPIOManager::readInputs() {
+void ICACHE_FLASH_ATTR GPIOManager::dhtRead(uint8_t deviceIdx) {
 
-	if ((initialized) && ((millis() - lastInputRead > 1000) || (lastInputRead == 0))) {
+	peripheralData *peripheral = &appConfigData.device.peripherals[deviceIdx];
 
-		for(int pinIdx = 0; pinIdx < MAX_GPIO; pinIdx++) {
-			if ((appConfigData.gpio.digitalIO[pinIdx].digitalPinMode == digitalInput) || (appConfigData.gpio.digitalIO[pinIdx].digitalPinMode == digitalInputPullup))
-				gpioDigitalRead(pinIdx);
+	if (dht != NULL && peripheral->type == peripheralType::dht22) {
+
+		APP_SERIAL_DEBUG("dhtRead\n");
+
+		float celcius = dht->readTemperature();
+		float humidity = dht->readHumidity();
+
+		if (isnan(humidity) || isnan(celcius)) {
+			APP_SERIAL_DEBUG("dhtRead failure\n");
+			return;
 		}
 
-		if(appConfigData.gpio.analogPinMode == analogEnabled)
+		if (peripheral->lastAnalogValue1 != celcius || peripheral->lastAnalogValue2 != humidity) {
+
+			peripheral->lastAnalogValue1 = celcius;
+			peripheral->lastAnalogValue2 = humidity;
+
+			NetworkSvcMngr.broadcastDeviceStateChange(ioType::digital, deviceIdx, peripheralType::dht22);
+
+		}
+	}
+}
+
+/*
+ * reads/writes configured devices
+ * this is a loop function
+ */
+void ICACHE_FLASH_ATTR GPIOManager::processGPIO() {
+
+	unsigned long now = millis();
+
+	if ((initialized) && ((now - lastProcess > 1000) || (lastProcess == 0))) {
+
+		for (byte deviceIdx = 0; deviceIdx < MAX_DEVICES; deviceIdx++) {
+			if ((appConfigData.gpio.digitals[deviceIdx].pinMode == digitalInput) || (appConfigData.gpio.digitals[deviceIdx].pinMode == digitalInputPullup)) {
+
+				gpioDigitalRead(deviceIdx);
+
+			} else {
+
+				peripheralData *peripheral = &appConfigData.device.peripherals[deviceIdx];
+
+				switch (peripheral->type) {
+					case peripheralType::digistatMk2:
+						if (digistat != NULL) {
+							digistat->Repeat();
+						}
+						break;
+					case peripheralType::dht22:
+						if ((now - lastDHTRead > 30000) || (lastDHTRead == 0)) {
+							dhtRead(deviceIdx);
+							lastDHTRead = now;
+						}
+						break;
+					default:
+						break;
+				}
+			}
+		}
+
+		if (appConfigData.gpio.analogPinMode == analogEnabled)
 			gpioAnalogRead();
 
-		lastInputRead = millis();
+		lastProcess = now;
 
 	}
 }
 
 String ICACHE_FLASH_ATTR GPIOManager::getUnitOfMeasureStr(unitOfMeasure unit) {
 
-	switch(unit)
-	{
-		case none:
-			return EMPTY_STR;
-		case celcius:
-			return getAppStr(appStrType::celciusStr);
-		case fahrenheit:
-			return getAppStr(appStrType::fahrenheitStr);
-		case millimeter:
-			return getAppStr(appStrType::mm);
-		case centimeter:
-			return getAppStr(appStrType::cm);
-		case metre:
-			return getAppStr(appStrType::m);
-		case kilometer:
-			return getAppStr(appStrType::km);
-		case inch:
-			return getAppStr(appStrType::in);
-		case foot:
-			return getAppStr(appStrType::ft);
-		case mile:
-			return getAppStr(appStrType::mi);
-		case millilitre:
-			return getAppStr(appStrType::ml);
-		case centilitre:
-			return getAppStr(appStrType::cl);
-		case litre:
-			return getAppStr(appStrType::l);
-		case gallon:
-			return getAppStr(appStrType::gal);
-		case milligram:
-			return getAppStr(appStrType::mg);
-		case gram:
-			return getAppStr(appStrType::g);
-		case kilogram:
-			return getAppStr(appStrType::kg);
-		case ounce:
-			return getAppStr(appStrType::oz);
-		case pound:
-			return getAppStr(appStrType::lb);
-		case ton:
-			return getAppStr(appStrType::t);
-		case btu:
-			return getAppStr(appStrType::BTU);
-		case millivolt:
-			return getAppStr(appStrType::mV);
-		case volt:
-			return getAppStr(appStrType::v);
-		case milliampere:
-			return getAppStr(appStrType::mA);
-		case ampere:
-			return getAppStr(appStrType::A);
-		case ohm:
-			return getAppStr(appStrType::ohms);
-		case watt:
-			return getAppStr(appStrType::W);
-		default:
-			return EMPTY_STR;
+	switch (unit) {
+	case none:
+		return EMPTY_STR;
+	case celcius:
+		return getAppStr(appStrType::celciusStr);
+	case fahrenheit:
+		return getAppStr(appStrType::fahrenheitStr);
+	case millimeter:
+		return getAppStr(appStrType::mm);
+	case centimeter:
+		return getAppStr(appStrType::cm);
+	case metre:
+		return getAppStr(appStrType::m);
+	case kilometer:
+		return getAppStr(appStrType::km);
+	case inch:
+		return getAppStr(appStrType::in);
+	case foot:
+		return getAppStr(appStrType::ft);
+	case mile:
+		return getAppStr(appStrType::mi);
+	case millilitre:
+		return getAppStr(appStrType::ml);
+	case centilitre:
+		return getAppStr(appStrType::cl);
+	case litre:
+		return getAppStr(appStrType::l);
+	case gallon:
+		return getAppStr(appStrType::gal);
+	case milligram:
+		return getAppStr(appStrType::mg);
+	case gram:
+		return getAppStr(appStrType::g);
+	case kilogram:
+		return getAppStr(appStrType::kg);
+	case ounce:
+		return getAppStr(appStrType::oz);
+	case pound:
+		return getAppStr(appStrType::lb);
+	case ton:
+		return getAppStr(appStrType::t);
+	case btu:
+		return getAppStr(appStrType::BTU);
+	case millivolt:
+		return getAppStr(appStrType::mV);
+	case volt:
+		return getAppStr(appStrType::v);
+	case milliampere:
+		return getAppStr(appStrType::mA);
+	case ampere:
+		return getAppStr(appStrType::A);
+	case ohm:
+		return getAppStr(appStrType::ohms);
+	case watt:
+		return getAppStr(appStrType::W);
+	default:
+		return EMPTY_STR;
 	}
 
 }
-
 

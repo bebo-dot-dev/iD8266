@@ -61,16 +61,20 @@
 				</div>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title">I/O</h3>
+						<h3 class="panel-title">Devices</h3>
 					</div>
 					<div class="panel-body">
 						<a href="/mqtt.cm">MQTT</a>
 						<a role="button" tabindex="3" data-trigger="focus" class="info" data-po="po" data-placement="top" data-html="true"
-						title="MQTT" data-content="Configure the lightweight MQTT publish/subscribe protocol for the device.<br/>See&nbsp;<a href='https://en.wikipedia.org/wiki/MQTT' target='_blank' class='plink'>MQTT</a>&nbsp;for details"> <span>i</span> </a>
+						title="MQTT" data-content="Configure the lightweight MQTT publish/subscribe protocol for this device.<br/>See&nbsp;<a href='https://en.wikipedia.org/wiki/MQTT' target='_blank' class='plink'>MQTT</a>&nbsp;for details"> <span>i</span> </a>
 						<br/>
-						<a href="/gpio.cm">Onboard GPIO</a>
+						<a href="/gpio.cm">GPIO</a>
 						<a role="button" tabindex="3" data-trigger="focus" class="info" data-po="po" data-placement="top"
-						title="Onboard GPIO" data-content="Configure device onboard I/O to enabled remote control actions on connected devices"> <span>i</span> </a>
+						title="GPIO" data-content="Configure device GPIO to enable monitoring and control of connected devices"> <span>i</span> </a>
+						<br/>
+						<a href="/peripherals.cm">Peripherals</a>
+						<a role="button" tabindex="10" data-trigger="focus" class="info" data-po="po" data-placement="top"
+						title="Peripherals" data-content="Configure device peripherals to enable monitoring and control of connected devices"> <span>i</span> </a>
 						<div class="dnone">
 							<a id="d0" href="/gpiodtl.cm?d=0">Unused</a>
 							<a role="button" tabindex="4" data-trigger="focus" class="info" data-po="po" data-placement="top"
@@ -100,7 +104,7 @@
 							<a id="a0" href="/gpiodtl.cm?a=0">Unused</a>
 							<a role="button" tabindex="9" data-trigger="focus" class="info" data-po="po" data-placement="top"
 							title="A0" data-content=""> <span>i</span> </a>
-						</div>
+						</div>						
 					</div>
 				</div>
 				<div class="panel panel-default">
@@ -108,32 +112,32 @@
 						<h3 class="panel-title">System</h3>
 					</div>
 					<div class="panel-body">
+						<a href="/password.cm">Security</a>
+						<a role="button" tabindex="11" data-trigger="focus" class="info" data-po="po" data-placement="top"
+						title="Security" data-content="Manage security options including password management and secondary authentication"> <span>i</span> </a>
+						<br/>
 						<a href="/regional.cm">Regional Settings</a>
-						<a role="button" tabindex="10" data-trigger="focus" class="info" data-po="po" data-placement="top"
+						<a role="button" tabindex="12" data-trigger="focus" class="info" data-po="po" data-placement="top"
 						title="Regional Settings" data-content="Configure NTP time server settings, timezone etc"> <span>i</span> </a>
 						<br/>
 						<a href="/power.cm">Power Management</a>
-						<a role="button" tabindex="10" data-trigger="focus" class="info" data-po="po" data-placement="top"
+						<a role="button" tabindex="13" data-trigger="focus" class="info" data-po="po" data-placement="top"
 						title="Power Management" data-content="Configure deep sleep power management settings"> <span>i</span> </a>
-						<br/>
-						<a href="/logging.cm">Logging</a>
-						<a role="button" tabindex="11" data-trigger="focus" class="info" data-po="po" data-placement="top"
-						title="Logging" data-content="Configure settings for logging to external services"> <span>i</span> </a>
-						<br/>
+						<br/>						
 						<a href="/diagnostics.cm">Diagnostics</a>
-						<a role="button" tabindex="12" data-trigger="focus" class="info" data-po="po" data-placement="top"
+						<a role="button" tabindex="14" data-trigger="focus" class="info" data-po="po" data-placement="top"
 						title="Diagnostics" data-content="Review diagnostic data, software version and runtime parameters"> <span>i</span> </a>
 						<br/>
 						<a href="/firmwareUpload.cm">Firmware Update</a>
-						<a role="button" tabindex="13" data-trigger="focus" class="info" data-po="po" data-placement="top"
+						<a role="button" tabindex="15" data-trigger="focus" class="info" data-po="po" data-placement="top"
 						title="Firmware Update" data-content="Manage the software running on this device / update the runtime firmware"> <span>i</span> </a>
 						<br/>
 						<a id="rebootLnk" href="#" data-action="reboot" data-toggle="modal" data-target="#confirmDlg">Reboot</a>
-						<a role="button" tabindex="14" data-trigger="focus" class="info" data-po="po" data-placement="top"
+						<a role="button" tabindex="16" data-trigger="focus" class="info" data-po="po" data-placement="top"
 						title="Reboot" data-content="Perform a device soft reboot"> <span>i</span> </a>
 						<br/>
 						<a id="resetLink" href="#" data-action="reset" data-toggle="modal" data-target="#confirmDlg">Factory Reset</a>
-						<a role="button" tabindex="15" data-trigger="focus" class="info" data-po="po" data-placement="top"
+						<a role="button" tabindex="17" data-trigger="focus" class="info" data-po="po" data-placement="top"
 						title="Factory Reset" data-content="Reset the device to factory default settings and reboot"> <span>i</span> </a>
 					</div>
 				</div>

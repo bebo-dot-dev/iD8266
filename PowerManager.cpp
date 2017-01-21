@@ -9,24 +9,21 @@
 #include "flashAppData.h"
 #include "NetworkServices.h"
 #include "applicationStrings.h"
-#include "/home/joe/git/thingspeak-arduino/src/ThingSpeak.h"
 
 //the global device wide rtcConfigData rtcData
 struct rtcData rtcConfigData;
 
 ICACHE_FLASH_ATTR PowerManager::PowerManager(rst_info *resetInfo) {
 
-	pwrMgmtWifiClient = NULL;
 	isDisabled = false;
 	delayedSleep = false;
-	lastThingSpeakLog = 0;
 	wakeupTime = millis();
 	wakeTimestamp = 0; //is set in logBoot when ntp has started
 
 	resetReason = (rst_reason)resetInfo->reason;
 
 	wakeEventType =
-		resetInfo->reason == rst_reason::REASON_DEFAULT_RST || resetInfo->reason == rst_reason::REASON_EXT_SYS_RST || resetInfo->reason == rst_reason::REASON_SOFT_RESTART
+		resetInfo->reason == rst_reason::REASON_DEFAULT_RST //power on boot / CH_PD->ground
 		? powerEventType::manualWakeEvent
 		: powerEventType::automatedWakeEvent;
 
@@ -36,7 +33,7 @@ ICACHE_FLASH_ATTR PowerManager::PowerManager(rst_info *resetInfo) {
 		delaySleep();
 	}
 
-	if (appConfigData.powerMgmt.enabled) {
+	if ((appConfigData.powerMgmt.enabled) && (wakeEventType == powerEventType::automatedWakeEvent)) {
 		checkLengthySleep();
 	} else {
 		initRtcStoreData();
@@ -55,7 +52,7 @@ void ICACHE_FLASH_ATTR PowerManager::checkLengthySleep() {
 
 	if (ESP.rtcUserMemoryRead(0, (uint32_t*) &rtcConfigData, sizeof(rtcData))) {
 
-		if(rtcConfigData.initialized) {
+		if(rtcConfigData.targetSleepCount > 0) {
 
 			//uint32_t crcCalc = calculateCRC32(((uint8_t*) &rtcConfigData) + 4, sizeof(rtcData) - 4);
 
@@ -64,16 +61,10 @@ void ICACHE_FLASH_ATTR PowerManager::checkLengthySleep() {
 
 			//if (crcCalc == rtcConfigData.crc32) {
 			//RTC data looks good
-			rtcConfigData.sleepCount += 1;
+			rtcConfigData.targetSleepCount--;
 
-			if (rtcConfigData.sleepCount > rtcConfigData.targetSleepCount) {
-				rtcConfigData.initialized = false;
-				rtcConfigData.sleepCount = 0;
-			}
+			if (rtcConfigData.targetSleepCount == 0) {
 
-			if (rtcConfigData.sleepCount == 0) {
-
-				rtcConfigData.targetSleepCount = 0;
 				if (wakeEventType == powerEventType::automatedWakeEvent) {
 					wakeEventType = powerEventType::scheduledWakeEvent;
 				}
@@ -81,7 +72,7 @@ void ICACHE_FLASH_ATTR PowerManager::checkLengthySleep() {
 			}
 
 			//a lengthy sleep is in progress - immediately go back to sleep
-			if (rtcConfigData.sleepCount == rtcConfigData.targetSleepCount) {
+			if (rtcConfigData.targetSleepCount == 1) {
 				rtcConfigData.wakeMode = WakeMode::RF_DEFAULT; // next wake up has WiFi on
 				deepSleep(false);
 			} else {
@@ -93,12 +84,10 @@ void ICACHE_FLASH_ATTR PowerManager::checkLengthySleep() {
 	}
 }
 
-WiFiClient* ICACHE_FLASH_ATTR PowerManager::getWifiClient()
-{
-	if (!pwrMgmtWifiClient) {
-		pwrMgmtWifiClient = new WiFiClient();
-	}
-	return pwrMgmtWifiClient;
+bool ICACHE_FLASH_ATTR PowerManager::isSingleCycleEnabled() {
+	return appConfigData.powerMgmt.enabled &&
+			appConfigData.powerMgmt.onLength == powerOnLength::zeroLength &&
+			!delayedSleep;
 }
 
 bool ICACHE_FLASH_ATTR PowerManager::addSchedule(uint8_t day, uint8_t hr, powerDownLength offLength) {
@@ -106,21 +95,20 @@ bool ICACHE_FLASH_ATTR PowerManager::addSchedule(uint8_t day, uint8_t hr, powerD
 	bool scheduleAdded = false;
 	scheduleData *schedule = NULL;
 
-	for(int i = 0; i < MAX_SCHEDULES; i++) {
+	for(byte i = 0; i < MAX_SCHEDULES; i++) {
 		schedule = &appConfigData.powerMgmt.schedules[i];
-		if ((!schedule->enabled)) {
+		if (!schedule->enabled) {
 
 			schedule->weekday = day;
 			schedule->hour = hr;
 			schedule->offLength = offLength;
 			schedule->enabled = true;
-			setAppData();
 
 			scheduleAdded = true;
 
 			if ((schedule->weekday == weekday()) && (schedule->hour == hour())) {
 				//the schedule being added matches now() so switch on the 5 minute sleep delay so we don't immediately shutdown
-				NetworkServiceManager.powerManager->delaySleep();
+				NetworkSvcMngr.powerManager->delaySleep();
 			}
 
 			break;
@@ -141,7 +129,6 @@ bool ICACHE_FLASH_ATTR PowerManager::removeSchedule(uint8_t scheduleIdx) {
 		schedule->hour = 0;
 		schedule->weekday = 0;
 		schedule->offLength = powerDownLength::eightHours;
-		setAppData();
 
 		scheduleRemoved = true;
 
@@ -157,21 +144,13 @@ void ICACHE_FLASH_ATTR PowerManager::delaySleep() {
 
 void ICACHE_FLASH_ATTR PowerManager::deepSleep(bool sleepLoggingEnabled) {
 
-	rtcConfigData.initialized = true;
-
 	if (sleepLoggingEnabled) {
-		if (appConfigData.powerMgmt.logToThingSpeak) {
-			logToThingSpeak(rtcConfigData.eventType);
-		}
-
-		if (appConfigData.powerMgmt.httpLoggingEnabled) {
-			logToHttpServer(rtcConfigData.eventType);
-		}
+		//TODO: mqtt support for power down event
 	}
 
 	APP_SERIAL_DEBUG((getEventTypeString(rtcConfigData.eventType) + getAppStr(appStrType::newline)).c_str());
 
-	if ((appConfigData.ntpEnabled) && (NetworkServiceManager.ntpManager != NULL) && (NetworkServiceManager.ntpManager->syncResponseReceived)) {
+	if ((appConfigData.ntpEnabled) && (NetworkSvcMngr.ntpManager != NULL) && (NetworkSvcMngr.ntpManager->syncResponseReceived)) {
 		rtcConfigData.lastSleepTimestamp = now();
 		APP_SERIAL_DEBUG("Timestamp deep sleep: %d\n", (int)rtcConfigData.lastSleepTimestamp);
 	} else {
@@ -183,13 +162,13 @@ void ICACHE_FLASH_ATTR PowerManager::deepSleep(bool sleepLoggingEnabled) {
 	//persist current config to RTC memory
 	ESP.rtcUserMemoryWrite(0, (uint32_t*) &rtcConfigData, sizeof(rtcData));
 
-	APP_SERIAL_DEBUG("Going into deep sleep for %d microseconds now!", rtcConfigData.pwrDownLength);
+	APP_SERIAL_DEBUG("Going into deep sleep for %d microseconds now", rtcConfigData.pwrDownLength);
 
 	//initiate sleep for the specified sleepLength
 	ESP.deepSleep(rtcConfigData.pwrDownLength, rtcConfigData.wakeMode);
 }
 
-scheduleData* ICACHE_FLASH_ATTR PowerManager::getScheduledPowerDownData() {
+scheduleData* ICACHE_FLASH_ATTR PowerManager::getScheduledPowerDownData(int hour) {
 
 	scheduleData *schedule = NULL;
 	scheduleData *sched;
@@ -200,10 +179,10 @@ scheduleData* ICACHE_FLASH_ATTR PowerManager::getScheduledPowerDownData() {
 	}
 
 	if (wakeExpired) {
-		for(int i = 0; i < MAX_SCHEDULES; i++) {
+		for(byte i = 0; i < MAX_SCHEDULES; i++) {
 			sched = &appConfigData.powerMgmt.schedules[i];
 			//try and find an enabled schedule that matches the current NTP day and hour
-			if ((sched->enabled) && (sched->weekday == weekday()) && (sched->hour == hour())) {
+			if ((sched->enabled) && (sched->weekday == weekday()) && (sched->hour == hour)) {
 				schedule = sched;
 				break;
 			}
@@ -253,14 +232,13 @@ bool ICACHE_FLASH_ATTR PowerManager::powerOnLengthExpired() {
 void ICACHE_FLASH_ATTR PowerManager::initRtcStoreData() {
 
 	//rtcConfigData.crc32 = 0;
-	rtcConfigData.initialized = false;
-	rtcConfigData.sleepCount = 0;
 	rtcConfigData.targetSleepCount = 0;
 	rtcConfigData.pwrDownLength = 0;
 	rtcConfigData.eventType = powerEventType::automatedWakeEvent;
 	rtcConfigData.wakeMode = WakeMode::RF_DEFAULT;
 	rtcConfigData.lastSleepTimestamp = 0;
 	rtcConfigData.lastSleepAdjusted = false;
+	rtcConfigData.shortSleep = false;
 
 	ESP.rtcUserMemoryWrite(0, (uint32_t*) &rtcConfigData, sizeof(rtcData));
 
@@ -270,11 +248,11 @@ void ICACHE_FLASH_ATTR PowerManager::initRtcStoreData() {
  * calculates a thirty minute interval to land exactly on the hour or half past the hour when waking from schedule and ntp is enabled
  * otherwise simply returns THIRTY_MIN_MICROS
  */
-uint32_t ICACHE_FLASH_ATTR PowerManager::getThirtyMinuteInterval() {
+uint32_t ICACHE_FLASH_ATTR PowerManager::getThirtyMinuteInterval(bool ntpAdjust) {
 
 	uint32_t interval = THIRTY_MIN_MICROS;
 
-	if ((wakeEventType == powerEventType::scheduledWakeEvent) && (appConfigData.ntpEnabled) && (NetworkServiceManager.ntpManager->syncResponseReceived)) {
+	if (ntpAdjust && wakeEventType == powerEventType::scheduledWakeEvent && appConfigData.ntpEnabled && NetworkSvcMngr.ntpManager->syncResponseReceived) {
 
 		time_t timenow = now();
 		time_t fromnow = (timenow + THIRTY_MIN_SECONDS);
@@ -312,11 +290,11 @@ uint32_t ICACHE_FLASH_ATTR PowerManager::getThirtyMinuteInterval() {
  * calculates a one hour interval to land exactly on the hour when waking from schedule and ntp is enabled
  * otherwise simply returns ONE_HOUR_MICROS
  */
-uint32_t ICACHE_FLASH_ATTR PowerManager::getOneHourInterval() {
+uint32_t ICACHE_FLASH_ATTR PowerManager::getOneHourInterval(bool ntpAdjust) {
 
 	uint32_t interval = ONE_HOUR_MICROS;
 
-	if ((wakeEventType == powerEventType::scheduledWakeEvent) && (appConfigData.ntpEnabled) && (NetworkServiceManager.ntpManager->syncResponseReceived)) {
+	if (ntpAdjust && wakeEventType == powerEventType::scheduledWakeEvent && appConfigData.ntpEnabled && NetworkSvcMngr.ntpManager->syncResponseReceived) {
 
 		time_t timenow = now();
 		time_t fromnow = (timenow + ONE_HOUR_SECONDS);
@@ -371,56 +349,66 @@ void ICACHE_FLASH_ATTR PowerManager::adjustPowerDownLength() {
 }
 
 /*
+ * returns a sleep interval in microseconds that corresponds to the given powerDownLength
+ */
+uint32_t ICACHE_FLASH_ATTR PowerManager::getSleepInterval(powerDownLength length, bool ntpAdjust) {
+
+	switch(length) {
+		case powerDownLength::fiveMins:
+			return FIVE_MIN_MICROS;
+		case powerDownLength::thirtyMinutes:
+			return getThirtyMinuteInterval(ntpAdjust);
+		default:
+			return getOneHourInterval(ntpAdjust);
+	}
+}
+
+/*
  * sets up the rctStore rtcData correctly for a sleep interval of the given powerDownLength
  */
 void ICACHE_FLASH_ATTR PowerManager::getRtcStoreData(powerDownLength length, powerEventType eventType) {
 
-	rtcConfigData.initialized = false;
-	rtcConfigData.sleepCount = 0;
 	rtcConfigData.targetSleepCount = 0; //default to no lengthy sleep interval
-	rtcConfigData.pwrDownLength = getOneHourInterval(); //default is one hour
+	rtcConfigData.pwrDownLength = getSleepInterval(length);
 	rtcConfigData.eventType = eventType;
 	rtcConfigData.wakeMode = WakeMode::RF_DISABLED; //default to radio off on wake
+	rtcConfigData.shortSleep = false;
 
-	switch(length) {
+	if (!checkShortSleep()) {
 
-		case powerDownLength::fiveMins:
-			rtcConfigData.pwrDownLength = FIVE_MIN_MICROS;
-			rtcConfigData.wakeMode = WakeMode::RF_DEFAULT;
-			break;
-		case powerDownLength::thirtyMinutes:
-			rtcConfigData.pwrDownLength = getThirtyMinuteInterval();
-			rtcConfigData.wakeMode = WakeMode::RF_DEFAULT;
-			break;
-		case powerDownLength::oneHour:
-			rtcConfigData.pwrDownLength = getOneHourInterval();
-			rtcConfigData.wakeMode = WakeMode::RF_DEFAULT;
-			break;
-		case powerDownLength::threeHours:
-			rtcConfigData.targetSleepCount = 2;
-			break;
-		case powerDownLength::sixHours:
-			rtcConfigData.targetSleepCount = 5;
-			break;
-		case powerDownLength::eightHours:
-			rtcConfigData.targetSleepCount = 7;
-			break;
-		case powerDownLength::twelveHours:
-			rtcConfigData.targetSleepCount = 11;
-			break;
-		case powerDownLength::sixteenHours:
-			rtcConfigData.targetSleepCount = 15;
-			break;
-		case powerDownLength::twentyHours:
-			rtcConfigData.targetSleepCount = 19;
-			break;
-		case powerDownLength::twentyFourHours:
-			rtcConfigData.targetSleepCount = 23;
-			break;
+		switch(length) {
 
+			case powerDownLength::fiveMins:
+			case powerDownLength::thirtyMinutes:
+			case powerDownLength::oneHour:
+				rtcConfigData.wakeMode = WakeMode::RF_DEFAULT;
+				break;
+			case powerDownLength::threeHours:
+				rtcConfigData.targetSleepCount = 3;
+				break;
+			case powerDownLength::sixHours:
+				rtcConfigData.targetSleepCount = 6;
+				break;
+			case powerDownLength::eightHours:
+				rtcConfigData.targetSleepCount = 8;
+				break;
+			case powerDownLength::twelveHours:
+				rtcConfigData.targetSleepCount = 12;
+				break;
+			case powerDownLength::sixteenHours:
+				rtcConfigData.targetSleepCount = 16;
+				break;
+			case powerDownLength::twentyHours:
+				rtcConfigData.targetSleepCount = 20;
+				break;
+			case powerDownLength::twentyFourHours:
+				rtcConfigData.targetSleepCount = 24;
+				break;
+
+		}
+
+		adjustPowerDownLength();
 	}
-
-	adjustPowerDownLength();
 }
 
 String ICACHE_FLASH_ATTR PowerManager::getEventTypeString(powerEventType eventType) {
@@ -437,64 +425,12 @@ String ICACHE_FLASH_ATTR PowerManager::getEventTypeString(powerEventType eventTy
 			return getAppStr(appStrType::automatedSleep);
 
 		case powerEventType::scheduledSleepEvent:
-				return getAppStr(appStrType::scheduledSleep);
+			return getAppStr(appStrType::scheduledSleep);
 
 		default:
 			return getAppStr(appStrType::manualWake);
 
 	}
-}
-
-int ICACHE_FLASH_ATTR PowerManager::logToThingSpeak(powerEventType eventType) {
-
-	unsigned long now = millis();
-
-	if ((lastThingSpeakLog == 0) || ((now - lastThingSpeakLog) >= 15000)) { // ThingSpeak call velocity is >= every 15 seconds
-
-		if (WiFi.status() == WL_CONNECTED) {
-
-			lastThingSpeakLog = now;
-
-			getWifiClient();
-			WiFiClient **client = &pwrMgmtWifiClient;
-
-			ThingSpeak.begin(**client);
-			ThingSpeak.setField(1, eventType);
-			ThingSpeak.setField(2, getEventTypeString(eventType));
-
-			return ThingSpeak.writeFields(appConfigData.powerMgmt.thingSpeakChannel, appConfigData.powerMgmt.thingSpeakApiKey);
-
-		}
-	}
-	return -1;
-}
-
-bool ICACHE_FLASH_ATTR PowerManager::logToHttpServer(powerEventType eventType) {
-
-	getWifiClient();
-
-	if ((WiFi.status() == WL_CONNECTED) && (pwrMgmtWifiClient->connect(appConfigData.powerMgmt.httpLoggingHost, 80))) {
-
-		String url = NetworkServicesManager::getSanitizedHttpLoggingUri(appConfigData.powerMgmt.httpLoggingUri);
-
-		String space = getAppStr(appStrType::spaceStr);
-		String qsData;
-		qsData += "#" + String(appConfigData.hostName) + space;
-		qsData += getEventTypeString(eventType) + space;
-		if (appConfigData.ntpEnabled && NetworkServiceManager.ntpManager->syncResponseReceived) {
-			qsData += getAppStr(appStrType::deviceTime) + NetworkServiceManager.ntpManager->iso8601DateTime();
-		}
-		qsData += getAppStr(appStrType::deviceUpTime) + Ntp::getDeviceUptimeString();
-
-		String uri = url + NetworkServicesManager::urlEncode(qsData.c_str());
-		String host = appConfigData.powerMgmt.httpLoggingHost;
-
-		return NetworkServiceManager.performHttpGetRequest(pwrMgmtWifiClient, host, uri);
-
-	}
-
-	return false;
-
 }
 
 uint32_t ICACHE_FLASH_ATTR PowerManager::calculateCRC32(const uint8_t *data, size_t length)
@@ -517,32 +453,79 @@ uint32_t ICACHE_FLASH_ATTR PowerManager::calculateCRC32(const uint8_t *data, siz
 	return crc;
 }
 
+/*
+ * checks if a shortened immediate sleep is required to reach the next scheduled sleep
+ */
+bool ICACHE_FLASH_ATTR PowerManager::checkShortSleep(bool canSleepNow) {
+
+	if (isSingleCycleEnabled() && appConfigData.ntpEnabled && NetworkSvcMngr.ntpManager->syncResponseReceived) {
+
+		uint32_t sleepInterval = getSleepInterval(appConfigData.powerMgmt.offLength, false);
+		time_t timenow = now();
+		time_t fromnow = (timenow + (sleepInterval / 1000));
+
+		tmElements_t te;
+		breakTime(fromnow, te);
+
+		scheduleData* schedule = getScheduledPowerDownData(te.Hour);
+		if (schedule != NULL && (hour() != schedule->hour)) {
+			//we have an upcoming schedule so calculate the shortened immediate sleep interval
+			//and either schedule the short sleep or immediately go to sleep
+			te.Minute = 0;
+			te.Second = 0;
+			fromnow = makeTime(te);
+			long diffSecs = (fromnow - timenow);
+
+			rtcConfigData.wakeMode = RFMode::RF_DEFAULT;
+			rtcConfigData.eventType = powerEventType::automatedSleepEvent;
+			if (diffSecs > 300) {
+				//sleep for a 5 minute chunk
+				rtcConfigData.pwrDownLength = FIVE_MIN_MICROS;
+			} else {
+				//sleep for a 1 minute chunk
+				rtcConfigData.pwrDownLength = ONE_MIN_MICROS;
+			}
+
+			if (!rtcConfigData.shortSleep || !canSleepNow) {
+				//delayed short sleep
+				rtcConfigData.shortSleep = true;
+			} else {
+				//short sleep now
+				deepSleep(false);
+			}
+
+			return true;
+
+		} else {
+			rtcConfigData.shortSleep = false;
+		}
+	} else {
+		rtcConfigData.shortSleep = false;
+	}
+
+	return false;
+}
+
 void ICACHE_FLASH_ATTR PowerManager::logBoot() {
 
-	if ((appConfigData.ntpEnabled) && (NetworkServiceManager.ntpManager->syncResponseReceived)) {
+	if ((appConfigData.ntpEnabled) && (NetworkSvcMngr.ntpManager->syncResponseReceived)) {
 		unsigned long diffSecs = (millis() - wakeupTime) / 1000;
 		wakeTimestamp = now() - diffSecs;
+		checkShortSleep(true);
 	} else {
 		wakeTimestamp = 0;
 	}
 
-	if (appConfigData.powerMgmt.logToThingSpeak) {
-		logToThingSpeak(wakeEventType);
-	}
-
-	if (appConfigData.powerMgmt.httpLoggingEnabled) {
-		logToHttpServer(wakeEventType);
-	}
-
+	//TODO: mqtt support for boot event
 }
 
 void ICACHE_FLASH_ATTR PowerManager::processPowerEvents() {
 
 	if ((appConfigData.powerMgmt.enabled) && (!isDisabled)) {
 
-		if ((appConfigData.ntpEnabled) && (NetworkServiceManager.ntpManager->syncResponseReceived)) {
+		if ((appConfigData.ntpEnabled) && (NetworkSvcMngr.ntpManager->syncResponseReceived)) {
 
-			scheduleData* schedule = getScheduledPowerDownData();
+			scheduleData* schedule = getScheduledPowerDownData(hour());
 			if (schedule != NULL) {
 
 				//scheduled sleep initiation
@@ -551,6 +534,13 @@ void ICACHE_FLASH_ATTR PowerManager::processPowerEvents() {
 				getRtcStoreData(schedule->offLength, powerEventType::scheduledSleepEvent);
 				deepSleep();
 			}
+		}
+
+		if ((!isDisabled) && (rtcConfigData.shortSleep)) {
+
+			//automated short sleep leading up to the next scheduled sleep
+			isDisabled = true;
+			deepSleep();
 		}
 
 		if ((!isDisabled) && (powerOnLengthExpired())) {

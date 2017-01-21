@@ -12,11 +12,12 @@
 #include "NetworkServices.h"
 
 
-ICACHE_FLASH_ATTR MQTTManager::MQTTManager(WiFiClient* wifiClient, uint8_t serverIP[4], uint16_t serverPort, const char* username, const char* password) {
+ICACHE_FLASH_ATTR MQTTManager::MQTTManager(WiFiClient* wifiClient, uint8_t serverIP[4], uint16_t serverPort, const char* username, const char* password, const char* deviceHostName) {
 
 	mqttServerIP = IPAddress(serverIP[0],serverIP[1],serverIP[2],serverIP[3]);
 	mqttUsername = username;
 	mqttPassword = password;
+	mqttDeviceHostName = deviceHostName;
 	connectAttemptCount = 1;
 	lastReconnectAttempt = 0;
 	connected = false;
@@ -73,18 +74,24 @@ bool ICACHE_FLASH_ATTR MQTTManager::connect() {
 	APP_SERIAL_DEBUG("MQTT client connect attempt\n");
 
 	// Attempt to connect
-	if (mqttClient->connect(appConfigData.hostName, mqttUsername, mqttPassword)) {
+	if (mqttClient->connect(mqttDeviceHostName, mqttUsername, mqttPassword)) {
 
 		APP_SERIAL_DEBUG("MQTT client connected\n");
 		lastReconnectAttempt = 0;
 
 		//subscribe outputs to in topics
-		for(int i = 0; i < MAX_GPIO; i++) {
-			switch(appConfigData.gpio.digitalIO[i].digitalPinMode)
+		String strTopic;
+		for(int i = 0; i < MAX_DEVICES; i++) {
+			switch(appConfigData.gpio.digitals[i].pinMode)
 			{
-				case digitalOutput:
-				case digitalAnalogOutputPwm:
-					mqttClient->subscribe(appConfigData.gpio.digitalIO[i].digitalName);
+				case digitalMode::digitalOutput:
+				case digitalMode::digitalAnalogOutputPwm:
+					strTopic = String(mqttDeviceHostName) + MQTTManager::TOPIC_SLASH + MQTTManager::GPIO_TOPIC + String(i) + MQTTManager::TOPIC_SLASH + MQTTManager::IN_TOPIC;
+					mqttClient->subscribe(strTopic.c_str());
+					break;
+				case digitalMode::digitalOutputPeripheral:
+					strTopic = String(mqttDeviceHostName) + MQTTManager::TOPIC_SLASH + MQTTManager::PERIPHERAL_TOPIC + String(i) + MQTTManager::TOPIC_SLASH + MQTTManager::IN_TOPIC;
+					mqttClient->subscribe(strTopic.c_str());
 					break;
 				default:
 					break;
@@ -97,37 +104,50 @@ bool ICACHE_FLASH_ATTR MQTTManager::connect() {
 	return connected;
 }
 
-bool ICACHE_FLASH_ATTR MQTTManager::publish(const char* topic, uint8_t value) {
+bool ICACHE_FLASH_ATTR MQTTManager::publish(String &topic, String &payload) {
 
-	String payload = String(value);
-	return mqttClient->publish(topic, payload.c_str());
+	String strTopic = String(mqttDeviceHostName) + MQTTManager::TOPIC_SLASH + topic + MQTTManager::TOPIC_SLASH + MQTTManager::OUT_TOPIC;
+	APP_SERIAL_DEBUG("MQTTManager::publish %s, %s\n", strTopic.c_str(), payload.c_str());
+	return mqttClient->publish(strTopic.c_str(), payload.c_str());
 }
 
-//handles an mqtt callback as a potential write to an output, if enabled on the pin
+//handles an mqtt callback as write to an output
 void ICACHE_FLASH_ATTR MQTTManager::mqttCallback(char* topic, byte* payload, unsigned int length) {
 
-	char *ptr_char = NULL;
+	String inboundTopic = String(topic);
+	String outputTopic;
 
-	for(int i = 0; i < MAX_GPIO; i++) {
-		switch(appConfigData.gpio.digitalIO[i].digitalPinMode)
+	char* outputValueStr((char*)payload);
+	uint8_t outputValue = strtoul(outputValueStr, 0, 10);
+
+	for(byte i = 0; i < MAX_DEVICES; i++) {
+
+		switch(appConfigData.gpio.digitals[i].pinMode)
 		{
-			case digitalOutput:
-			case digitalAnalogOutputPwm:
+			case digitalMode::digitalOutput:
+			case digitalMode::digitalAnalogOutputPwm:
 
-				ptr_char = appConfigData.gpio.digitalIO[i].digitalName;
+				outputTopic = String(appConfigData.hostName) + MQTTManager::TOPIC_SLASH + MQTTManager::GPIO_TOPIC + String(i) + MQTTManager::TOPIC_SLASH + MQTTManager::IN_TOPIC;
 
-				if (strcmp(topic, ptr_char) == 0) {
-					char* outputValueStr((char*)payload);
+				if (inboundTopic.equals(outputTopic)) {
 
-					uint8_t outputValue = strtoul(outputValueStr, 0, 10);
-
-					if (appConfigData.gpio.digitalIO[i].digitalPinMode == digitalOutput) {
+					if (appConfigData.gpio.digitals[i].pinMode == digitalOutput) {
 						GPIOMngr.gpioDigitalWrite(i, outputValue, true);
 					} else {
 						GPIOMngr.gpioAnalogWrite(i, outputValue, true);
 					}
 					break;
 				}
+				break;
+			case digitalMode::digitalOutputPeripheral:
+
+				outputTopic = String(appConfigData.hostName) + MQTTManager::TOPIC_SLASH + MQTTManager::PERIPHERAL_TOPIC + String(i) + MQTTManager::TOPIC_SLASH + MQTTManager::IN_TOPIC;
+
+				if (inboundTopic.equals(outputTopic)) {
+					GPIOMngr.gpioDigitalWrite(i, outputValue, true);
+					break;
+				}
+
 				break;
 			default:
 				break;

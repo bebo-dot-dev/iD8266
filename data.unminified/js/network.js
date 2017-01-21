@@ -73,12 +73,19 @@ $(document).ready(function() {
 
 		$('#netApSSID').val(ns.netApSSID);
 		$('#netApPwd').val(ns.netApPwd);
+		
+		var unassignedIP = '0.0.0.0';
 
-		$('#netApStaticIp').val(ns.netApStaticIp);
-		$('#netApSubnet').val(ns.netApSubnet);
-		$('#netApGatewayIp').val(ns.netApGatewayIp);
-		$('#netApDnsIp').val(ns.netApDnsIp);
-		$('#netApDns2Ip').val(ns.netApDns2Ip);
+		if (ns.netApStaticIp != unassignedIP)
+			$('#netApStaticIp').val(ns.netApStaticIp);
+		if (ns.netApSubnet != unassignedIP)
+			$('#netApSubnet').val(ns.netApSubnet);
+		if (ns.netApGatewayIp != unassignedIP)
+			$('#netApGatewayIp').val(ns.netApGatewayIp);
+		if (ns.netApDnsIp != unassignedIP)
+			$('#netApDnsIp').val(ns.netApDnsIp);
+		if (ns.netApDns2Ip != unassignedIP)
+			$('#netApDns2Ip').val(ns.netApDns2Ip);
 
 		$('div.alert.alert-success').hide();
 		$('#mainPnl').fadeIn();

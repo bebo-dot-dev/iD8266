@@ -60,7 +60,9 @@ $(document).ready(function() {
 		r.mqttSystemEnabled == "true" ? $("#mqttSystemEnabled").prop('checked', true) : $("#mqttSystemEnabled").prop('checked', false);
 		checkMqttDisplay();
 
-		$('#mqttServerBrokerIp').val(r.mqttServerBrokerIp);
+		if (r.mqttServerBrokerIp !== '0.0.0.0') {
+			$('#mqttServerBrokerIp').val(r.mqttServerBrokerIp);
+		}
 		$('#mqttServerBrokerPort').val(r.mqttServerBrokerPort);
 		$('#mqttUsername').val(r.mqttUsername);
 		$('#mqttPassword').val(r.mqttPassword);

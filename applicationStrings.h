@@ -92,7 +92,8 @@
 	ENTRY(gpioTypeStr, "\"GPIOType\": \"") \
 	ENTRY(escapedIdxStr, "\"Idx\": \"") \
 	ENTRY(escapedValueStr, "\"Value\": \"") \
-	ENTRY(voltageStr, ",\"Voltage\": \"") \
+	ENTRY(escapedValue2Str, "\"Value2\": \"") \
+	ENTRY(voltageStr, "\"Voltage\": \"") \
 	ENTRY(calculatedStr, "\"Calculated\": \"") \
 	ENTRY(sslReverseProxy, "X-SSL") \
 	ENTRY(sslReverseProxyWebserverPort, "X-SSL-WebserverPort") \
@@ -152,7 +153,6 @@
 	ENTRY(loginStr, "/login.cm") \
 	ENTRY(slashLoginMin, "/login.min.htm") \
 	ENTRY(updateDone, "/updateDone.min.htm") \
-	ENTRY(passwordStr, "password") \
 	ENTRY(setCookie, "Set-Cookie") \
 	ENTRY(resetCookie, "sessionId=0;") \
 	ENTRY(intPlaceholderStr, "%d") \
@@ -244,29 +244,7 @@
 	ENTRY(A0UnitStr, "\"A0UnitStr\": \"") \
 	ENTRY(A0Calculated, "\"A0Calculated\": \"") \
 	ENTRY(escapedLowerName, "\"name\": \"") \
-	ENTRY(logToThingSpeakTrue, "\"logToThingSpeak\": \"true\",") \
-	ENTRY(logToThingSpeakFalse, "\"logToThingSpeak\": \"false\",") \
-	ENTRY(escapedThingSpeakChannel, "\"thingSpeakChannel\": \"") \
-	ENTRY(escapedThingSpeakApiKey, "\"thingSpeakApiKey\": \"") \
-	ENTRY(httpLoggingEnabledTrue, "\"httpLoggingEnabled\": \"true\"") \
-	ENTRY(httpLoggingEnabledFalse, "\"httpLoggingEnabled\": \"false\"") \
-	ENTRY(thingSpeakEnabledTrue, "\"thingSpeakEnabled\": \"true\",") \
-	ENTRY(thingSpeakEnabledFalse, "\"thingSpeakEnabled\": \"false\",") \
-	ENTRY(httpLoggingEnabledTrueWithComma, "\"httpLoggingEnabled\": \"true\",") \
-	ENTRY(httpLoggingEnabledFalseWithComma, "\"httpLoggingEnabled\": \"false\",") \
-	ENTRY(escapedHttpLoggingHost, "\"httpLoggingHost\": \"") \
-	ENTRY(escapedHttpLoggingUri, "\"httpLoggingUri\": \"") \
-	ENTRY(lastThingSpeakResponseCode, "\"lastThingSpeakResponseCode\": \"") \
-	ENTRY(httpLoggingLastCallOkTrue, "\"httpLoggingLastCallOk\": \"true\",") \
-	ENTRY(httpLoggingLastCallOkFalse, "\"httpLoggingLastCallOk\": \"false\",") \
-	ENTRY(httpLoggingLastUri, "\"httpLoggingLastUri\": \"") \
 	ENTRY(analogName, "\"analogName\": \"") \
-	ENTRY(analogLogToThingSpeakTrue, "\"analogLogToThingSpeak\": \"true\",") \
-	ENTRY(analogLogToThingSpeakFalse, "\"analogLogToThingSpeak\": \"false\",") \
-	ENTRY(analogThingSpeakChannel, "\"analogThingSpeakChannel\": \"") \
-	ENTRY(analogThingSpeakApiKey, "\"analogThingSpeakApiKey\": \"") \
-	ENTRY(analogHttpLoggingEnabledTrue, "\"analogHttpLoggingEnabled\": \"true\"") \
-	ENTRY(analogHttpLoggingEnabledFalse, "\"analogHttpLoggingEnabled\": \"false\"") \
 	ENTRY(runtimeDataStr, "\"runtimeData\":") \
 	ENTRY(netSettingsStr, "\"netSettings\":") \
 	ENTRY(dnsSettingsStr, "\"dnsSettings\":") \
@@ -274,7 +252,6 @@
 	ENTRY(regionalSettingsStr, "\"regionalSettings\":") \
 	ENTRY(mqttDataStr, "\"mqttData\":") \
 	ENTRY(gpioDataStr, "\"gpioData\":") \
-	ENTRY(loggingDataStr, "\"loggingData\":") \
 	ENTRY(accessDenied, "Access denied") \
 	ENTRY(gpiodtlMinHtm, "/gpiodtl.min.htm") \
 	ENTRY(wifiMode, "wifiMode") \
@@ -323,18 +300,6 @@
 	ENTRY(valueStr, "value") \
 	ENTRY(jsonResultOk, "{\"result\":\"OK\"}") \
 	ENTRY(jsonResultFailed, "{\"result\":\"FAILED\"}") \
-	ENTRY(LogToThingSpeak, "LogToThingSpeak") \
-	ENTRY(ThingSpeakChannel, "ThingSpeakChannel") \
-	ENTRY(ThingSpeakApiKey, "ThingSpeakApiKey") \
-	ENTRY(HttpLoggingEnabled, "HttpLoggingEnabled") \
-	ENTRY(thingSpeakEnabled, "thingSpeakEnabled") \
-	ENTRY(httpLoggingEnabled, "httpLoggingEnabled") \
-	ENTRY(httpLoggingHost, "httpLoggingHost") \
-	ENTRY(httpLoggingUri, "httpLoggingUri") \
-	ENTRY(a0LogToThingSpeak, "a0LogToThingSpeak") \
-	ENTRY(a0ThingSpeakChannel, "a0ThingSpeakChannel") \
-	ENTRY(a0ThingSpeakApiKey, "a0ThingSpeakApiKey") \
-	ENTRY(a0HttpLoggingEnabled, "a0HttpLoggingEnabled") \
 	ENTRY(badArgs, "BAD ARGS") \
 	ENTRY(dirStr, "dir") \
 	ENTRY(fileStr, "file") \
@@ -370,13 +335,16 @@
 	ENTRY(gpiodtl, "/gpiodtl") \
 	ENTRY(digitalWriteStr, "/digitalWrite") \
 	ENTRY(analogWriteStr, "/analogWrite") \
-	ENTRY(logging, "/logging") \
-	ENTRY(getLoggingDataStr, "/getLoggingData") \
 	ENTRY(getPowerMgmtDataStr, "/getPowerMgmtData") \
 	ENTRY(getPowerMgmtScheduleDataStr, "/getPowerMgmtScheduleData") \
 	ENTRY(powerMgmtStr, "/powerMgmt") \
 	ENTRY(addPowerMgmtScheduleStr, "/addPowerMgmtSchedule") \
 	ENTRY(removePowerMgmtScheduleStr, "/removePowerMgmtSchedule") \
+	ENTRY(password, "/password") \
+	ENTRY(passwordStr, "/password.cm") \
+	ENTRY(passwordMin, "password.min.htm") \
+	ENTRY(pwd, "pwd") \
+	ENTRY(confirmPwd, "confirmPwd") \
 	ENTRY(scheduleArray, "\"schedule\":[") \
 	ENTRY(escapedEnabledTrue, "\"enabled\": \"true\",") \
 	ENTRY(escapedEnabledFalse, "\"enabled\": \"false\",") \
@@ -398,7 +366,21 @@
 	ENTRY(scheduledWake, "Scheduled Wake") \
 	ENTRY(automatedSleep, "Automated Deep Sleep") \
 	ENTRY(scheduledSleep, "Scheduled Deep Sleep") \
-
+	ENTRY(totp, "totp") \
+	ENTRY(totpOff, "totpOff") \
+	ENTRY(getSecurityDataStr, "/getSecurityData") \
+	ENTRY(totpEnabledTrue, "\"totpEnabled\": \"true\"") \
+	ENTRY(totpEnabledFalse, "\"totpEnabled\": \"false\"") \
+	ENTRY(getTotpQrCodeDataStr, "/getTotpQrCodeData") \
+	ENTRY(totpQrCodeUri, "\"totpQrCodeUri\": \"") \
+	ENTRY(submitTotpTokenStr, "/submitTotpToken") \
+	ENTRY(getPeripheralsDataStr, "/getPeripheralsData") \
+	ENTRY(peripheralArray, "\"peripheral\":[") \
+	ENTRY(escapedPeripheralType, "\"peripheralType\": \"") \
+	ENTRY(escapedPeripheralPin, "\"peripheralPin\": \"") \
+	ENTRY(peripheralTypeStr, "peripheralType") \
+	ENTRY(addPeripheralStr, "/addPeripheral") \
+	ENTRY(removePeripheralStr, "/removePeripheral") \
 
 enum appStrType {
 #define ENTRY(enumVal, str) enumVal,

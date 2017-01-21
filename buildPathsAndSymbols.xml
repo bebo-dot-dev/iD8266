@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cdtprojectproperties>
+<section name="org.eclipse.cdt.internal.ui.wizards.settingswizards.IncludePaths">
+<language name="C++ Source File">
+<includepath workspace_path="true">/iD8266/core/core</includepath>
+<includepath workspace_path="true">/iD8266/core/variant</includepath>
+<includepath workspace_path="true">/iD8266/libraries/ESP8266WebServer</includepath>
+<includepath workspace_path="true">/iD8266/libraries/ESP8266WebServer/src</includepath>
+<includepath workspace_path="true">/iD8266/libraries/ESP8266WiFi</includepath>
+<includepath workspace_path="true">/iD8266/libraries/ESP8266WiFi/src</includepath>
+<includepath workspace_path="true">/iD8266/libraries/EEPROM</includepath>
+<includepath workspace_path="true">/iD8266/libraries/DNSServer</includepath>
+<includepath workspace_path="true">/iD8266/libraries/DNSServer/src</includepath>
+<includepath workspace_path="true">/iD8266/libraries/Wire</includepath>
+<includepath workspace_path="true">/iD8266/libraries/Hash</includepath>
+<includepath workspace_path="true">/iD8266/libraries/Hash/src</includepath>
+<includepath workspace_path="true">/iD8266/libraries/SPI</includepath>
+<includepath workspace_path="true">/iD8266/libraries/SoftwareSerial</includepath>
+<includepath workspace_path="true">/iD8266/libraries/Ethernet</includepath>
+<includepath workspace_path="true">/iD8266/libraries/Ethernet/src</includepath>
+<includepath workspace_path="true">/iD8266/libraries/ESP8266HTTPClient</includepath>
+<includepath workspace_path="true">/iD8266/libraries/ESP8266HTTPClient/src</includepath>
+<includepath workspace_path="true">/iD8266/libraries/ESP8266mDNS</includepath>
+<includepath>/home/joe/git/ESP8266Base32</includepath>
+<includepath>/home/joe/git/ESP8266Complexify</includepath>
+<includepath>/home/joe/git/pubsubclient/src</includepath>
+<includepath>/home/joe/git/thingspeak-arduino/src</includepath>
+<includepath>/home/joe/git/Time</includepath>
+<includepath>/home/joe/git/ESP8266TrueRandom</includepath>
+<includepath>/home/joe/git/arduinoWebSockets/src</includepath>
+<includepath>/home/joe/git/Cryptosuite/Sha</includepath>
+<includepath>/home/joe/git/ESP8266TOTP</includepath>
+
+</language>
+<language name="C Source File">
+<includepath workspace_path="true">/iD8266/core/core</includepath>
+<includepath workspace_path="true">/iD8266/core/variant</includepath>
+<includepath workspace_path="true">/iD8266/libraries/ESP8266WebServer</includepath>
+<includepath workspace_path="true">/iD8266/libraries/ESP8266WebServer/src</includepath>
+<includepath workspace_path="true">/iD8266/libraries/ESP8266WiFi</includepath>
+<includepath workspace_path="true">/iD8266/libraries/ESP8266WiFi/src</includepath>
+<includepath workspace_path="true">/iD8266/libraries/EEPROM</includepath>
+<includepath workspace_path="true">/iD8266/libraries/DNSServer</includepath>
+<includepath workspace_path="true">/iD8266/libraries/DNSServer/src</includepath>
+<includepath workspace_path="true">/iD8266/libraries/Wire</includepath>
+<includepath workspace_path="true">/iD8266/libraries/Hash</includepath>
+<includepath workspace_path="true">/iD8266/libraries/Hash/src</includepath>
+<includepath workspace_path="true">/iD8266/libraries/SPI</includepath>
+<includepath workspace_path="true">/iD8266/libraries/SoftwareSerial</includepath>
+<includepath workspace_path="true">/iD8266/libraries/Ethernet</includepath>
+<includepath workspace_path="true">/iD8266/libraries/Ethernet/src</includepath>
+<includepath workspace_path="true">/iD8266/libraries/ESP8266HTTPClient</includepath>
+<includepath workspace_path="true">/iD8266/libraries/ESP8266HTTPClient/src</includepath>
+<includepath workspace_path="true">/iD8266/libraries/ESP8266mDNS</includepath>
+<includepath>/home/joe/git/ESP8266Base32</includepath>
+<includepath>/home/joe/git/ESP8266Complexify</includepath>
+<includepath>/home/joe/git/pubsubclient/src</includepath>
+<includepath>/home/joe/git/thingspeak-arduino/src</includepath>
+<includepath>/home/joe/git/Time</includepath>
+<includepath>/home/joe/git/ESP8266TrueRandom</includepath>
+<includepath>/home/joe/git/arduinoWebSockets/src</includepath>
+<includepath>/home/joe/git/Cryptosuite/Sha</includepath>
+<includepath>/home/joe/git/ESP8266TOTP</includepath>
+
+</language>
+</section>
+<section name="org.eclipse.cdt.internal.ui.wizards.settingswizards.Macros">
+<language name="C++ Source File">
+
+</language>
+<language name="C Source File">
+
+</language>
+</section>
+</cdtprojectproperties>

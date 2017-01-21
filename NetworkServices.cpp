@@ -12,10 +12,10 @@
 
 #include "NetworkServices.h"
 #include "Ntp.h"
+#include "GPIOData.h"
 #include "MQTTManager.h"
-#include "/home/joe/git/thingspeak-arduino/src/ThingSpeak.h"
 
-NetworkServicesManager NetworkServiceManager;
+NetworkServicesManager NetworkSvcMngr;
 DNSServer* dnsServer;
 
 ICACHE_FLASH_ATTR NetworkServicesManager::NetworkServicesManager() {
@@ -30,38 +30,20 @@ ICACHE_FLASH_ATTR NetworkServicesManager::NetworkServicesManager() {
 	ntpManager = NULL;
 	socketServer = NULL;
 	mqttManager = NULL;
+	powerManager = NULL;
 
 	broadcastingGPIOChange = false;
-
-	initLoggingStatusData();
 }
 
 ICACHE_FLASH_ATTR NetworkServicesManager::~NetworkServicesManager() {
 
 }
 
-bool ICACHE_FLASH_ATTR NetworkServicesManager::isSingleCycleEnabled() {
-	return appConfigData.powerMgmt.enabled &&
-			appConfigData.powerMgmt.onLength == powerOnLength::zeroLength &&
-			!powerManager->delayedSleep;
-}
-
-void ICACHE_FLASH_ATTR NetworkServicesManager::initLoggingStatusData() {
-
-	thingSpeakLoggingData.lastThingSpeakLog = (millis() - 15000);
-	httpLoggingData.lastHttpLog = millis();
-
-	for(int pinIdx = 0; pinIdx < MAX_GPIO; pinIdx++) {
-		thingSpeakLoggingData.lastLoggedDigitalIOVal[pinIdx] = UNDEFINED_GPIO;
-		httpLoggingData.lastLoggedDigitalIOVal[pinIdx] = UNDEFINED_GPIO;
-	}
-
-	thingSpeakLoggingData.lastLoggedAnalogueVal = UNDEFINED_GPIO;
-	httpLoggingData.lastLoggedAnalogueVal = UNDEFINED_GPIO;
-
-}
-
-void ICACHE_FLASH_ATTR NetworkServicesManager::startNetworkServices(rst_info *resetInfo) {
+/*
+ * initializes all configured network services and I/O as per
+ * currently specified flash persisted configuration
+ */
+bool ICACHE_FLASH_ATTR NetworkServicesManager::startNetworkServices(rst_info *resetInfo) {
 
 	if (appConfigData.initialized) {
 
@@ -100,7 +82,7 @@ void ICACHE_FLASH_ATTR NetworkServicesManager::startNetworkServices(rst_info *re
 
 			powerManager->logBoot();
 
-			bool singleCycleEnabled = isSingleCycleEnabled();
+			bool singleCycleEnabled = powerManager->isSingleCycleEnabled();
 
 			if (!singleCycleEnabled)
 			{
@@ -123,17 +105,15 @@ void ICACHE_FLASH_ATTR NetworkServicesManager::startNetworkServices(rst_info *re
 					appConfigData.mqttServerBrokerIp,
 					appConfigData.mqttServerBrokerPort,
 					appConfigData.mqttUsername,
-					appConfigData.mqttPassword);
+					appConfigData.mqttPassword,
+					appConfigData.hostName);
 
-			if (appConfigData.thingSpeakEnabled) {
-				getWifiClient();
-				WiFiClient **client = &networkServicesWifiClient;
-				ThingSpeak.begin( **client );
-			}
+			GPIOMngr.initialize();
+
+			return true;
 		}
-
-		GPIOMngr.initialize();
 	}
+	return false;
 }
 
 void ICACHE_FLASH_ATTR NetworkServicesManager::connectWifiStation() {
@@ -240,7 +220,7 @@ String ICACHE_FLASH_ATTR NetworkServicesManager::deviceMacStr() {
 
 	WiFi.macAddress(macBytes);
 	String macStr = EMPTY_STR;
-	for (int i = 0; i < 6; ++i) {
+	for (byte i = 0; i < 6; ++i) {
 		macStr += String(macBytes[i], HEX);
 	}
 
@@ -336,7 +316,8 @@ bool ICACHE_FLASH_ATTR NetworkServicesManager::startMqtt(
 	uint8_t serverIP[4],
 	uint16_t serverPort,
 	const char* username,
-	const char* password)
+	const char* password,
+	const char* deviceHostName)
 {
 
 	bool enabled = false;
@@ -344,7 +325,7 @@ bool ICACHE_FLASH_ATTR NetworkServicesManager::startMqtt(
 	if (WiFi.status() == WL_CONNECTED) {
 
 		if (serverIP[0] > 0 || serverIP[1] > 0 || serverIP[2] > 0 || serverIP[3] > 0) {
-			mqttManager = new MQTTManager(wifiClient, serverIP, serverPort, username, password);
+			mqttManager = new MQTTManager(wifiClient, serverIP, serverPort, username, password, deviceHostName);
 			enabled = true;
 		}
 
@@ -367,292 +348,90 @@ bool ICACHE_FLASH_ATTR NetworkServicesManager::mqttConnected() {
 }
 
 /*
- * broadcasts details of a GPIO change to interested parties including:
+ * broadcasts details of a device state change to interested parties including:
  * 1) websocket clients
  * 2) mqtt clients subscribed to this device's mqtt topics
  * 3) thingspeak
  * 4) some arbitrary http server
  */
-bool ICACHE_FLASH_ATTR NetworkServicesManager::broadcastGPIOChange(
-	gpioType type,
-	uint8_t pinIdx,
+bool ICACHE_FLASH_ATTR NetworkServicesManager::broadcastDeviceStateChange(
+	ioType type,
+	uint8_t deviceIdx,
+	peripheralType pType,
 	bool mqttOutEnabled)
 {
-	APP_SERIAL_DEBUG("NetworkServicesManager::broadcastGPIOChange\n");
+	APP_SERIAL_DEBUG("NetworkServicesManager::broadcastDeviceStateChange\n");
 
 	broadcastingGPIOChange = true;
 
 	bool broadcast = false;
 	bool mqttPublish = false;
-	int tsResultCode = 0;
-	bool httpLogged = false;
-
-	char* pinName;
-	int value;
-	bool thingSpeakEnabled;
-	bool httpLoggingEnabled;
-
-	switch(type)
-	{
-		case digital:
-			pinName = appConfigData.gpio.digitalIO[pinIdx].digitalName;
-			value = appConfigData.gpio.digitalIO[pinIdx].lastValue;
-			thingSpeakEnabled = appConfigData.gpio.digitalIO[pinIdx].logToThingSpeak;
-			httpLoggingEnabled = appConfigData.gpio.digitalIO[pinIdx].httpLoggingEnabled;
-			break;
-		default:
-			pinName = appConfigData.gpio.analogName;
-			value = appConfigData.gpio.analogRawValue;
-			thingSpeakEnabled = appConfigData.gpio.analogLogToThingSpeak;
-			httpLoggingEnabled = appConfigData.gpio.analogHttpLoggingEnabled;
-			break;
-	}
-
-
-	if (socketserverStarted) {
-		broadcast = socketServer->broadcastGPIOChange(type, pinIdx);
-	}
 
 	if ((mqttEnabled) && (mqttManager->connected) && (mqttOutEnabled)) {
-		mqttPublish = mqttManager->publish(pinName, value);
+
+		String mqttTopic;
+		String mqttPayload;
+
+		if(pType == peripheralType::unspecified) {
+
+			switch(type)
+			{
+				case ioType::digital:
+					mqttTopic = String(MQTTManager::GPIO_TOPIC) + String(deviceIdx);
+					mqttPayload = String(appConfigData.gpio.digitals[deviceIdx].lastValue);
+					break;
+				default:
+					mqttTopic = String(MQTTManager::ANALOG_TOPIC) + String(deviceIdx);
+					mqttPayload = String(appConfigData.gpio.analogRawValue);
+					break;
+			}
+
+			mqttPublish = mqttManager->publish(mqttTopic, mqttPayload);
+
+		} else {
+
+			peripheralData *peripheral = &appConfigData.device.peripherals[deviceIdx];
+
+			switch(peripheral->type) {
+
+				case peripheralType::digistatMk2:
+					mqttTopic = String(MQTTManager::PERIPHERAL_TOPIC) + String(deviceIdx);
+					mqttPayload = String(peripheral->base.lastValue);
+					mqttPublish = mqttManager->publish(mqttTopic, mqttPayload);
+					break;
+
+				case peripheralType::dht22:
+					//both DHT22 temperature and humidity are mqtt published serially
+					mqttTopic = String(MQTTManager::PERIPHERAL_TOPIC) + String(deviceIdx) + MQTTManager::TOPIC_SLASH + MQTTManager::TEMPERATURE_TOPIC;
+					mqttPayload = String(peripheral->lastAnalogValue1, 1);
+					mqttPublish = mqttManager->publish(mqttTopic, mqttPayload);
+
+					mqttTopic = String(MQTTManager::PERIPHERAL_TOPIC) + String(deviceIdx) + MQTTManager::TOPIC_SLASH + MQTTManager::HUMIDITY_TOPIC;
+					mqttPayload = String(peripheral->lastAnalogValue2, 1);
+					mqttPublish &= mqttManager->publish(mqttTopic, mqttPayload);
+					break;
+
+				default:
+					break;
+			}
+
+		}
 	}
 
-	if (thingSpeakEnabled && appConfigData.thingSpeakEnabled) {
-		tsResultCode = logToThingSpeak(type, pinIdx);
-	}
-
-	if (httpLoggingEnabled && appConfigData.httpLoggingEnabled) {
-		httpLogged = logToHttpServer(type, pinIdx);
+	if (socketserverStarted) {
+		broadcast = socketServer->broadcastGPIOChange(type, pType, deviceIdx);
 	}
 
 	broadcastingGPIOChange = false;
 
-	return broadcast || mqttPublish || tsResultCode == 200 || httpLogged;
+	return broadcast || mqttPublish;
 
 }
 
-int ICACHE_FLASH_ATTR NetworkServicesManager::logToThingSpeak(
-	gpioType type,
-	uint8_t pinIdx)
-{
-	APP_SERIAL_DEBUG("NetworkServicesManager::logToThingSpeak\n");
-
-	int response = 0;
-
-	unsigned long now = millis();
-
-	if ((now - thingSpeakLoggingData.lastThingSpeakLog) >= 15000) { // ThingSpeak call velocity is >= every 15 seconds
-
-		bool valueChanged =
-			type == digital
-			? appConfigData.gpio.digitalIO[pinIdx].lastValue != thingSpeakLoggingData.lastLoggedDigitalIOVal[pinIdx]
-			: appConfigData.gpio.analogRawValue != thingSpeakLoggingData.lastLoggedAnalogueVal;
-
-		if ((valueChanged) && (WiFi.status() == WL_CONNECTED)) {
-
-			ThingSpeak.setField(1, pinIdx);
-			ThingSpeak.setField(2, type);
-
-			if (ntpEnabled) {
-				ThingSpeak.setField(5, ntpManager->iso8601DateTime());
-			}
-
-			switch(type)
-			{
-				case digital:
-
-					thingSpeakLoggingData.lastLoggedDigitalIOVal[pinIdx] = appConfigData.gpio.digitalIO[pinIdx].lastValue;
-
-					ThingSpeak.setField(3, appConfigData.gpio.digitalIO[pinIdx].digitalName);
-					ThingSpeak.setField(4, appConfigData.gpio.digitalIO[pinIdx].lastValue);
-
-					response = ThingSpeak.writeFields(
-							appConfigData.gpio.digitalIO[pinIdx].thingSpeakChannel,
-							appConfigData.gpio.digitalIO[pinIdx].thingSpeakApiKey);
-
-					break;
-				default:
-
-					thingSpeakLoggingData.lastLoggedAnalogueVal = appConfigData.gpio.analogRawValue;
-
-					ThingSpeak.setField(3, appConfigData.gpio.analogName);
-					ThingSpeak.setField(4, appConfigData.gpio.analogRawValue);
-
-					ThingSpeak.setField(6, (float)appConfigData.gpio.analogVoltage);
-					ThingSpeak.setField(7, (float)appConfigData.gpio.analogCalcVal);
-					ThingSpeak.setField(8, GPIOManager::getUnitOfMeasureStr(appConfigData.gpio.analogUnit));
-
-					response = ThingSpeak.writeFields(
-							appConfigData.gpio.analogThingSpeakChannel,
-							appConfigData.gpio.analogThingSpeakApiKey);
-
-					break;
-			}
-
-			thingSpeakLoggingData.lastThingSpeakResponseCode = response;
-			thingSpeakLoggingData.lastThingSpeakLog = now;
-		}
-	}
-	else {
-		response = -1;
-	}
-
-	return response;
-}
-
-bool ICACHE_FLASH_ATTR NetworkServicesManager::logToHttpServer(
-	gpioType type,
-	uint8_t pinIdx)
-{
-	long now = millis();
-
-	bool isSingleCycle = isSingleCycleEnabled();
-
-	if (((now - httpLoggingData.lastHttpLog) >= 60000) || //logging timeout expired
-			(type == digital) || //digital GPIOs are always logged
-			(isSingleCycle)) { //all power management single cycle events are always logged
-
-		bool valueChanged = isSingleCycle ? true :
-			type == digital
-			? appConfigData.gpio.digitalIO[pinIdx].lastValue != httpLoggingData.lastLoggedDigitalIOVal[pinIdx]
-			: appConfigData.gpio.analogRawValue != httpLoggingData.lastLoggedAnalogueVal;
-
-		if(valueChanged)
-			httpLoggingData.lastCallOk = false;
-
-		getWifiClient();
-
-		if ((valueChanged) && (WiFi.status() == WL_CONNECTED) && (networkServicesWifiClient->connect(appConfigData.httpLoggingHost, 80))) {
-
-			String url = getSanitizedHttpLoggingUri(appConfigData.httpLoggingUri);
-
-			String space = getAppStr(appStrType::spaceStr);
-			String qsData;
-
-			//hashtags (identifiers)
-			qsData += "#" + String(appConfigData.hostName) + space;
-			qsData += type == digital ? "#D" : "#A";
-			qsData += String(pinIdx) + space;
-
-			//pin name and value(s)
-			switch(type)
-			{
-				case digital:
-					qsData +=
-							String(appConfigData.gpio.digitalIO[pinIdx].digitalName) +
-							getAppStr(appStrType::equals) +
-							String(appConfigData.gpio.digitalIO[pinIdx].lastValue);
-					qsData +=
-							appConfigData.gpio.digitalIO[pinIdx].lastValue == 0
-							? getAppStr(appStrType::digitalOff)
-							: getAppStr(appStrType::digitalOn);
-					break;
-				default:
-					qsData +=
-							String(appConfigData.gpio.analogName) +
-							getAppStr(appStrType::equals) +
-							String(appConfigData.gpio.analogCalcVal) +
-							space +
-							GPIOManager::getUnitOfMeasureStr(appConfigData.gpio.analogUnit);
-					break;
-			}
-
-			if (appConfigData.ntpEnabled && ntpManager->syncResponseReceived) {
-				qsData += getAppStr(appStrType::deviceTime) + ntpManager->iso8601DateTime();
-			}
-			qsData += getAppStr(appStrType::deviceUpTime) + Ntp::getDeviceUptimeString();
-
-			String uri = url + urlEncode(qsData.c_str());
-			String host = String(appConfigData.httpLoggingHost);
-
-			bool httpOk = performHttpGetRequest(networkServicesWifiClient, host, uri);
-			if (!httpOk) {
-				httpLoggingData.lastCallOk = false;
-				httpLoggingData.lastHttpLog = now;
-			} else {
-				httpLoggingData.lastCallOk = true;
-				httpLoggingData.lastHttpLog = now;
-			}
-		}
-	}
-
-	return httpLoggingData.lastCallOk;
-}
-
-bool ICACHE_FLASH_ATTR NetworkServicesManager::performHttpGetRequest(WiFiClient* wifiClient, String host, String request) {
-
-	httpLoggingData.lastUri = request;
-
-	wifiClient->println(getAppStr(appStrType::httpGET) + httpLoggingData.lastUri + getAppStr(appStrType::httpVersion));
-	wifiClient->println(getAppStr(appStrType::httpHost) + host);
-	wifiClient->println(getAppStr(appStrType::httpAccept));
-	wifiClient->println(getAppStr(appStrType::httpConnectionClose));
-	wifiClient->println();
-
-	int timeout = millis() + 5000;
-
-	while (wifiClient->available() == 0) {
-		//loop waiting for a reply
-		if (timeout - millis() <= 0) {
-			APP_SERIAL_DEBUG("HTTP call timeout\n");
-			wifiClient->stop();
-			return false;
-		}
-		yield();
-	}
-
-	// Read all the lines of the response from server and dump them to serial
-	while (wifiClient->available()) {
-		String response = wifiClient->readStringUntil('\r');
-		APP_SERIAL_DEBUG(response.c_str());
-	}
-
-	return true;
-
-}
-
-String ICACHE_FLASH_ATTR NetworkServicesManager::getSanitizedHttpLoggingUri(String uri) {
-
-	String url = String(uri);
-	if (!(url.startsWith(getAppStr(appStrType::forwardSlash)))) {
-		url = getAppStr(appStrType::forwardSlash) + url;
-	}
-
-	if (url.indexOf(getAppStr(appStrType::questionMark)) == -1) {
-		url += getAppStr(appStrType::questionMark);
-	} else {
-		if (!url.endsWith(getAppStr(appStrType::equalsSign))) {
-			url += getAppStr(appStrType::equalsSign);
-		}
-	}
-	return url;
-}
-
-String ICACHE_FLASH_ATTR NetworkServicesManager::urlEncode(const char* stringToEncode) {
-
-	const char *hex = "0123456789abcdef";
-	String encodedStr = "";
-
-	while (*stringToEncode != '\0') {
-		if( ('a' <= *stringToEncode && *stringToEncode <= 'z')
-				|| ('A' <= *stringToEncode && *stringToEncode <= 'Z')
-				|| ('0' <= *stringToEncode && *stringToEncode <= '9') ) {
-			encodedStr += *stringToEncode;
-		} else {
-			encodedStr += '%';
-			encodedStr += hex[*stringToEncode >> 4];
-			encodedStr += hex[*stringToEncode & 15];
-		}
-		stringToEncode++;
-	}
-	return encodedStr;
-
-}
-
-void ICACHE_FLASH_ATTR NetworkServicesManager::processRequests() {
+void NetworkServicesManager::processRequests() {
 
 	if (webserverStarted)
-		processWebClientRequest();
+		processWebClientRequests();
 
 	if (mdnsStarted)
 		MDNS.update();
@@ -670,7 +449,7 @@ void ICACHE_FLASH_ATTR NetworkServicesManager::processRequests() {
 		mqttManager->processMqtt();
 
 	if (!broadcastingGPIOChange)
-		GPIOMngr.readInputs();
+		GPIOMngr.processGPIO();
 
 	powerManager->processPowerEvents();
 
