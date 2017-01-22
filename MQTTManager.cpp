@@ -18,7 +18,7 @@ ICACHE_FLASH_ATTR MQTTManager::MQTTManager(WiFiClient* wifiClient, uint8_t serve
 	mqttUsername = username;
 	mqttPassword = password;
 	mqttDeviceHostName = deviceHostName;
-	connectAttemptCount = 1;
+	connectAttemptCount = 0;
 	lastReconnectAttempt = 0;
 	connected = false;
 
@@ -64,7 +64,9 @@ bool ICACHE_FLASH_ATTR MQTTManager::processMqtt() {
 }
 
 bool ICACHE_FLASH_ATTR MQTTManager::getClientConnectedState() {
+
 	return mqttClient->connected();
+
 }
 
 bool ICACHE_FLASH_ATTR MQTTManager::connect() {
@@ -77,25 +79,12 @@ bool ICACHE_FLASH_ATTR MQTTManager::connect() {
 	if (mqttClient->connect(mqttDeviceHostName, mqttUsername, mqttPassword)) {
 
 		APP_SERIAL_DEBUG("MQTT client connected\n");
+		connectAttemptCount = 0;
 		lastReconnectAttempt = 0;
 
-		//subscribe outputs to in topics
 		String strTopic;
-		for(int i = 0; i < MAX_DEVICES; i++) {
-			switch(appConfigData.gpio.digitals[i].pinMode)
-			{
-				case digitalMode::digitalOutput:
-				case digitalMode::digitalAnalogOutputPwm:
-					strTopic = String(mqttDeviceHostName) + MQTTManager::TOPIC_SLASH + MQTTManager::GPIO_TOPIC + String(i) + MQTTManager::TOPIC_SLASH + MQTTManager::IN_TOPIC;
-					mqttClient->subscribe(strTopic.c_str());
-					break;
-				case digitalMode::digitalOutputPeripheral:
-					strTopic = String(mqttDeviceHostName) + MQTTManager::TOPIC_SLASH + MQTTManager::PERIPHERAL_TOPIC + String(i) + MQTTManager::TOPIC_SLASH + MQTTManager::IN_TOPIC;
-					mqttClient->subscribe(strTopic.c_str());
-					break;
-				default:
-					break;
-			}
+		for(uint8_t deviceIdx = 0; deviceIdx < MAX_DEVICES; deviceIdx++) {
+			subscribe(appConfigData.gpio.digitals[deviceIdx].pinMode, deviceIdx);
 		}
 		connected = true;
 
@@ -104,11 +93,103 @@ bool ICACHE_FLASH_ATTR MQTTManager::connect() {
 	return connected;
 }
 
-bool ICACHE_FLASH_ATTR MQTTManager::publish(String &topic, String &payload) {
+bool ICACHE_FLASH_ATTR MQTTManager::subscribe (
+	digitalMode pinMode,
+	uint8_t deviceIdx)
+{
+	//subscribe an output to an mqtt IN topic
 
-	String strTopic = String(mqttDeviceHostName) + MQTTManager::TOPIC_SLASH + topic + MQTTManager::TOPIC_SLASH + MQTTManager::OUT_TOPIC;
-	APP_SERIAL_DEBUG("MQTTManager::publish %s, %s\n", strTopic.c_str(), payload.c_str());
-	return mqttClient->publish(strTopic.c_str(), payload.c_str());
+	if (mqttClient->connected()) {
+
+		String strTopic;
+		switch(pinMode)
+		{
+			case digitalMode::digitalOutput:
+			case digitalMode::digitalAnalogOutputPwm:
+				strTopic = String(mqttDeviceHostName) + MQTTManager::TOPIC_SLASH + MQTTManager::GPIO_TOPIC + String(deviceIdx) + MQTTManager::TOPIC_SLASH + MQTTManager::IN_TOPIC;
+				mqttClient->unsubscribe(strTopic.c_str());
+				return mqttClient->subscribe(strTopic.c_str());
+			case digitalMode::digitalOutputPeripheral:
+				strTopic = String(mqttDeviceHostName) + MQTTManager::TOPIC_SLASH + MQTTManager::PERIPHERAL_TOPIC + String(deviceIdx) + MQTTManager::TOPIC_SLASH + MQTTManager::IN_TOPIC;
+				mqttClient->unsubscribe(strTopic.c_str());
+				return mqttClient->subscribe(strTopic.c_str());
+			default:
+				break;
+		}
+
+	}
+
+	return false;
+}
+
+bool ICACHE_FLASH_ATTR MQTTManager::publish(
+	ioType type,
+	uint8_t deviceIdx,
+	peripheralType pType)
+{
+	if (mqttClient->connected()) {
+
+		String mqttTopic;
+		String mqttPayload;
+
+		if(pType == peripheralType::unspecified) {
+
+			switch(type)
+			{
+				case ioType::digital:
+					mqttTopic = String(mqttDeviceHostName) + MQTTManager::TOPIC_SLASH + String(MQTTManager::GPIO_TOPIC) + String(deviceIdx) + MQTTManager::TOPIC_SLASH + MQTTManager::OUT_TOPIC;
+					mqttPayload = String(appConfigData.gpio.digitals[deviceIdx].lastValue);
+					break;
+				default:
+					mqttTopic = String(mqttDeviceHostName) + MQTTManager::TOPIC_SLASH + String(MQTTManager::ANALOG_TOPIC) + String(deviceIdx) + MQTTManager::TOPIC_SLASH + MQTTManager::OUT_TOPIC;
+					mqttPayload = String(appConfigData.gpio.analogRawValue);
+					break;
+			}
+
+			return publish(mqttTopic, mqttPayload);
+
+		} else {
+
+			peripheralData *peripheral = &appConfigData.device.peripherals[deviceIdx];
+
+			switch(peripheral->type) {
+
+				case peripheralType::digistatMk2:
+					mqttTopic = String(mqttDeviceHostName) + MQTTManager::TOPIC_SLASH + String(MQTTManager::PERIPHERAL_TOPIC) + String(deviceIdx) + MQTTManager::TOPIC_SLASH + MQTTManager::OUT_TOPIC;
+					mqttPayload = String(peripheral->base.lastValue);
+					return publish(mqttTopic, mqttPayload);
+
+				case peripheralType::dht22:
+					//both DHT22 temperature and humidity are mqtt published serially
+					mqttTopic = String(mqttDeviceHostName) + MQTTManager::TOPIC_SLASH + String(MQTTManager::PERIPHERAL_TOPIC) + String(deviceIdx) + MQTTManager::TOPIC_SLASH + MQTTManager::TEMPERATURE_TOPIC + MQTTManager::TOPIC_SLASH + MQTTManager::OUT_TOPIC;
+					mqttPayload = String(peripheral->lastAnalogValue1, 1);
+					bool published;
+					published = publish(mqttTopic, mqttPayload);
+
+					mqttTopic = String(mqttDeviceHostName) + MQTTManager::TOPIC_SLASH + String(MQTTManager::PERIPHERAL_TOPIC) + String(deviceIdx) + MQTTManager::TOPIC_SLASH + MQTTManager::HUMIDITY_TOPIC + MQTTManager::TOPIC_SLASH + MQTTManager::OUT_TOPIC;
+					mqttPayload = String(peripheral->lastAnalogValue2, 1);
+					published &= publish(mqttTopic, mqttPayload);
+					return published;
+
+				default:
+					break;
+			}
+		}
+	}
+
+	return false;
+}
+
+bool ICACHE_FLASH_ATTR MQTTManager::publish(const String &mqttTopic, const String &mqttPayload) {
+
+	if (mqttClient->connected()) {
+
+		APP_SERIAL_DEBUG("MQTTManager::publish %s, %s\n", mqttTopic.c_str(), mqttPayload.c_str());
+		return mqttClient->publish(mqttTopic.c_str(), mqttPayload.c_str());
+
+	}
+
+	return false;
 }
 
 //handles an mqtt callback as write to an output
@@ -120,31 +201,31 @@ void ICACHE_FLASH_ATTR MQTTManager::mqttCallback(char* topic, byte* payload, uns
 	char* outputValueStr((char*)payload);
 	uint8_t outputValue = strtoul(outputValueStr, 0, 10);
 
-	for(byte i = 0; i < MAX_DEVICES; i++) {
+	for(uint8_t deviceIdx = 0; deviceIdx < MAX_DEVICES; deviceIdx++) {
 
-		switch(appConfigData.gpio.digitals[i].pinMode)
+		switch(appConfigData.gpio.digitals[deviceIdx].pinMode)
 		{
 			case digitalMode::digitalOutput:
 			case digitalMode::digitalAnalogOutputPwm:
 
-				outputTopic = String(appConfigData.hostName) + MQTTManager::TOPIC_SLASH + MQTTManager::GPIO_TOPIC + String(i) + MQTTManager::TOPIC_SLASH + MQTTManager::IN_TOPIC;
+				outputTopic = String(appConfigData.hostName) + MQTTManager::TOPIC_SLASH + MQTTManager::GPIO_TOPIC + String(deviceIdx) + MQTTManager::TOPIC_SLASH + MQTTManager::IN_TOPIC;
 
 				if (inboundTopic.equals(outputTopic)) {
 
-					if (appConfigData.gpio.digitals[i].pinMode == digitalOutput) {
-						GPIOMngr.gpioDigitalWrite(i, outputValue, true);
+					if (appConfigData.gpio.digitals[deviceIdx].pinMode == digitalOutput) {
+						GPIOMngr.gpioDigitalWrite(deviceIdx, outputValue, true);
 					} else {
-						GPIOMngr.gpioAnalogWrite(i, outputValue, true);
+						GPIOMngr.gpioAnalogWrite(deviceIdx, outputValue, true);
 					}
 					break;
 				}
 				break;
 			case digitalMode::digitalOutputPeripheral:
 
-				outputTopic = String(appConfigData.hostName) + MQTTManager::TOPIC_SLASH + MQTTManager::PERIPHERAL_TOPIC + String(i) + MQTTManager::TOPIC_SLASH + MQTTManager::IN_TOPIC;
+				outputTopic = String(appConfigData.hostName) + MQTTManager::TOPIC_SLASH + MQTTManager::PERIPHERAL_TOPIC + String(deviceIdx) + MQTTManager::TOPIC_SLASH + MQTTManager::IN_TOPIC;
 
 				if (inboundTopic.equals(outputTopic)) {
-					GPIOMngr.gpioDigitalWrite(i, outputValue, true);
+					GPIOMngr.gpioDigitalWrite(deviceIdx, outputValue, true);
 					break;
 				}
 

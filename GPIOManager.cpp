@@ -61,10 +61,12 @@ ICACHE_FLASH_ATTR GPIOManager::~GPIOManager() {
 
 	if (digistat != NULL) {
 		delete digistat;
+		digistat = NULL;
 	}
 
 	if (dht != NULL) {
 		delete dht;
+		dht = NULL;
 	}
 
 }
@@ -80,10 +82,12 @@ void ICACHE_FLASH_ATTR GPIOManager::initialize() {
 
 		if (digistat != NULL) {
 			delete digistat;
+			digistat = NULL;
 		}
 
 		if (dht != NULL) {
 			delete dht;
+			dht = NULL;
 		}
 
 		//initialise devices
@@ -184,6 +188,11 @@ bool ICACHE_FLASH_ATTR GPIOManager::addPeripheral(peripheralType pType, String &
 						peripheral->base.pinMode = digitalMode::digitalOutputPeripheral;
 						appConfigData.gpio.digitals[deviceIdx].pinMode = digitalMode::digitalOutputPeripheral;
 						strncpy(appConfigData.gpio.digitals[deviceIdx].name , peripheralName.c_str(), STRMAX);
+
+						if (NetworkSvcMngr.mqttEnabled) {
+							NetworkSvcMngr.mqttManager->subscribe(digitalMode::digitalOutputPeripheral, deviceIdx);
+						}
+
 						break;
 					case peripheralType::dht22:
 						peripheral->base.pinMode = digitalMode::digitalInputPeripheral;
@@ -222,11 +231,14 @@ bool ICACHE_FLASH_ATTR GPIOManager::removePeripheral(uint8_t deviceIdx) {
 		peripheral->base.pinMode = digitalMode::digitalNotInUse;
 		appConfigData.gpio.digitals[deviceIdx].pinMode = digitalMode::digitalNotInUse;
 
+		String name = DEVICE_IO_PREFIX + String(deviceIdx);
+		strncpy(appConfigData.gpio.digitals[deviceIdx].name , name.c_str(), STRMAX);
+
 		peripheral->base.defaultValue = 0;
 		peripheral->base.lastValue = UNDEFINED_GPIO;
 
 		peripheral->type = peripheralType::unspecified;
-		peripheral->pinIdx = UNDEFINED_GPIO_PIN;
+		peripheral->pinIdx = 0;
 		peripheral->lastAnalogValue1 = UNDEFINED_GPIO;
 		peripheral->lastAnalogValue2 = UNDEFINED_GPIO;
 
@@ -254,7 +266,7 @@ bool ICACHE_FLASH_ATTR GPIOManager::removePeripheralsByPinIdx(uint8_t pinIdx) {
 
 		peripheral = &appConfigData.device.peripherals[deviceIdx];
 
-		if ((peripheral->pinIdx == pinIdx)) {
+		if (peripheral->pinIdx == pinIdx) {
 
 			peripheralRemoved |= removePeripheral(deviceIdx);
 
@@ -277,7 +289,7 @@ peripheralData ICACHE_FLASH_ATTR *GPIOManager::getPeripheralByPinIdx(uint8_t pin
 
 		peripheral = &appConfigData.device.peripherals[deviceIdx];
 
-		if ((peripheral->pinIdx == pinIdx)) {
+		if (peripheral->type != peripheralType::unspecified && peripheral->pinIdx == pinIdx) {
 
 			return peripheral;
 		}

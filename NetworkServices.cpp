@@ -367,55 +367,8 @@ bool ICACHE_FLASH_ATTR NetworkServicesManager::broadcastDeviceStateChange(
 	bool broadcast = false;
 	bool mqttPublish = false;
 
-	if ((mqttEnabled) && (mqttManager->connected) && (mqttOutEnabled)) {
-
-		String mqttTopic;
-		String mqttPayload;
-
-		if(pType == peripheralType::unspecified) {
-
-			switch(type)
-			{
-				case ioType::digital:
-					mqttTopic = String(MQTTManager::GPIO_TOPIC) + String(deviceIdx);
-					mqttPayload = String(appConfigData.gpio.digitals[deviceIdx].lastValue);
-					break;
-				default:
-					mqttTopic = String(MQTTManager::ANALOG_TOPIC) + String(deviceIdx);
-					mqttPayload = String(appConfigData.gpio.analogRawValue);
-					break;
-			}
-
-			mqttPublish = mqttManager->publish(mqttTopic, mqttPayload);
-
-		} else {
-
-			peripheralData *peripheral = &appConfigData.device.peripherals[deviceIdx];
-
-			switch(peripheral->type) {
-
-				case peripheralType::digistatMk2:
-					mqttTopic = String(MQTTManager::PERIPHERAL_TOPIC) + String(deviceIdx);
-					mqttPayload = String(peripheral->base.lastValue);
-					mqttPublish = mqttManager->publish(mqttTopic, mqttPayload);
-					break;
-
-				case peripheralType::dht22:
-					//both DHT22 temperature and humidity are mqtt published serially
-					mqttTopic = String(MQTTManager::PERIPHERAL_TOPIC) + String(deviceIdx) + MQTTManager::TOPIC_SLASH + MQTTManager::TEMPERATURE_TOPIC;
-					mqttPayload = String(peripheral->lastAnalogValue1, 1);
-					mqttPublish = mqttManager->publish(mqttTopic, mqttPayload);
-
-					mqttTopic = String(MQTTManager::PERIPHERAL_TOPIC) + String(deviceIdx) + MQTTManager::TOPIC_SLASH + MQTTManager::HUMIDITY_TOPIC;
-					mqttPayload = String(peripheral->lastAnalogValue2, 1);
-					mqttPublish &= mqttManager->publish(mqttTopic, mqttPayload);
-					break;
-
-				default:
-					break;
-			}
-
-		}
+	if ((mqttEnabled) && (mqttOutEnabled)) {
+		mqttPublish = mqttManager->publish(type, deviceIdx, pType);
 	}
 
 	if (socketserverStarted) {

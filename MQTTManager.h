@@ -10,14 +10,14 @@
 
 #include <ESP8266WiFi.h>
 #include "PubSubClient.h"
-#include "flashAppData.h"
+#include "GPIOData.h"
 
 #define MQTT_RECONNECT_INTERVAL 4000
 
 class MQTTManager {
 public:
 	bool connected;
-	uint8_t connectAttemptCount = 1;
+	uint8_t connectAttemptCount = 0;
 	unsigned long lastReconnectAttempt = 0;
 
 	static constexpr const char* const TOPIC_SLASH = "/";
@@ -32,7 +32,14 @@ public:
 	ICACHE_FLASH_ATTR MQTTManager(WiFiClient* wifiClient, uint8_t serverIP[4], uint16_t serverPort, const char* username, const char* password, const char* deviceHostName);
 	ICACHE_FLASH_ATTR virtual ~MQTTManager();
 	bool ICACHE_FLASH_ATTR processMqtt();
-	bool ICACHE_FLASH_ATTR publish(String &topic, String &payload);
+	bool ICACHE_FLASH_ATTR subscribe(
+		digitalMode pinMode,
+		uint8_t deviceIdx);
+	bool ICACHE_FLASH_ATTR publish(
+		ioType type,
+		uint8_t deviceIdx,
+		peripheralType pType);
+	bool ICACHE_FLASH_ATTR publish(const String &mqttTopic, const String &mqttPayload);
 	bool ICACHE_FLASH_ATTR connect();
 	bool ICACHE_FLASH_ATTR getClientConnectedState();
 private:

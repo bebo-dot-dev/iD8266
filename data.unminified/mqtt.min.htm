@@ -50,7 +50,7 @@
 									<label for="mqttSystemEnabled">Enable MQTT</label>
 									<input type="checkbox" class="form-control" id="mqttSystemEnabled" name="mqttSystemEnabled" >
 								</div>
-								<a role="button" tabindex="0" data-trigger="focus" class="info" data-po="po" title="Enable MQTT" data-placement="bottom" data-html="true" data-content="Enables/disables the lightweight MQTT publish/subscribe protocol for the device.<br/><br/>Configured I/O pin names are used as inbound / outbound MQTT topic names<br/><br/>See&nbsp;<a href='https://en.wikipedia.org/wiki/MQTT' target='_blank'>MQTT</a>&nbsp;for details"> <span>i</span> </a>
+								<a role="button" tabindex="0" data-trigger="focus" class="info" data-po="po" title="Enable MQTT" data-placement="bottom" data-html="true" data-content="Enables/disables the lightweight MQTT publish/subscribe protocol for the device.<br/><br/>A combination of configured device hostname, device type (<strong>D</strong>igital, <strong>A</strong>nalog, <strong>P</strong>eripheral) and GPIO/Peripheral device ordinal position index Ids are used as MQTT publish/subscribe topic names<br/>e.g. the 1st configured peripheral would be subscribed to a topic that looks like this, when this peripheral is an output type device: iD8266_10A74E/P0/In<br/><br/>See&nbsp;<a href='https://en.wikipedia.org/wiki/MQTT' target='_blank'>MQTT</a>&nbsp;for details"> <span>i</span> </a>
 							</div>
 							<div class="mqtt">
 								<div class="form-group">

@@ -10,7 +10,6 @@
 
 #define MAX_DEVICES 5
 #define UNDEFINED_GPIO -32768
-#define UNDEFINED_GPIO_PIN 10
 #define MIN_ANALOG 0
 #define MAX_ANALOG 255
 #define MAX_NAME_STR 32

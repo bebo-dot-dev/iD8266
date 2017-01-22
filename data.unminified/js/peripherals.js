@@ -43,17 +43,20 @@ $(document).ready(function() {
 		
 		$('#peripheralTable > tbody').html('');
 				
-		var tRow, tCell, type, pin, name, delBtn;
+		var tRow, tCell, pIdx, type, pin, name, delBtn;
 		
 		$.each(peripherals, function(idx) {
 			
+			pIdx = peripherals[idx].Idx;
 			type = $('#peripheralType option[value=' + peripherals[idx].peripheralType + ']').text();
 			pin = $('#pinIdx option[value=' + peripherals[idx].peripheralPin + ']').text();
 			name = peripherals[idx].Name
-			delBtn = '<button type="button" class="btn btn-info btn-sm" data-idx="' +  peripherals[idx].Idx  + '"><span class="glyphicon glyphicon-del"></span> Delete</button>';
+			delBtn = '<button type="button" class="btn btn-info btn-sm" data-idx="' + pIdx + '"><span class="glyphicon glyphicon-del"></span> Delete</button>';
 			
 			tRow = $('<tr>');
 			
+			tCell = $('<td>').html(pIdx);			
+			tRow.append(tCell);
 			tCell = $('<td>').html(type);			
 			tRow.append(tCell);
 			tCell = $('<td>').html(pin);			
