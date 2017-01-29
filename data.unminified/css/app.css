@@ -183,6 +183,9 @@ a {
 .glyphicon-del:before {
   content: "\2716";
 }
+.glyphicon {
+	font-family: inherit;
+}
 
 .diagnostics table tr td:nth-child(1) {
   width: 50%;
