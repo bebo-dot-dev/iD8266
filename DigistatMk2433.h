@@ -14,7 +14,6 @@
 
 #define DIGISTATMK2_433_MAX_WRITES 3
 #define DIGISTATMK2_433_WRITE_REPEAT_INTERVAL 1900
-#define DIGISTATMK2_433_KEEP_ON_INTERVAL 60000
 
 /*
  * The class models emulation of a Digistat MK2 thermostat to enable control of a Worcester-Bosch Greenstar 30CDi combi-boiler

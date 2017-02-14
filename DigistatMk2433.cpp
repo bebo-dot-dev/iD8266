@@ -161,22 +161,10 @@ bool ICACHE_FLASH_ATTR DigistatMk2_433::TimeToRepeat() {
 	unsigned long timeNow = millis();
 
 	/*
-	 * Implements an ON/OFF signal repeat function to prevent normal boiler failsafe switch off
-	 * and boiler 'connection lost' scenarios occurring
-	 * An ON/OFF signal repeat is sent every DIGISTATMK2_433_KEEP_ON_INTERVAL (60 seconds)
+	 * all ON / OFF signals are repeated 3 times on an approximate 2 second interval (DIGISTATMK2_433_WRITE_REPEAT_INTERVAL)
 	 */
-	if (((timeNow - lastWrite) > DIGISTATMK2_433_KEEP_ON_INTERVAL) || (timeNow < lastWrite)) {
-		writeCounter = 0;
+	if (((writeCounter < DIGISTATMK2_433_MAX_WRITES) && ((timeNow - lastWrite) > DIGISTATMK2_433_WRITE_REPEAT_INTERVAL)) || (timeNow < lastWrite)) {
 		repeat = true;
-	}
-
-	if (!repeat) {
-		/*
-		 * all ON / OFF signals are repeated 3 times on an approximate 2 second interval (DIGISTATMK2_433_WRITE_REPEAT_INTERVAL)
-		 */
-		if (((writeCounter < DIGISTATMK2_433_MAX_WRITES) && ((timeNow - lastWrite) > DIGISTATMK2_433_WRITE_REPEAT_INTERVAL)) || (timeNow < lastWrite)) {
-			repeat = true;
-		}
 	}
 
 	return repeat;
