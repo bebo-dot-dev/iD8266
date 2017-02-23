@@ -13,7 +13,7 @@ extern "C" {
 }
 #include <Arduino.h>
 #include "WiFiClient.h"
-#include "/home/joe/git/Time/Time.h"
+#include "Time.h"
 
 #define MAX_SCHEDULES 14
 #define MAX_NAME_STR 32
