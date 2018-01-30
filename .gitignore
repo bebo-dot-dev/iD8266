@@ -1,3 +1,4 @@
 /Release/
 *.ino.cpp
 /node_modules/
+*.bin
