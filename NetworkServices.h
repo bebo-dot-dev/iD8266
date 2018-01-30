@@ -30,8 +30,7 @@ public:
 	bool ICACHE_FLASH_ATTR broadcastDeviceStateChange(
 		ioType ioType,
 		uint8_t deviceIdx,
-		peripheralType peripheralType = peripheralType::unspecified,
-		bool mqttOutEnabled = true);
+		peripheralType peripheralType = peripheralType::unspecified);
 	void processRequests();
 private:
 	bool broadcastingGPIOChange;

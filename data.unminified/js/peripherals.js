@@ -90,6 +90,17 @@ $(document).ready(function() {
 		}
 		return val;
 	}
+
+	$(document).on('change', '#peripheralType', function() {
+		switch($(this).val()) {
+		case '3': //home easy
+			$('#virtualDeviceIdSection').show();
+			break;
+		default:
+			$('#virtualDeviceIdSection').hide();
+			break;
+		}		
+	});
 	
 	$(document).on('click', '#savePeripheral', function(e) {		
 		
@@ -99,7 +110,8 @@ $(document).ready(function() {
 				'peripheralType=' + $('#peripheralType').val() + '&' + 
 				'Name=' + $('#name').val() + '&' + 
 				'idx=' + $('#pinIdx').val()  + '&' + 
-			 	'Default=' + $('#default').val();
+			 	'Default=' + $('#default').val() + '&' + 
+				'virtualDeviceId=' + $('#virtualDeviceId').val();
 			 	
 			$.ajax({
 				url : 'addPeripheral',

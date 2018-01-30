@@ -75,7 +75,8 @@ enum peripheralType {
 	unspecified,
 	digistatMk2,
 	dht22,
-	maxPeripheralType = dht22
+	homeEasySwitch,
+	maxPeripheralType = homeEasySwitch
 };
 
 struct ioLoggingData {
@@ -107,6 +108,7 @@ struct peripheralData {
 
 	ioData base;
 
+	uint8_t virtualDeviceId;
 };
 
 struct gpioStorage {

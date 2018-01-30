@@ -199,7 +199,7 @@ void ICACHE_FLASH_ATTR NetworkServicesManager::connectWifiAccessPoint() {
 
 		if ((has_ssid) && (has_pwd)) {
 
-			WiFi.softAP(appConfigData.deviceApSSID, appConfigData.deviceApPwd,appConfigData.deviceApChannel);
+			WiFi.softAP(appConfigData.deviceApSSID, appConfigData.deviceApPwd, appConfigData.deviceApChannel);
 
 		} else if (has_ssid) {
 
@@ -349,16 +349,13 @@ bool ICACHE_FLASH_ATTR NetworkServicesManager::mqttConnected() {
 
 /*
  * broadcasts details of a device state change to interested parties including:
- * 1) websocket clients
- * 2) mqtt clients subscribed to this device's mqtt topics
- * 3) thingspeak
- * 4) some arbitrary http server
+ * 1) WebSocket clients
+ * 2) MQTT clients subscribed to this device's MQTT topics
  */
 bool ICACHE_FLASH_ATTR NetworkServicesManager::broadcastDeviceStateChange(
 	ioType type,
 	uint8_t deviceIdx,
-	peripheralType pType,
-	bool mqttOutEnabled)
+	peripheralType pType)
 {
 	APP_SERIAL_DEBUG("NetworkServicesManager::broadcastDeviceStateChange\n");
 
@@ -367,7 +364,7 @@ bool ICACHE_FLASH_ATTR NetworkServicesManager::broadcastDeviceStateChange(
 	bool broadcast = false;
 	bool mqttPublish = false;
 
-	if ((mqttEnabled) && (mqttOutEnabled)) {
+	if (mqttEnabled) {
 		mqttPublish = mqttManager->publish(type, deviceIdx, pType);
 	}
 
@@ -375,6 +372,7 @@ bool ICACHE_FLASH_ATTR NetworkServicesManager::broadcastDeviceStateChange(
 		broadcast = socketServer->broadcastGPIOChange(type, pType, deviceIdx);
 	}
 
+	delay(20);
 	broadcastingGPIOChange = false;
 
 	return broadcast || mqttPublish;

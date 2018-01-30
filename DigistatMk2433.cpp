@@ -33,7 +33,7 @@ ICACHE_FLASH_ATTR DigistatMk2_433::DigistatMk2_433(peripheralData *data) {
 
 	//setup the mappedPin as an OUTPUT
 	pinMode(mappedPin, OUTPUT);
-
+	digitalWrite(mappedPin, _peripheralData->base.defaultValue > 0 ? HIGH : LOW);
 }
 
 /*
@@ -52,6 +52,8 @@ void ICACHE_FLASH_ATTR DigistatMk2_433::Switch(uint8_t value) {
 		case HIGH:
 			SwitchOn();
 			break;
+		default:
+		    break;
 	}
 
 }

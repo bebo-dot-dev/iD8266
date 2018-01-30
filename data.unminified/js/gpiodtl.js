@@ -55,7 +55,7 @@ $(document).ready(function() {
 				break;
 			case '3':
 			case '5':
-				$('#dMode').text(r.Mode == '3' ? '(Digital Output)' : 'Digistat MK2');
+				$('#dMode').text(r.Mode == '3' ? '(Digital Output)' : r.peripheralType == '1' ? 'Digistat MK2' : 'Home Easy Switch');
 				$('.range-slider').hide();
 				$('#switch').removeAttr('disabled');
 				$('.onoffswitch').show();
@@ -199,16 +199,19 @@ $(document).ready(function() {
 		if ((d) && (d.Mode) && ((d.Mode == '3') || (d.Mode == '5'))) {
 			var bitVal = $(this).prop('checked') ? '1' : '0';
 			var qs = '?d=' + d.Idx + '&value=' + bitVal;
-			var ajaxTimeout = d.peripheralType && d.peripheralType == '1' ? 8000 : 5000;
+			qs += d.peripheralType ? '&p=' + d.peripheralType : '';
+			qs += d.virtualDeviceId ? '&vid=' + d.virtualDeviceId : '';
+			var action = d.peripheralType ? 'peripheralWrite' : 'digitalWrite';
+			var ajaxTimeout = d.peripheralType && (d.peripheralType == '1' || d.peripheralType == '3') ? 8000 : 5000;
 			$.ajax({
-				url : '/digitalWrite' + qs,
+				url : '/' + action + qs,
 				dataType : 'json',
 				timeout : ajaxTimeout
 			}).fail(function(jqXHR, textStatus, errorThrown) {
 				if (jqXHR.status == '403') {
 					window.location = "/login.cm";
 				} else {
-					console.log('digitalWrite ajax call failure', jqXHR, textStatus, errorThrown);					
+					console.log(action + ' ajax call failure', jqXHR, textStatus, errorThrown);					
 				}
 			});
 		}

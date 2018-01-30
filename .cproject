@@ -47,6 +47,7 @@
 									<listOptionValue builtIn="false" value="/home/joe/Dev/git_repositories/Cryptosuite/Sha"/>
 									<listOptionValue builtIn="false" value="/home/joe/Dev/git_repositories/ESP8266TOTP"/>
 									<listOptionValue builtIn="false" value="/home/joe/Dev/git_repositories/DHT-sensor-library"/>
+									<listOptionValue builtIn="false" value="/home/joe/Dev/git_repositories/NexaCtrl"/>
 								</option>
 								<inputType id="io.sloeber.compiler.cpp.sketch.input.477050757" name="CPP source files" superClass="io.sloeber.compiler.cpp.sketch.input"/>
 							</tool>
@@ -80,6 +81,7 @@
 									<listOptionValue builtIn="false" value="/home/joe/Dev/git_repositories/Cryptosuite/Sha"/>
 									<listOptionValue builtIn="false" value="/home/joe/Dev/git_repositories/ESP8266TOTP"/>
 									<listOptionValue builtIn="false" value="/home/joe/Dev/git_repositories/DHT-sensor-library"/>
+									<listOptionValue builtIn="false" value="/home/joe/Dev/git_repositories/NexaCtrl"/>
 								</option>
 								<inputType id="io.sloeber.compiler.c.sketch.input.366202948" name="C Source Files" superClass="io.sloeber.compiler.c.sketch.input"/>
 							</tool>
@@ -113,6 +115,7 @@
 									<listOptionValue builtIn="false" value="/home/joe/Dev/git_repositories/Cryptosuite/Sha"/>
 									<listOptionValue builtIn="false" value="/home/joe/Dev/git_repositories/ESP8266TOTP"/>
 									<listOptionValue builtIn="false" value="/home/joe/Dev/git_repositories/DHT-sensor-library"/>
+									<listOptionValue builtIn="false" value="/home/joe/Dev/git_repositories/NexaCtrl"/>
 								</option>
 								<inputType id="io.sloeber.compiler.S.sketch.input.1073844057" name="Assembly source files" superClass="io.sloeber.compiler.S.sketch.input"/>
 							</tool>
@@ -138,5 +141,9 @@
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
 	<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
-	<storageModule moduleId="refreshScope"/>
+	<storageModule moduleId="refreshScope" versionNumber="2">
+		<configuration configurationName="Release">
+			<resource resourceType="PROJECT" workspacePath="/iD8266"/>
+		</configuration>
+	</storageModule>
 </cproject>

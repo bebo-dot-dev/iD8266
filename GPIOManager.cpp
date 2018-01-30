@@ -40,10 +40,13 @@ ICACHE_FLASH_ATTR GPIOManager::GPIOManager() {
 
 	lastProcess = 0;
 	lastDHTRead = 0;
+	lastHomeEasyBroadcast = 0;
+
 	initialized = false;
 
 	digistat = NULL;
 	dht = NULL;
+	homeEasyController = NULL;
 
 	analogReadIndex = 0;
 	analogRunningTotal = 0;
@@ -69,6 +72,11 @@ ICACHE_FLASH_ATTR GPIOManager::~GPIOManager() {
 		dht = NULL;
 	}
 
+	if (homeEasyController != NULL) {
+		delete homeEasyController;
+		homeEasyController = NULL;
+	}
+
 }
 
 /*
@@ -88,6 +96,11 @@ void ICACHE_FLASH_ATTR GPIOManager::initialize() {
 		if (dht != NULL) {
 			delete dht;
 			dht = NULL;
+		}
+
+		if (homeEasyController != NULL) {
+			delete homeEasyController;
+			homeEasyController = NULL;
 		}
 
 		//initialise devices
@@ -130,7 +143,6 @@ void ICACHE_FLASH_ATTR GPIOManager::initialize() {
 					break;
 
 				default:
-					//digitalNotInUse
 					break;
 			}
 
@@ -138,13 +150,17 @@ void ICACHE_FLASH_ATTR GPIOManager::initialize() {
 				case peripheralType::digistatMk2:
 					if (digistat == NULL) {
 						digistat = new DigistatMk2_433(peripheral);
-						gpioDigitalWrite(deviceIdx, (uint8_t)peripheral->base.defaultValue);
 					}
 					break;
 				case peripheralType::dht22:
 					if (dht == NULL) {
-						dht = new DHT(mappedPin, DHT22);
+						dht = new DHT(digitalPinMap[peripheral->pinIdx], DHT22);
 						dht->begin();
+					}
+					break;
+				case peripheralType::homeEasySwitch:
+					if (homeEasyController == NULL) {
+						homeEasyController = new NexaCtrl(digitalPinMap[peripheral->pinIdx]);
 					}
 					break;
 				default:
@@ -161,7 +177,7 @@ void ICACHE_FLASH_ATTR GPIOManager::initialize() {
 /*
  * attempts to configure a peripheral for the given parameters in a free appConfigData.device.peripherals slot
  */
-bool ICACHE_FLASH_ATTR GPIOManager::addPeripheral(peripheralType pType, String &peripheralName, uint8_t pinIdx, int defaultValue) {
+bool ICACHE_FLASH_ATTR GPIOManager::addPeripheral(peripheralType pType, String &peripheralName, uint8_t pinIdx, int defaultValue, uint8_t virtualDeviceId) {
 
 	bool peripheralAdded = false;
 
@@ -185,9 +201,14 @@ bool ICACHE_FLASH_ATTR GPIOManager::addPeripheral(peripheralType pType, String &
 
 				switch (pType) {
 					case peripheralType::digistatMk2:
+					case peripheralType::homeEasySwitch:
 						peripheral->base.pinMode = digitalMode::digitalOutputPeripheral;
 						appConfigData.gpio.digitals[deviceIdx].pinMode = digitalMode::digitalOutputPeripheral;
 						strncpy(appConfigData.gpio.digitals[deviceIdx].name , peripheralName.c_str(), STRMAX);
+
+						if (pType == peripheralType::homeEasySwitch) {
+							peripheral->virtualDeviceId = virtualDeviceId;
+						}
 
 						if (NetworkSvcMngr.mqttEnabled) {
 							NetworkSvcMngr.mqttManager->subscribe(digitalMode::digitalOutputPeripheral, deviceIdx);
@@ -239,6 +260,7 @@ bool ICACHE_FLASH_ATTR GPIOManager::removePeripheral(uint8_t deviceIdx) {
 
 		peripheral->type = peripheralType::unspecified;
 		peripheral->pinIdx = 0;
+		peripheral->virtualDeviceId = 0;
 		peripheral->lastAnalogValue1 = UNDEFINED_GPIO;
 		peripheral->lastAnalogValue2 = UNDEFINED_GPIO;
 
@@ -279,20 +301,17 @@ bool ICACHE_FLASH_ATTR GPIOManager::removePeripheralsByPinIdx(uint8_t pinIdx) {
 }
 
 /*
- * returns the first peripheral where the peripheral->pinIdx matches the given pinIdx
+ * returns the peripheral in the deviceIdx position
  */
-peripheralData ICACHE_FLASH_ATTR *GPIOManager::getPeripheralByPinIdx(uint8_t pinIdx) {
+peripheralData ICACHE_FLASH_ATTR *GPIOManager::getPeripheralByIdx(uint8_t deviceIdx) {
 
 	peripheralData *peripheral = NULL;
 
-	for(byte deviceIdx = 0; deviceIdx < MAX_DEVICES; deviceIdx++) {
+	peripheral = &appConfigData.device.peripherals[deviceIdx];
 
-		peripheral = &appConfigData.device.peripherals[deviceIdx];
+	if (peripheral->type != peripheralType::unspecified) {
 
-		if (peripheral->type != peripheralType::unspecified && peripheral->pinIdx == pinIdx) {
-
-			return peripheral;
-		}
+		return peripheral;
 	}
 
 	return NULL;
@@ -386,10 +405,7 @@ int ICACHE_FLASH_ATTR GPIOManager::gpioAnalogRead() {
  * Writes a digital GPIO value to a pin and stores the value.
  * The pin must be configured as digitalOutput and the given value must be either LOW or HIGH
  */
-bool ICACHE_FLASH_ATTR GPIOManager::gpioDigitalWrite(
-		uint8_t pinIdx,
-		uint8_t value,
-		bool suppressMqtt) {
+bool ICACHE_FLASH_ATTR GPIOManager::gpioDigitalWrite(uint8_t pinIdx, uint8_t value) {
 
 	if (pinIdx >= 0 && pinIdx < MAX_DEVICES) {
 
@@ -406,26 +422,58 @@ bool ICACHE_FLASH_ATTR GPIOManager::gpioDigitalWrite(
 				NetworkSvcMngr.broadcastDeviceStateChange(
 					ioType::digital,
 					pinIdx,
-					peripheralType::unspecified,
-					!suppressMqtt);
+					peripheralType::unspecified);
 
-			} else if (appConfigData.gpio.digitals[pinIdx].pinMode == digitalMode::digitalOutputPeripheral) {
+				return true;
 
-				if (digistat != NULL) {
-					digistat->Switch(value);
-					appConfigData.gpio.digitals[pinIdx].lastValue = value;
-
-					NetworkSvcMngr.broadcastDeviceStateChange(
-						ioType::digital,
-						pinIdx,
-						peripheralType::digistatMk2,
-						!suppressMqtt);
-
-				}
 			}
-
-			return true;
 		}
+	}
+	return false;
+}
+
+bool ICACHE_FLASH_ATTR GPIOManager::peripheralWrite(uint8_t deviceIdx, peripheralType ptype, uint8_t virtualDeviceId, uint8_t value) {
+
+	if (deviceIdx >= 0 && deviceIdx < MAX_DEVICES) {
+
+        peripheralData *peripheral = GPIOMngr.getPeripheralByIdx(deviceIdx);
+
+        if (peripheral != NULL &&
+            peripheral->type == ptype &&
+            appConfigData.gpio.digitals[deviceIdx].pinMode == digitalMode::digitalOutputPeripheral) {
+
+            switch(peripheral->type) {
+                case peripheralType::digistatMk2:
+                    if (digistat != NULL) {
+                        digistat->Switch(value);
+                        appConfigData.gpio.digitals[deviceIdx].lastValue = value;
+
+                        NetworkSvcMngr.broadcastDeviceStateChange(
+                            ioType::digital,
+                            deviceIdx,
+                            peripheralType::digistatMk2);
+
+                        return true;
+                    }
+                    break;
+                case peripheralType::homeEasySwitch:
+                    if (homeEasyController != NULL) {
+                        homeEasyController->Switch(virtualDeviceId, value);
+                        peripheral->base.lastValue = value;
+                        appConfigData.gpio.digitals[deviceIdx].lastValue = value;
+
+                        NetworkSvcMngr.broadcastDeviceStateChange(
+                            ioType::digital,
+                            deviceIdx,
+                            peripheralType::homeEasySwitch);
+
+                        return true;
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
 	}
 	return false;
 }
@@ -434,10 +482,7 @@ bool ICACHE_FLASH_ATTR GPIOManager::gpioDigitalWrite(
  * Writes an analog GPIO value to a pin and stores the value.
  * The pin must be configured as digitalAnalogOutputPwm and the given value must be between MIN_ANALOG and MAX_ANALOG
  */
-bool ICACHE_FLASH_ATTR GPIOManager::gpioAnalogWrite(
-		uint8_t pinIdx,
-		int value,
-		bool suppressMqtt) {
+bool ICACHE_FLASH_ATTR GPIOManager::gpioAnalogWrite(uint8_t pinIdx, int value) {
 
 	if (pinIdx >= 0 && pinIdx < MAX_DEVICES) {
 
@@ -455,8 +500,7 @@ bool ICACHE_FLASH_ATTR GPIOManager::gpioAnalogWrite(
 				NetworkSvcMngr.broadcastDeviceStateChange(
 					ioType::digital,
 					pinIdx,
-					peripheralType::unspecified,
-					!suppressMqtt);
+					peripheralType::unspecified);
 
 				return true;
 			}
@@ -506,6 +550,8 @@ void ICACHE_FLASH_ATTR GPIOManager::processGPIO() {
 
 	if ((initialized) && ((now - lastProcess > 1000) || (lastProcess == 0))) {
 
+	    bool homeEasyBroadcasted = false;
+
 		for (byte deviceIdx = 0; deviceIdx < MAX_DEVICES; deviceIdx++) {
 			if ((appConfigData.gpio.digitals[deviceIdx].pinMode == digitalInput) || (appConfigData.gpio.digitals[deviceIdx].pinMode == digitalInputPullup)) {
 
@@ -527,10 +573,24 @@ void ICACHE_FLASH_ATTR GPIOManager::processGPIO() {
 							lastDHTRead = now;
 						}
 						break;
+					case peripheralType::homeEasySwitch:
+					    if ((homeEasyController != NULL) && ((now - lastHomeEasyBroadcast > 900000) || (lastHomeEasyBroadcast == 0))) {
+					        NetworkSvcMngr.broadcastDeviceStateChange(
+                                ioType::digital,
+                                deviceIdx,
+                                peripheralType::homeEasySwitch);
+					        homeEasyBroadcasted = true;
+                        }
+					    break;
 					default:
 						break;
 				}
 			}
+			yield();
+		}
+
+		if (homeEasyBroadcasted) {
+		    lastHomeEasyBroadcast = now;
 		}
 
 		if (appConfigData.gpio.analogPinMode == analogEnabled)

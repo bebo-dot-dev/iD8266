@@ -79,17 +79,14 @@ bool ICACHE_FLASH_ATTR SocketServer::broadcastGPIOChange(
 				json += getAppStr(appStrType::escapedValueStr) + String(peripheral->lastAnalogValue1, 1) + escapedCommaStr;
 				json += getAppStr(appStrType::escapedValue2Str) + String(peripheral->lastAnalogValue2, 1) + escapedQuoteStr;
 				break;
+			case peripheralType::homeEasySwitch:
+                json += getAppStr(appStrType::escapedValueStr) + String(peripheral->base.lastValue) + escapedCommaStr;
+                json += getAppStr(appStrType::escapedVirtualDeviceId) + String(peripheral->virtualDeviceId) + escapedQuoteStr;
+                break;
 			default:
 				break;
-
 		}
-
 	}
-
-
-
-
-
 
 	json += getAppStr(appStrType::closeBrace);
 

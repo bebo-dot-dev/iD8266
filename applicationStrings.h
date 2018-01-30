@@ -2,7 +2,7 @@
  * ApplicationStrings.h
  *
  *  Created on: 13 May 2016
- *      Author: joe
+ *      Author: Joe
  */
 
 #ifndef APPLICATIONSTRINGS_H_
@@ -49,8 +49,9 @@
 	ENTRY(A, "A") \
 	ENTRY(ohms, "Ω") \
 	ENTRY(W, "W") \
+	ENTRY(D, "D") \
+	ENTRY(P, "P") \
 	ENTRY(DeviceClass_WiFiController, "iD8266 WiFi Controller") \
-	ENTRY(DeviceClass_WiFiControllerWithThermometer, "iD8266 WiFi Controller With Thermometer") \
 	ENTRY(dot, ".") \
 	ENTRY(httpProtocol, "http") \
 	ENTRY(tcpProtocol, "tcp") \
@@ -58,7 +59,7 @@
 	ENTRY(equals, " == ") \
 	ENTRY(digitalOn, " (ON)") \
 	ENTRY(digitalOff, " (OFF)") \
-	ENTRY(forwardSlash, "/") \
+	ENTRY(FORWARD_SLASH, "/") \
 	ENTRY(questionMark, "?") \
 	ENTRY(equalsSign, "=") \
 	ENTRY(hyphen, "-") \
@@ -335,6 +336,7 @@
 	ENTRY(gpiodtl, "/gpiodtl") \
 	ENTRY(digitalWriteStr, "/digitalWrite") \
 	ENTRY(analogWriteStr, "/analogWrite") \
+	ENTRY(peripheralWriteStr, "/peripheralWrite") \
 	ENTRY(getPowerMgmtDataStr, "/getPowerMgmtData") \
 	ENTRY(getPowerMgmtScheduleDataStr, "/getPowerMgmtScheduleData") \
 	ENTRY(powerMgmtStr, "/powerMgmt") \
@@ -381,6 +383,15 @@
 	ENTRY(peripheralTypeStr, "peripheralType") \
 	ENTRY(addPeripheralStr, "/addPeripheral") \
 	ENTRY(removePeripheralStr, "/removePeripheral") \
+	ENTRY(virtualDeviceIdStr, "virtualDeviceId") \
+	ENTRY(escapedVirtualDeviceId, "\"virtualDeviceId\": \"") \
+	ENTRY(pStr, "p") \
+	ENTRY(vidStr, "vid") \
+	ENTRY(VID, "VID") \
+	ENTRY(IN, "IN") \
+	ENTRY(OUT, "OUT") \
+	ENTRY(TEMPERATURE, "TEMPERATURE") \
+	ENTRY(HUMIDITY, "HUMIDITY") \
 
 enum appStrType {
 #define ENTRY(enumVal, str) enumVal,

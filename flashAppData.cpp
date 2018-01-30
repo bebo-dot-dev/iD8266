@@ -183,6 +183,7 @@ void FlashAppDataManager::initAppDataToFactoryDefaults() {
 
 		appConfigData.device.peripherals[i].type = peripheralType::unspecified;
 		appConfigData.device.peripherals[i].pinIdx = 0;
+		appConfigData.device.peripherals[i].virtualDeviceId = 0;
 		appConfigData.device.peripherals[i].lastAnalogValue1 = UNDEFINED_GPIO;
 		appConfigData.device.peripherals[i].lastAnalogValue2 = UNDEFINED_GPIO;
 	}

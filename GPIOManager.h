@@ -12,6 +12,7 @@
 #include "DHT.h"
 #include "GPIOData.h"
 #include "DigistatMk2433.h"
+#include "NexaCtrl.h"
 
 class GPIOManager {
 public:
@@ -23,18 +24,20 @@ public:
 	bool initialized;
 	unsigned long lastProcess;
 	unsigned long lastDHTRead;
+	unsigned long lastHomeEasyBroadcast;
 
 	void ICACHE_FLASH_ATTR initialize();
 
-	bool ICACHE_FLASH_ATTR addPeripheral(peripheralType ptype, String &peripheralName, uint8_t pinIdx, int defaultValue);
+	bool ICACHE_FLASH_ATTR addPeripheral(peripheralType ptype, String &peripheralName, uint8_t pinIdx, int defaultValue, uint8_t virtualDeviceId);
 	bool ICACHE_FLASH_ATTR removePeripheral(uint8_t deviceIdx);
 	bool ICACHE_FLASH_ATTR removePeripheralsByPinIdx(uint8_t pinIdx);
-	peripheralData ICACHE_FLASH_ATTR *getPeripheralByPinIdx(uint8_t pinIdx);
+	peripheralData ICACHE_FLASH_ATTR *getPeripheralByIdx(uint8_t deviceIdx);
 
 	int ICACHE_FLASH_ATTR gpioDigitalRead(uint8_t pin);
 	int ICACHE_FLASH_ATTR gpioAnalogRead();
-	bool ICACHE_FLASH_ATTR gpioDigitalWrite(uint8_t pin, uint8_t value, bool suppressMqtt = false);
-	bool ICACHE_FLASH_ATTR gpioAnalogWrite(uint8_t pin, int value, bool suppressMqtt = false);
+	bool ICACHE_FLASH_ATTR gpioDigitalWrite(uint8_t pin, uint8_t value);
+	bool ICACHE_FLASH_ATTR gpioAnalogWrite(uint8_t pin, int value);
+	bool ICACHE_FLASH_ATTR peripheralWrite(uint8_t deviceIdx, peripheralType ptype, uint8_t virtualDeviceId, uint8_t value);
 	void ICACHE_FLASH_ATTR dhtRead(uint8_t deviceIdx);
 	void ICACHE_FLASH_ATTR processGPIO();
 	static String ICACHE_FLASH_ATTR getUnitOfMeasureStr(unitOfMeasure unit);
@@ -45,6 +48,7 @@ private:
 	int analogStabilizationArray[MAX_ANALOG_READINGS];
 	DigistatMk2_433 *digistat;
 	DHT *dht;
+	NexaCtrl *homeEasyController;
 };
 
 extern GPIOManager GPIOMngr;

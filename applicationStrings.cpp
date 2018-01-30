@@ -17,7 +17,7 @@ const char* const appStrings[] PROGMEM = {
 #undef ENTRY
 };
 
-static char appStrBuffer[70];
+static char appStrBuffer[45];
 
 String getAppStr(appStrType strType) {
 

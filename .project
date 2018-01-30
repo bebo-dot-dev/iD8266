@@ -52,6 +52,11 @@
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
+			<name>NexaCtrl</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
 			<name>Sha</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
@@ -130,6 +135,16 @@
 			<name>ESP8266TOTP/ESP8266TOTP.h</name>
 			<type>1</type>
 			<locationURI>PARENT-3-PROJECT_LOC/git_repositories/ESP8266TOTP/ESP8266TOTP.h</locationURI>
+		</link>
+		<link>
+			<name>NexaCtrl/NexaCtrl.cpp</name>
+			<type>1</type>
+			<locationURI>PARENT-3-PROJECT_LOC/git_repositories/NexaCtrl/NexaCtrl.cpp</locationURI>
+		</link>
+		<link>
+			<name>NexaCtrl/NexaCtrl.h</name>
+			<type>1</type>
+			<locationURI>PARENT-3-PROJECT_LOC/git_repositories/NexaCtrl/NexaCtrl.h</locationURI>
 		</link>
 		<link>
 			<name>Sha/examples</name>

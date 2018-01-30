@@ -369,7 +369,7 @@ void ICACHE_FLASH_ATTR handleLogon() {
 			webserver->sendHeader(getAppStr(appStrType::setCookie), sessionCookieStr);
 
 			//return a 301 redirect to the root /
-			redirect(getAppStr(appStrType::forwardSlash), getAppStr(appStrType::htmlContentType));
+			redirect(getAppStr(appStrType::FORWARD_SLASH), getAppStr(appStrType::htmlContentType));
 
 		} else {
 
@@ -773,7 +773,7 @@ String ICACHE_FLASH_ATTR getGpioDataByIdx(uint8_t idx, bool allData) {
 		json += getAppStr(appStrType::escapedMode) + String(appConfigData.gpio.digitals[idx].pinMode) + escapedCommaStr;
 		json += getAppStr(appStrType::escapedDefault) + String(appConfigData.gpio.digitals[idx].defaultValue) + escapedCommaStr;
 
-		peripheralData *peripheral = GPIOMngr.getPeripheralByPinIdx(idx);
+		peripheralData *peripheral = GPIOMngr.getPeripheralByIdx(idx);
 		if (peripheral != NULL) {
 			//include the data of the peripheral configured to use this pinIdx
 			json += getAppStr(appStrType::escapedPeripheralType) + String(peripheral->type) + escapedCommaStr;
@@ -785,6 +785,10 @@ String ICACHE_FLASH_ATTR getGpioDataByIdx(uint8_t idx, bool allData) {
 				case peripheralType::dht22:
 					json += getAppStr(appStrType::escapedValueStr) + String(peripheral->lastAnalogValue1, 1) + escapedCommaStr;
 					json += getAppStr(appStrType::escapedValue2Str) + String(peripheral->lastAnalogValue2, 1) + escapedQuoteStr;
+					break;
+				case peripheralType::homeEasySwitch:
+					json += getAppStr(appStrType::escapedValueStr) + String(peripheral->base.lastValue) + escapedCommaStr;
+					json += getAppStr(appStrType::escapedVirtualDeviceId) + String(peripheral->virtualDeviceId) + escapedQuoteStr;
 					break;
 				default:
 					break;
@@ -1077,6 +1081,7 @@ String ICACHE_FLASH_ATTR getPeripheralDataByIdx(uint8_t deviceIdx) {
 		json += getAppStr(appStrType::escapedIdxStr) + String(deviceIdx) + escapedCommaChar;
 		json += getAppStr(appStrType::escapedPeripheralType) + String(peripheral->type) + escapedCommaChar;
 		json += getAppStr(appStrType::escapedPeripheralPin) + String(peripheral->pinIdx) + escapedCommaChar;
+		json += getAppStr(appStrType::escapedVirtualDeviceId) + String(peripheral->virtualDeviceId) + escapedCommaChar;
 		json += getAppStr(appStrType::escapedName) + String(peripheral->base.name) + quote;
 
 	}
@@ -1657,6 +1662,34 @@ bool ICACHE_FLASH_ATTR handleAnalogWrite() {
 }
 
 /*
+ * peripheral write GET handler
+ */
+bool ICACHE_FLASH_ATTR handlePeripheralWrite() {
+
+	if (isAuthenticated() &&
+        (webserver->hasArg(getAppStr(appStrType::dStr))) &&
+        (webserver->hasArg(getAppStr(appStrType::pStr))) &&
+        (webserver->hasArg(getAppStr(appStrType::vidStr))) &&
+        (webserver->hasArg(getAppStr(appStrType::valueStr)))) {
+
+		uint8_t deviceIdx = strtoul(webserver->arg(getAppStr(appStrType::dStr)).c_str(), NULL, 10);
+		peripheralType ptype = (peripheralType)strtoul(webserver->arg(getAppStr(appStrType::pStr)).c_str(), NULL, 10);
+		uint8_t virtualDeviceId = strtoul(webserver->arg(getAppStr(appStrType::vidStr)).c_str(), NULL, 10);
+		uint8_t digitalValue = strtoul(webserver->arg(getAppStr(appStrType::valueStr)).c_str(), NULL, 10);
+
+		bool result = GPIOMngr.peripheralWrite(deviceIdx, ptype, virtualDeviceId, digitalValue);
+		webserver->send(200, getAppStr(appStrType::jsonContentType), result ? getAppStr(appStrType::jsonResultOk) : getAppStr(appStrType::jsonResultFailed));
+		return result;
+
+	} else {
+
+		webserver->send(403, getAppStr(appStrType::textContentType), getAppStr(appStrType::accessDenied));
+
+	}
+	return false;
+}
+
+/*
  * power management settings AJAX postback save handler
  */
 void ICACHE_FLASH_ATTR handleSavePowerMgmtSettings() {
@@ -1863,6 +1896,7 @@ void ICACHE_FLASH_ATTR handleAddPeripheral() {
 		String peripheralName;
 		uint8_t pinIdx;
 		uint8_t defaultValue;
+		uint8_t virtualDeviceId;
 		uint8_t ubyteVal;
 
 		char *endptr;
@@ -1906,8 +1940,18 @@ void ICACHE_FLASH_ATTR handleAddPeripheral() {
 			}
 		}
 
+		if(valid) {
+			argStr = webserver->arg(getAppStr(appStrType::virtualDeviceIdStr));
+			ubyteVal = strtoul(argStr.c_str(), &endptr, 10);
+			if ((*endptr == '\0') && (ubyteVal >= 0 && ubyteVal <= 255)) {
+				virtualDeviceId = ubyteVal;
+			} else {
+				valid = false;
+			}
+		}
+
 		if (valid) {
-			if (GPIOMngr.addPeripheral(pType, peripheralName, pinIdx, defaultValue)) {
+			if (GPIOMngr.addPeripheral(pType, peripheralName, pinIdx, defaultValue, virtualDeviceId)) {
 				FlashAppDataMngr.setAppData();
 			}
 		}
@@ -1998,7 +2042,7 @@ void ICACHE_FLASH_ATTR handleFileCreate() {
 
 		  String path = webserver->arg(0);
 
-		  if(path == getAppStr(appStrType::forwardSlash))
+		  if(path == getAppStr(appStrType::FORWARD_SLASH))
 			  return webserver->send(500, getAppStr(appStrType::textContentType), getAppStr(appStrType::badPath));
 
 		  if(SPIFFS.exists(path))
@@ -2025,7 +2069,7 @@ void ICACHE_FLASH_ATTR handleFileDelete() {
 
 		  String path = webserver->arg(0);
 
-		  if(path == getAppStr(appStrType::forwardSlash))
+		  if(path == getAppStr(appStrType::FORWARD_SLASH))
 		    return webserver->send(500, getAppStr(appStrType::textContentType), getAppStr(appStrType::badPath));
 
 		  if(!SPIFFS.exists(path))
@@ -2051,8 +2095,8 @@ void ICACHE_FLASH_ATTR handleFileUpload() {
 		if (upload.status == UPLOAD_FILE_START) {
 
 			String filename = upload.filename;
-			if(!filename.startsWith(getAppStr(appStrType::forwardSlash)))
-				filename = getAppStr(appStrType::forwardSlash) + filename;
+			if(!filename.startsWith(getAppStr(appStrType::FORWARD_SLASH)))
+				filename = getAppStr(appStrType::FORWARD_SLASH) + filename;
 
 			if (SPIFFS.exists(filename))
 				SPIFFS.remove(filename);
@@ -2132,7 +2176,7 @@ bool ICACHE_FLASH_ATTR configureWebServices() {
 				(requestMethod == HTTP_GET) &&
 				(
 					(requestUri.indexOf(getAppStr(appStrType::idHtmlExtension)) > 0) ||
-					(requestUri.equals(getAppStr(appStrType::forwardSlash)))
+					(requestUri.equals(getAppStr(appStrType::FORWARD_SLASH)))
 				)
 			);
 
@@ -2146,7 +2190,7 @@ bool ICACHE_FLASH_ATTR configureWebServices() {
 
 			bool requiresAuth = !requestUri.equals(getAppStr(appStrType::loginStr));
 
-			if (requestUri.equals(getAppStr(appStrType::forwardSlash)))
+			if (requestUri.equals(getAppStr(appStrType::FORWARD_SLASH)))
 			{
 				requestUri = getAppStr(appStrType::indexStr);
 			}
@@ -2290,6 +2334,8 @@ bool ICACHE_FLASH_ATTR configureWebServices() {
 	webserver->on(getAppStr(appStrType::digitalWriteStr).c_str(), HTTP_GET, handleDigitalWrite);
 
 	webserver->on(getAppStr(appStrType::analogWriteStr).c_str(), HTTP_GET, handleAnalogWrite);
+
+	webserver->on(getAppStr(appStrType::peripheralWriteStr).c_str(), HTTP_GET, handlePeripheralWrite);
 
 	webserver->on(getAppStr(appStrType::powerMgmtStr).c_str(), HTTP_POST, handleSavePowerMgmtSettings);
 
