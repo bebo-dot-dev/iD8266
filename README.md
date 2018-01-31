@@ -28,7 +28,7 @@ Some videos here: https://www.youtube.com/channel/UCa_exk34O_W2tTnGeHXw5Og
 * OTA update support
 
 ## Getting Started
-* You can find compiled binaries at GitHub's [release](https://github.com/jjssoftware/iD8266/releases) facility
+* Compiled binaries are available in the GitHub [release](https://github.com/jjssoftware/iD8266/releases) page
 
 ### What You Will Need
 ### Hardware
@@ -36,6 +36,20 @@ Some videos here: https://www.youtube.com/channel/UCa_exk34O_W2tTnGeHXw5Og
 
 ### Known Issues
 * Nothing for now.
+
+### Library dependencies:
+
+* https://github.com/esp8266/Arduino 
+* https://github.com/jjssoftware/cpp-base32
+* https://github.com/jjssoftware/ESP8266Complexify
+* https://github.com/knolleary/pubsubclient
+* https://github.com/PaulStoffregen/Time
+* https://github.com/jjssoftware/ESP8266TrueRandom
+* https://github.com/jjssoftware/arduinoWebSockets
+* https://github.com/jjssoftware/Cryptosuite
+* https://github.com/jjssoftware/ESP8266TOTP
+* https://github.com/jjssoftware/DHT-sensor-library
+* https://github.com/jjssoftware/NexaCtrl
 
 ## License
 
