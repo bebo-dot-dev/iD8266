@@ -57,11 +57,6 @@
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>Sha</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
 			<name>pubsubclient</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
@@ -80,6 +75,41 @@
 			<name>trueRandom</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>Cryptosuite/examples</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>Cryptosuite/keywords.txt</name>
+			<type>1</type>
+			<locationURI>PARENT-3-PROJECT_LOC/git_repositories/Cryptosuite/keywords.txt</locationURI>
+		</link>
+		<link>
+			<name>Cryptosuite/readme.txt</name>
+			<type>1</type>
+			<locationURI>PARENT-3-PROJECT_LOC/git_repositories/Cryptosuite/readme.txt</locationURI>
+		</link>
+		<link>
+			<name>Cryptosuite/sha1.cpp</name>
+			<type>1</type>
+			<locationURI>PARENT-3-PROJECT_LOC/git_repositories/Cryptosuite/sha1.cpp</locationURI>
+		</link>
+		<link>
+			<name>Cryptosuite/sha1.h</name>
+			<type>1</type>
+			<locationURI>PARENT-3-PROJECT_LOC/git_repositories/Cryptosuite/sha1.h</locationURI>
+		</link>
+		<link>
+			<name>Cryptosuite/sha256.cpp</name>
+			<type>1</type>
+			<locationURI>PARENT-3-PROJECT_LOC/git_repositories/Cryptosuite/sha256.cpp</locationURI>
+		</link>
+		<link>
+			<name>Cryptosuite/sha256.h</name>
+			<type>1</type>
+			<locationURI>PARENT-3-PROJECT_LOC/git_repositories/Cryptosuite/sha256.h</locationURI>
 		</link>
 		<link>
 			<name>ESP8266Base32/.git</name>
@@ -145,41 +175,6 @@
 			<name>NexaCtrl/NexaCtrl.h</name>
 			<type>1</type>
 			<locationURI>PARENT-3-PROJECT_LOC/git_repositories/NexaCtrl/NexaCtrl.h</locationURI>
-		</link>
-		<link>
-			<name>Sha/examples</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>Sha/keywords.txt</name>
-			<type>1</type>
-			<locationURI>PARENT-3-PROJECT_LOC/git_repositories/Cryptosuite/Sha/keywords.txt</locationURI>
-		</link>
-		<link>
-			<name>Sha/readme.txt</name>
-			<type>1</type>
-			<locationURI>PARENT-3-PROJECT_LOC/git_repositories/Cryptosuite/Sha/readme.txt</locationURI>
-		</link>
-		<link>
-			<name>Sha/sha1.cpp</name>
-			<type>1</type>
-			<locationURI>PARENT-3-PROJECT_LOC/git_repositories/Cryptosuite/Sha/sha1.cpp</locationURI>
-		</link>
-		<link>
-			<name>Sha/sha1.h</name>
-			<type>1</type>
-			<locationURI>PARENT-3-PROJECT_LOC/git_repositories/Cryptosuite/Sha/sha1.h</locationURI>
-		</link>
-		<link>
-			<name>Sha/sha256.cpp</name>
-			<type>1</type>
-			<locationURI>PARENT-3-PROJECT_LOC/git_repositories/Cryptosuite/Sha/sha256.cpp</locationURI>
-		</link>
-		<link>
-			<name>Sha/sha256.h</name>
-			<type>1</type>
-			<locationURI>PARENT-3-PROJECT_LOC/git_repositories/Cryptosuite/Sha/sha256.h</locationURI>
 		</link>
 		<link>
 			<name>core/core</name>
@@ -592,21 +587,6 @@
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>Sha/examples/hmacsha256test</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>Sha/examples/sha1test</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>Sha/examples/sha256test</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
 			<name>src/libb64/AUTHORS</name>
 			<type>1</type>
 			<locationURI>PARENT-3-PROJECT_LOC/git_repositories/arduinoWebSockets/src/libb64/AUTHORS</locationURI>
@@ -827,6 +807,21 @@
 			<locationURI>PARENT-3-PROJECT_LOC/git_repositories/ESP8266TrueRandom/Release/subdir.mk</locationURI>
 		</link>
 		<link>
+			<name>Cryptosuite/examples/hmacsha256test/hmacsha256test.pde</name>
+			<type>1</type>
+			<locationURI>PARENT-3-PROJECT_LOC/git_repositories/Cryptosuite/examples/hmacsha256test/hmacsha256test.pde</locationURI>
+		</link>
+		<link>
+			<name>Cryptosuite/examples/sha1test/sha1test.pde</name>
+			<type>1</type>
+			<locationURI>PARENT-3-PROJECT_LOC/git_repositories/Cryptosuite/examples/sha1test/sha1test.pde</locationURI>
+		</link>
+		<link>
+			<name>Cryptosuite/examples/sha256test/sha256test.pde</name>
+			<type>1</type>
+			<locationURI>PARENT-3-PROJECT_LOC/git_repositories/Cryptosuite/examples/sha256test/sha256test.pde</locationURI>
+		</link>
+		<link>
 			<name>ESP8266Base32/.git/hooks/applypatch-msg.sample</name>
 			<type>1</type>
 			<locationURI>PARENT-3-PROJECT_LOC/git_repositories/ESP8266Base32/.git/hooks/applypatch-msg.sample</locationURI>
@@ -1045,21 +1040,6 @@
 			<name>ESP8266Complexify/.git/refs/remotes</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>Sha/examples/hmacsha256test/hmacsha256test.pde</name>
-			<type>1</type>
-			<locationURI>PARENT-3-PROJECT_LOC/git_repositories/Cryptosuite/Sha/examples/hmacsha256test/hmacsha256test.pde</locationURI>
-		</link>
-		<link>
-			<name>Sha/examples/sha1test/sha1test.pde</name>
-			<type>1</type>
-			<locationURI>PARENT-3-PROJECT_LOC/git_repositories/Cryptosuite/Sha/examples/sha1test/sha1test.pde</locationURI>
-		</link>
-		<link>
-			<name>Sha/examples/sha256test/sha256test.pde</name>
-			<type>1</type>
-			<locationURI>PARENT-3-PROJECT_LOC/git_repositories/Cryptosuite/Sha/examples/sha256test/sha256test.pde</locationURI>
 		</link>
 		<link>
 			<name>pubsubclient/.git/logs/HEAD</name>

@@ -44,7 +44,7 @@
 									<listOptionValue builtIn="false" value="/home/joe/Dev/git_repositories/Time"/>
 									<listOptionValue builtIn="false" value="/home/joe/Dev/git_repositories/ESP8266TrueRandom"/>
 									<listOptionValue builtIn="false" value="/home/joe/Dev/git_repositories/arduinoWebSockets/src"/>
-									<listOptionValue builtIn="false" value="/home/joe/Dev/git_repositories/Cryptosuite/Sha"/>
+									<listOptionValue builtIn="false" value="/home/joe/Dev/git_repositories/Cryptosuite"/>
 									<listOptionValue builtIn="false" value="/home/joe/Dev/git_repositories/ESP8266TOTP"/>
 									<listOptionValue builtIn="false" value="/home/joe/Dev/git_repositories/DHT-sensor-library"/>
 									<listOptionValue builtIn="false" value="/home/joe/Dev/git_repositories/NexaCtrl"/>
@@ -78,7 +78,7 @@
 									<listOptionValue builtIn="false" value="/home/joe/Dev/git_repositories/Time"/>
 									<listOptionValue builtIn="false" value="/home/joe/Dev/git_repositories/ESP8266TrueRandom"/>
 									<listOptionValue builtIn="false" value="/home/joe/Dev/git_repositories/arduinoWebSockets/src"/>
-									<listOptionValue builtIn="false" value="/home/joe/Dev/git_repositories/Cryptosuite/Sha"/>
+									<listOptionValue builtIn="false" value="/home/joe/Dev/git_repositories/Cryptosuite"/>
 									<listOptionValue builtIn="false" value="/home/joe/Dev/git_repositories/ESP8266TOTP"/>
 									<listOptionValue builtIn="false" value="/home/joe/Dev/git_repositories/DHT-sensor-library"/>
 									<listOptionValue builtIn="false" value="/home/joe/Dev/git_repositories/NexaCtrl"/>
@@ -112,10 +112,10 @@
 									<listOptionValue builtIn="false" value="/home/joe/Dev/git_repositories/Time"/>
 									<listOptionValue builtIn="false" value="/home/joe/Dev/git_repositories/ESP8266TrueRandom"/>
 									<listOptionValue builtIn="false" value="/home/joe/Dev/git_repositories/arduinoWebSockets/src"/>
-									<listOptionValue builtIn="false" value="/home/joe/Dev/git_repositories/Cryptosuite/Sha"/>
 									<listOptionValue builtIn="false" value="/home/joe/Dev/git_repositories/ESP8266TOTP"/>
 									<listOptionValue builtIn="false" value="/home/joe/Dev/git_repositories/DHT-sensor-library"/>
 									<listOptionValue builtIn="false" value="/home/joe/Dev/git_repositories/NexaCtrl"/>
+									<listOptionValue builtIn="false" value="/home/joe/Dev/git_repositories/Cryptosuite"/>
 								</option>
 								<inputType id="io.sloeber.compiler.S.sketch.input.1073844057" name="Assembly source files" superClass="io.sloeber.compiler.S.sketch.input"/>
 							</tool>
