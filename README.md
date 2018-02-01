@@ -1,10 +1,10 @@
 # iD8266 - General Purpose firmware for ESP8266
 
-Some background information here: https://jjssoftware.github.io/id8266-aka-skynet/
+[Background information](https://jjssoftware.github.io/id8266-aka-skynet/)
 
-Some videos here: https://www.youtube.com/channel/UCa_exk34O_W2tTnGeHXw5Og
+[Screenshots](screenshots/SCREENSHOTS.md)
 
-[Screenshots](screenshots.md)
+[YouTube videos](https://www.youtube.com/channel/UCa_exk34O_W2tTnGeHXw5Og)
 
 ## Features
 * Everything is or should be configurable via the web UI
