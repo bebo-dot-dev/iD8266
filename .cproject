@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?fileVersion 4.0.0?><cproject storage_type_id="org.eclipse.cdt.core.XmlProjectDescriptionStorage">
 	<storageModule moduleId="org.eclipse.cdt.core.settings">
-		<cconfiguration id="io.sloeber.core.toolChain.release.319285446">
-			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="io.sloeber.core.toolChain.release.319285446" moduleId="org.eclipse.cdt.core.settings" name="Release">
+		<cconfiguration id="io.sloeber.core.toolChain.release.984455">
+			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="io.sloeber.core.toolChain.release.984455" moduleId="org.eclipse.cdt.core.settings" name="Release">
 				<externalSettings/>
 				<extensions>
 					<extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser"/>
@@ -12,121 +12,208 @@
 				</extensions>
 			</storageModule>
 			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
-				<configuration artifactName="${ProjName}" buildProperties="" description="" id="io.sloeber.core.toolChain.release.319285446" name="Release" parent="org.eclipse.cdt.build.core.emptycfg">
-					<folderInfo id="io.sloeber.core.toolChain.release.319285446.1594135160" name="/" resourcePath="">
-						<toolChain id="io.sloeber.core.toolChain.release.1117748568" name="Arduino Toolchain (Sloeber edition)" superClass="io.sloeber.core.toolChain.release">
-							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="io.sloeber.targetplatform.1247951152" name="Arduino Target" osList="all" superClass="io.sloeber.targetplatform"/>
-							<builder buildPath="${workspace_loc:/iD8266}/Release" id="io.sloeber.sketch.builder.288036268" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="Arduino sketch builder" superClass="io.sloeber.sketch.builder"/>
-							<tool id="io.sloeber.tool.sketch.compiler.cpp.1076343690" name="Arduino C++ Compiler" superClass="io.sloeber.tool.sketch.compiler.cpp">
-								<option id="io.sloeber.compiler.cpp.sketch.option.incpath.48149934" name="Include Paths (-I)" superClass="io.sloeber.compiler.cpp.sketch.option.incpath" valueType="includePath">
+				<configuration artifactName="${ProjName}" buildProperties="" description="" id="io.sloeber.core.toolChain.release.984455" name="Release" parent="org.eclipse.cdt.build.core.emptycfg">
+					<folderInfo id="io.sloeber.core.toolChain.release.984455.571046747" name="/" resourcePath="">
+						<toolChain id="io.sloeber.core.toolChain.release.994343931" name="Arduino Toolchain (Sloeber edition)" superClass="io.sloeber.core.toolChain.release">
+							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="io.sloeber.targetplatform.1820527253" name="Arduino Target" osList="all" superClass="io.sloeber.targetplatform"/>
+							<builder buildPath="${workspace_loc:/testing}/Release" id="io.sloeber.sketch.builder.934161043" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="Arduino sketch builder" superClass="io.sloeber.sketch.builder"/>
+							<tool id="io.sloeber.tool.sketch.compiler.cpp.1578657581" name="Arduino C++ Compiler" superClass="io.sloeber.tool.sketch.compiler.cpp">
+								<option id="io.sloeber.compiler.cpp.sketch.option.incpath.2105559428" name="Include Paths (-I)" superClass="io.sloeber.compiler.cpp.sketch.option.incpath" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/core/core}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/core/variant}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/esp8266}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/esp8266/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/DHT-sensor-library-master}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/DNSServer}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/DNSServer/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/EEPROM}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/ESP8266Complexify-master}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/ESP8266mDNS}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/ESP8266TOTP-master}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/ESP8266TrueRandom-master}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/ESP8266WebServer}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/ESP8266WebServer/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/ESP8266WiFi}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/ESP8266WiFi/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/NexaCtrl-master}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/pubsubclient}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/pubsubclient/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/Time}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/WebSockets}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/WebSockets/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/WiFi}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/WiFi/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/cpp-base32-master}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/Cryptosuite-master}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/Hash}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/Hash/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/SPI}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/core/core}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/core/variant}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/cpp-base32-master}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/Cryptosuite-master}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/DHT-sensor-library-master}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/DNSServer}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/DNSServer/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/ESP8266HTTPClient}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/ESP8266HTTPClient/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/EEPROM}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/esp8266}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/esp8266/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/ESP8266Complexify-master}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/ESP8266mDNS}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/ESP8266TOTP-master}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/ESP8266TrueRandom-master}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/ESP8266WebServer}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/ESP8266WebServer/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/ESP8266WiFi}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/ESP8266WiFi/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/Ethernet}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/Ethernet/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/Hash}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/Hash/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/SoftwareSerial}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/NexaCtrl-master}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/pubsubclient}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/pubsubclient/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/SPI}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/Wire}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/EEPROM}&quot;"/>
-									<listOptionValue builtIn="false" value="/home/joe/Dev/git_repositories/ESP8266Base32"/>
-									<listOptionValue builtIn="false" value="/home/joe/Dev/git_repositories/ESP8266Complexify"/>
-									<listOptionValue builtIn="false" value="/home/joe/Dev/git_repositories/pubsubclient/src"/>
-									<listOptionValue builtIn="false" value="/home/joe/Dev/git_repositories/Time"/>
-									<listOptionValue builtIn="false" value="/home/joe/Dev/git_repositories/ESP8266TrueRandom"/>
-									<listOptionValue builtIn="false" value="/home/joe/Dev/git_repositories/arduinoWebSockets/src"/>
-									<listOptionValue builtIn="false" value="/home/joe/Dev/git_repositories/Cryptosuite"/>
-									<listOptionValue builtIn="false" value="/home/joe/Dev/git_repositories/ESP8266TOTP"/>
-									<listOptionValue builtIn="false" value="/home/joe/Dev/git_repositories/DHT-sensor-library"/>
-									<listOptionValue builtIn="false" value="/home/joe/Dev/git_repositories/NexaCtrl"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/Time}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/WebSockets}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/WebSockets/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/WiFi}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/WiFi/src}&quot;"/>
 								</option>
-								<inputType id="io.sloeber.compiler.cpp.sketch.input.477050757" name="CPP source files" superClass="io.sloeber.compiler.cpp.sketch.input"/>
+								<inputType id="io.sloeber.compiler.cpp.sketch.input.528990016" name="CPP source files" superClass="io.sloeber.compiler.cpp.sketch.input"/>
 							</tool>
-							<tool id="io.sloeber.tool.compiler.c.100896170" name="Arduino C Compiler" superClass="io.sloeber.tool.compiler.c">
-								<option id="io.sloeber.compiler.c.sketch.option.incpath.180615125" name="Include Paths (-I)" superClass="io.sloeber.compiler.c.sketch.option.incpath" valueType="includePath">
+							<tool id="io.sloeber.tool.compiler.c.1562361285" name="Arduino C Compiler" superClass="io.sloeber.tool.compiler.c">
+								<option id="io.sloeber.compiler.c.sketch.option.incpath.372238157" name="Include Paths (-I)" superClass="io.sloeber.compiler.c.sketch.option.incpath" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/core/core}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/core/variant}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/esp8266}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/esp8266/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/DHT-sensor-library-master}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/DNSServer}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/DNSServer/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/EEPROM}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/ESP8266Complexify-master}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/ESP8266mDNS}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/ESP8266TOTP-master}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/ESP8266TrueRandom-master}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/ESP8266WebServer}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/ESP8266WebServer/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/ESP8266WiFi}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/ESP8266WiFi/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/NexaCtrl-master}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/pubsubclient}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/pubsubclient/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/Time}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/WebSockets}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/WebSockets/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/WiFi}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/WiFi/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/cpp-base32-master}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/Cryptosuite-master}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/Hash}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/Hash/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/SPI}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/core/core}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/core/variant}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/cpp-base32-master}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/Cryptosuite-master}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/DHT-sensor-library-master}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/DNSServer}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/DNSServer/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/ESP8266HTTPClient}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/ESP8266HTTPClient/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/EEPROM}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/esp8266}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/esp8266/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/ESP8266Complexify-master}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/ESP8266mDNS}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/ESP8266TOTP-master}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/ESP8266TrueRandom-master}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/ESP8266WebServer}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/ESP8266WebServer/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/ESP8266WiFi}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/ESP8266WiFi/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/Ethernet}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/Ethernet/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/Hash}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/Hash/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/SoftwareSerial}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/NexaCtrl-master}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/pubsubclient}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/pubsubclient/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/SPI}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/Wire}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/EEPROM}&quot;"/>
-									<listOptionValue builtIn="false" value="/home/joe/Dev/git_repositories/ESP8266Base32"/>
-									<listOptionValue builtIn="false" value="/home/joe/Dev/git_repositories/ESP8266Complexify"/>
-									<listOptionValue builtIn="false" value="/home/joe/Dev/git_repositories/pubsubclient/src"/>
-									<listOptionValue builtIn="false" value="/home/joe/Dev/git_repositories/Time"/>
-									<listOptionValue builtIn="false" value="/home/joe/Dev/git_repositories/ESP8266TrueRandom"/>
-									<listOptionValue builtIn="false" value="/home/joe/Dev/git_repositories/arduinoWebSockets/src"/>
-									<listOptionValue builtIn="false" value="/home/joe/Dev/git_repositories/Cryptosuite"/>
-									<listOptionValue builtIn="false" value="/home/joe/Dev/git_repositories/ESP8266TOTP"/>
-									<listOptionValue builtIn="false" value="/home/joe/Dev/git_repositories/DHT-sensor-library"/>
-									<listOptionValue builtIn="false" value="/home/joe/Dev/git_repositories/NexaCtrl"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/Time}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/WebSockets}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/WebSockets/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/WiFi}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/WiFi/src}&quot;"/>
 								</option>
-								<inputType id="io.sloeber.compiler.c.sketch.input.366202948" name="C Source Files" superClass="io.sloeber.compiler.c.sketch.input"/>
+								<inputType id="io.sloeber.compiler.c.sketch.input.1856473569" name="C Source Files" superClass="io.sloeber.compiler.c.sketch.input"/>
 							</tool>
-							<tool id="io.sloeber.tool.sketch.compiler.s.1423332663" name="Arduino Assembler" superClass="io.sloeber.tool.sketch.compiler.s">
-								<option id="io.sloeber.compiler.asm.sketch.option.incpath.325972355" name="Include Paths (-I)" superClass="io.sloeber.compiler.asm.sketch.option.incpath" valueType="includePath">
+							<tool id="io.sloeber.tool.sketch.compiler.s.1024336713" name="Arduino Assembler" superClass="io.sloeber.tool.sketch.compiler.s">
+								<option id="io.sloeber.compiler.asm.sketch.option.incpath.865281899" name="Include Paths (-I)" superClass="io.sloeber.compiler.asm.sketch.option.incpath" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/core/core}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/core/variant}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/esp8266}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/esp8266/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/DHT-sensor-library-master}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/DNSServer}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/DNSServer/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/EEPROM}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/ESP8266Complexify-master}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/ESP8266mDNS}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/ESP8266TOTP-master}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/ESP8266TrueRandom-master}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/ESP8266WebServer}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/ESP8266WebServer/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/ESP8266WiFi}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/ESP8266WiFi/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/NexaCtrl-master}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/pubsubclient}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/pubsubclient/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/Time}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/WebSockets}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/WebSockets/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/WiFi}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/WiFi/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/cpp-base32-master}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/Cryptosuite-master}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/Hash}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/Hash/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/testing/libraries/SPI}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/core/core}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/core/variant}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/cpp-base32-master}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/Cryptosuite-master}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/DHT-sensor-library-master}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/DNSServer}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/DNSServer/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/ESP8266HTTPClient}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/ESP8266HTTPClient/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/EEPROM}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/esp8266}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/esp8266/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/ESP8266Complexify-master}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/ESP8266mDNS}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/ESP8266TOTP-master}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/ESP8266TrueRandom-master}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/ESP8266WebServer}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/ESP8266WebServer/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/ESP8266WiFi}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/ESP8266WiFi/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/Ethernet}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/Ethernet/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/Hash}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/Hash/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/SoftwareSerial}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/NexaCtrl-master}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/pubsubclient}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/pubsubclient/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/SPI}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/Wire}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/EEPROM}&quot;"/>
-									<listOptionValue builtIn="false" value="/home/joe/Dev/git_repositories/ESP8266Base32"/>
-									<listOptionValue builtIn="false" value="/home/joe/Dev/git_repositories/ESP8266Complexify"/>
-									<listOptionValue builtIn="false" value="/home/joe/Dev/git_repositories/pubsubclient/src"/>
-									<listOptionValue builtIn="false" value="/home/joe/Dev/git_repositories/Time"/>
-									<listOptionValue builtIn="false" value="/home/joe/Dev/git_repositories/ESP8266TrueRandom"/>
-									<listOptionValue builtIn="false" value="/home/joe/Dev/git_repositories/arduinoWebSockets/src"/>
-									<listOptionValue builtIn="false" value="/home/joe/Dev/git_repositories/ESP8266TOTP"/>
-									<listOptionValue builtIn="false" value="/home/joe/Dev/git_repositories/DHT-sensor-library"/>
-									<listOptionValue builtIn="false" value="/home/joe/Dev/git_repositories/NexaCtrl"/>
-									<listOptionValue builtIn="false" value="/home/joe/Dev/git_repositories/Cryptosuite"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/Time}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/WebSockets}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/WebSockets/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/WiFi}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/iD8266/libraries/WiFi/src}&quot;"/>
 								</option>
-								<inputType id="io.sloeber.compiler.S.sketch.input.1073844057" name="Assembly source files" superClass="io.sloeber.compiler.S.sketch.input"/>
+								<inputType id="io.sloeber.compiler.S.sketch.input.1279277051" name="Assembly source files" superClass="io.sloeber.compiler.S.sketch.input"/>
 							</tool>
-							<tool id="io.sloeber.tool.ar.1702143093" name="Arduino archiver" superClass="io.sloeber.tool.ar"/>
-							<tool id="io.sloeber.tool.combine.948423946" name="Arduino combiner" superClass="io.sloeber.tool.combine"/>
-							<tool id="io.sloeber.tool.objcopy.eep.830468307" name="Arduino tool Create eeprom" superClass="io.sloeber.tool.objcopy.eep"/>
-							<tool id="io.sloeber.tool.size.33561631" name="Arduino tool Print Size" superClass="io.sloeber.tool.size"/>
+							<tool id="io.sloeber.tool.ar.666735649" name="Arduino archiver" superClass="io.sloeber.tool.ar"/>
+							<tool id="io.sloeber.tool.combine.1343756183" name="Arduino combiner" superClass="io.sloeber.tool.combine"/>
+							<tool id="io.sloeber.tool.objcopy.eep.1329383346" name="Arduino tool Create eeprom" superClass="io.sloeber.tool.objcopy.eep"/>
+							<tool id="io.sloeber.tool.size.1039513601" name="Arduino tool Print Size" superClass="io.sloeber.tool.size"/>
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="libraries/?*/**/?xamples/**|libraries/?*/**/?xtras/**|libraries/?*/**/test*/**|libraries/?*/**/third-party/**|libraries**/._*|libraries/?*/c*/?*|libraries/?*/d*/?*|libraries/?*/D*/?*|pubsubclient/examples/|pubsubclient/tests/|Sha/examples/|time/examples/" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name=""/>
+						<entry excluding="libraries/WebSockets/travis|libraries/DHT-sensor-library-master/.github|libraries/?*/**/?xamples/**|libraries/?*/**/?xtras/**|libraries/?*/**/test*/**|libraries/?*/**/third-party/**|libraries/**/._*|libraries/?*/utility/*/*|libraries/WiFi/src/" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -134,16 +221,12 @@
 		</cconfiguration>
 	</storageModule>
 	<storageModule moduleId="cdtBuildSystem" version="4.0.0">
-		<project id="iD8266.null.1692929702" name="iD8266"/>
+		<project id="testing.null.89414269" name="testing"/>
 	</storageModule>
 	<storageModule moduleId="scannerConfiguration">
 		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
+	<storageModule moduleId="refreshScope"/>
 	<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
-	<storageModule moduleId="refreshScope" versionNumber="2">
-		<configuration configurationName="Release">
-			<resource resourceType="PROJECT" workspacePath="/iD8266"/>
-		</configuration>
-	</storageModule>
 </cproject>
