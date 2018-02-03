@@ -32,3 +32,6 @@
 ---
 ### Power Management
 ![11](Screenshot_20180131-234818.png)
+---
+### OTA Flashing
+![12](Screenshot_20180203-152600.png)
