@@ -1,4 +1,5 @@
 /Release/
-*.ino.cpp
-/node_modules/
-*.bin
+.pioenvs
+.piolibdeps
+.vscode/c_cpp_properties.json
+.vscode/launch.json

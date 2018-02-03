@@ -92,6 +92,11 @@
 			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp8266/hardware/esp8266/2.4.0/libraries/ESP8266mDNS</locationURI>
 		</link>
 		<link>
+			<name>libraries/Ethernet</name>
+			<type>2</type>
+			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp8266/hardware/esp8266/2.4.0/libraries/Ethernet</locationURI>
+		</link>
+		<link>
 			<name>libraries/Hash</name>
 			<type>2</type>
 			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp8266/hardware/esp8266/2.4.0/libraries/Hash</locationURI>
@@ -105,6 +110,11 @@
 			<name>libraries/SPI</name>
 			<type>2</type>
 			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp8266/hardware/esp8266/2.4.0/libraries/SPI</locationURI>
+		</link>
+		<link>
+			<name>libraries/SoftwareSerial</name>
+			<type>2</type>
+			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp8266/hardware/esp8266/2.4.0/libraries/SoftwareSerial</locationURI>
 		</link>
 		<link>
 			<name>libraries/Time</name>
@@ -122,14 +132,14 @@
 			<locationURI>ECLIPSE_HOME/arduinoPlugin/libraries/WiFi/1.2.6</locationURI>
 		</link>
 		<link>
+			<name>libraries/Wire</name>
+			<type>2</type>
+			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp8266/hardware/esp8266/2.4.0/libraries/Wire</locationURI>
+		</link>
+		<link>
 			<name>libraries/cpp-base32-master</name>
 			<type>2</type>
 			<locationURI>iD8266jjs8266/libraries/cpp-base32-master</locationURI>
-		</link>
-		<link>
-			<name>libraries/esp8266</name>
-			<type>2</type>
-			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp8266/hardware/esp8266/2.4.0/libraries/esp8266</locationURI>
 		</link>
 		<link>
 			<name>libraries/pubsubclient</name>
