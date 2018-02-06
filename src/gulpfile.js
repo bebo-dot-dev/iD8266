@@ -33,6 +33,7 @@ const del = require('del');
 const useref = require('gulp-useref');
 const gulpif = require('gulp-if');
 const inline = require('gulp-inline');
+const argv = require('yargs').argv;
  
 /* Clean destination folder */
 gulp.task('clean', function() {
@@ -48,20 +49,22 @@ gulp.task('files', function() {
         .pipe(gulp.dest('data'));
 });
 
+var src = argv.src ? argv.src.split(',') : 'data.unminified/*.htm';
+
 /* Process HTML, CSS, JS  --- INLINE --- */
 gulp.task('inline', function() {
-    return gulp.src('data.unminified/*.htm')
+    return gulp.src(src)
         .pipe(inline({
             base: 'data.unminified/',
             css: cleancss,
             disabledTypes: ['svg', 'img']
-        }))
+            }))
         .pipe(htmlmin({
             collapseWhitespace: true,
             removeComments: false,
-	    minifyJS: { mangle: false }
-        }))	        
-	.pipe(gzip())
+	        minifyJS: { mangle: false }
+            }))	        
+	    .pipe(gzip())
         .pipe(gulp.dest('data'));
 })
  
@@ -97,7 +100,6 @@ gulp.task('default', ['buildfs']);
 // -----------------------------------------------------------------------------
  
 const spawn = require('child_process').spawn;
-const argv = require('yargs').argv;
  
 var platformio = function(target) {
     var args = ['run'];
