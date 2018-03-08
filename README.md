@@ -12,6 +12,4 @@
 * None at this time
 
 ## License
-
-MIT License
-Copyright (c) 2018 Joe
+https://github.com/jjssoftware/iD8266/blob/master/LICENSE
